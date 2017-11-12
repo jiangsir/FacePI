@@ -1,0 +1,6 @@
+{
+    "api_key": "<請輸入自行申請的金鑰>",
+    "host": "westcentralus.api.cognitive.microsoft.com",
+    "personGroupId": "<請自行決定一個 personGroupId>",
+    "title" : "<請輸入標題>"
+}
