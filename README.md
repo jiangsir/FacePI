@@ -7,7 +7,7 @@ FacePI 讓樹莓派變身刷臉報到系統
 
 在這裡要先做一些名詞解釋，因為中文裡面這幾個詞有點容易搞混。
 * 「臉部偵測(Face Detection)」:這是最簡單的一種應用，一般數位相機裡面就都可以看得到，就是直接把畫面中有人臉的地方用框框定位出來。
-* [臉部校驗(Face Verification)]:則是可以拿來比對一張圖片裡的人跟另一張圖片裡的人臉是否是同一人？因此得到的結果為“是”或"否"。
+* 「臉部校驗(Face Verification)」:則是可以拿來比對一張圖片裡的人跟另一張圖片裡的人臉是否是同一人？因此得到的結果為“是”或"否"。
 * 「臉部辨識(Face Identification)」:則是更進一步的找出圖片中的人是誰？
 
 因為是微軟的服務，準備好你塵封已久的 hotmail 帳號準備去註冊一個服務吧！
@@ -24,6 +24,20 @@ FacePI 讓樹莓派變身刷臉報到系統
 * Person: 一個 person 可以加入好幾個臉
 * Person Group: 自訂一個人群，在人群裡面可以加入多個 person
 
+Face API 整體的基本流程如下：
+
+* 先建立一個 Person Group 然後獲得一個 personGroupId 
+* 在這個 Person Group 裡面建立一個 Person 然後獲得一個 personId
+* 接下來針對 Person Group 內的一個 person 放入訓練圖片。
+* 訓練圖片放入之後，針對一個 Person Group 來做訓練。
+* 查看 Person Group 的狀況，可以知道訓練是否有成功。
+* 準備一張照片來辨識是否是剛剛所訓練的 Person Face.
+    * 照片必須先經過 Detect 然後獲得一個 faceid, 
+    * 用這個 faceid 到一個 personGroupId 內辨識是否同一個人。
+    * 設定信心門檻，預設 0.5。進行完畢就會回傳符合的 candidates
+
+
+接下來分別將這些動作用 Face API 的呼叫來替代，這當中包含了很多組不同的 API 呼叫，但基本用法大致都相同，因此僅就一個 Face Identity API 看一個典型的呼叫的程式碼寫法。
 一個典型的呼叫大致會是如底下程式：
 
 ```python
