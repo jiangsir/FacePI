@@ -126,3 +126,7 @@ confidence|	Number|	信心指數從 0 ~ 1
 
         python3 FacePI/FacePI-mainGUI.py
 
+實際畫面截圖：
+
+![主畫面](data/screen1.png)
+![辨識畫面](data/screen2.png)
