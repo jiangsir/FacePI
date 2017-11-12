@@ -56,7 +56,7 @@ def deletePersonId(personGroupId, personId):
                      headers)
         response = conn.getresponse()
         data = response.read()
-        print(str(data, 'UTF-8') + " 成功！")
+        print(data, " 成功！")
         conn.close()
     except Exception as e:
         print("[Errno {0}] {1}".format(e.errno, e.strerror))
