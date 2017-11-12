@@ -20,6 +20,7 @@ headers = {
     'Ocp-Apim-Subscription-Key': api_key,
 }
 
+
 def list_persons_in_group(personGroupId):
     headers = {
         # Request headers
@@ -43,7 +44,7 @@ def list_persons_in_group(personGroupId):
         return persons
     except Exception as e:
         print("[Errno {0}] {1}".format(e.errno, e.strerror))
-    
+
 
 def deletePersonId(personGroupId, personId):
     params = urllib.parse.urlencode({})
@@ -55,11 +56,10 @@ def deletePersonId(personGroupId, personId):
                      headers)
         response = conn.getresponse()
         data = response.read()
-        print(data)
+        print(str(data, 'UTF-8') + " 成功！")
         conn.close()
     except Exception as e:
         print("[Errno {0}] {1}".format(e.errno, e.strerror))
-
 
 
 #for personId in personIds:
@@ -71,3 +71,5 @@ for person in persons:
     if person['name'] == personname:
         print('刪除 ', person['name'], person['personId'])
         deletePersonId(personGroupId, person['personId'])
+    else:
+        print('', person['name'], person['personId'])

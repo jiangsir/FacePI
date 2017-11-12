@@ -341,13 +341,13 @@ for facejson in facejsons:
                 name = id_names[personjson['name']]['name']
             else:
                 name = personjson['name']
-            text = "" + name + " 報到成功！"
+            text = "" + name + " 報到成功！！！"
         elif confidence >= 0.7:
             if personjson['name'] in id_names.keys():
                 name = id_names[personjson['name']]['name']
             else:
                 name = personjson['name']
-            text = name + " 報到成功！"
+            text = name + " 報到成功！！"
         elif confidence >= 0.5:
             if personjson['name'] in id_names.keys():
                 name = id_names[personjson['name']]['姓名']
