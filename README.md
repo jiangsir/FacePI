@@ -123,6 +123,7 @@ confidence|	Number|	信心指數從 0 ~ 1
         git clone https://github.com/jiangsir/FacePI.git
 
 修改設定檔：
+
         nano FacePI/FacePI-Config.json
 
 ```json
