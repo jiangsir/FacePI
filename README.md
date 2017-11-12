@@ -122,6 +122,24 @@ confidence|	Number|	信心指數從 0 ~ 1
 
         git clone https://github.com/jiangsir/FacePI.git
 
+修改設定檔：
+        nano FacePI/FacePI-Config.json
+
+```json
+{
+    "api_key": "<您的 Key>",
+    "host": "westcentralus.api.cognitive.microsoft.com",
+    "personGroupId": "<自訂的 personGroupId>",
+    "title" : "<自訂的 title>"
+}
+```
+
+* api_key: 就是您在微軟網站獲得的 API 金鑰。
+* host: 就是「端點」。
+* personGroupId: 可以自訂，若不存在會自動建立，可以將不同的人分群處理。
+* title: 則會出現在主畫面的標題。
+
+
 執行主畫面：
 
         python3 FacePI/FacePI-mainGUI.py
