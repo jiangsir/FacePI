@@ -350,7 +350,7 @@ for facejson in facejsons:
             text = name + " 報到成功！！"
         elif confidence >= 0.5:
             if personjson['name'] in id_names.keys():
-                name = id_names[personjson['name']]['姓名']
+                name = id_names[personjson['name']]['name']
             else:
                 name = personjson['name']
             text = name + " 報到成功！"
