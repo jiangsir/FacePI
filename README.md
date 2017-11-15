@@ -3,6 +3,11 @@ FacePI 讓樹莓派變身刷臉報到系統
 > 本專案僅作為技術驗證使用，若要自行運用，則仍須自行修改程式結構，以符合自身所需。
 >
 
+實測影片：
+
+[![Alt text](https://img.youtube.com/vi/tQDK2j6lsCY/0.jpg)](https://youtu.be/tQDK2j6lsCY)
+
+
 2017 年可說是各種刷臉應用的爆發的一年，各種應用目不暇給。微軟也在 2016 年提出「微軟認知服務」，裡面就包含了一組 API ，叫做 Face API，專門提供臉部辨識服務，FacePI 就是利用這個 Face API 將它建構在樹莓派上，做成一個刷臉報到應用。
 
 在這裡要先做一些名詞解釋，因為中文裡面這幾個詞有點容易搞混。
@@ -164,6 +169,3 @@ confidence|	Number|	信心指數從 0 ~ 1
 ![主畫面](data/screen1.png)
 ![辨識畫面](data/screen2.png)
 
-實測影片：
-
-[![Alt text](https://img.youtube.com/vi/tQDK2j6lsCY/0.jpg)](https://youtu.be/tQDK2j6lsCY)
