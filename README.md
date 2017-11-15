@@ -163,3 +163,6 @@ confidence|	Number|	信心指數從 0 ~ 1
 
 ![主畫面](data/screen1.png)
 ![辨識畫面](data/screen2.png)
+
+實測影片：
+[![Alt text](https://img.youtube.com/vi/tQDK2j6lsCY/0.jpg)](https://youtu.be/tQDK2j6lsCY)
