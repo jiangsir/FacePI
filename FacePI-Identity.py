@@ -38,86 +38,8 @@ if len(sys.argv) == 3:
     imagepaths = sys.argv[2:]
 
 
-def identify(faceids, personGroupId):
-    print("開始辨識。")
-    headers = {
-        # Request headers
-        'Content-Type': 'application/json',
-        'Ocp-Apim-Subscription-Key': api_key,
-    }
-
-    params = urllib.parse.urlencode({})
-
-    requestbody = '''{
-        "personGroupId": "''' + personGroupId + '''",
-        "faceIds":''' + str(faceids) + ''',
-        "maxNumOfCandidatesReturned":1,
-        "confidenceThreshold": 0.5
-    }'''
-
-    try:
-        conn = http.client.HTTPSConnection(host)
-        conn.request("POST", "/face/v1.0/identify?%s" % params, requestbody,
-                     headers)
-        response = conn.getresponse()
-        data = response.read()
-        #print(data)
-        facejson = json.loads(str(data, 'UTF-8'))
-        #print(facejson)
-        conn.close()
-        return facejson
-    except Exception as e:
-        print("[Errno {0}] {1}".format(e.errno, e.strerror))
-        sys.exit()
 
 
-def get_a_person(personGroupId, personId):
-    headers = {
-        # Request headers
-        'Ocp-Apim-Subscription-Key': api_key,
-    }
-
-    params = urllib.parse.urlencode({})
-
-    try:
-        conn = http.client.HTTPSConnection(host)
-        conn.request("GET", "/face/v1.0/persongroups/" + personGroupId +
-                     "/persons/" + personId + "?%s" % params, "{body}",
-                     headers)
-        response = conn.getresponse()
-        data = response.read()
-        personjson = json.loads(str(data, 'UTF-8'))
-        conn.close()
-        print("get_a_person = " + str(personjson))
-        return personjson
-    except Exception as e:
-        print("[Errno {0}] {1}".format(e.errno, e.strerror))
-
-
-def list_persons_in_group(personGroupId):
-    headers = {
-        # Request headers
-        'Ocp-Apim-Subscription-Key': api_key,
-    }
-
-    params = urllib.parse.urlencode({
-        # Request parameters
-        #'start': '{string}',
-        #'top': '1000',
-    })
-
-    try:
-        conn = http.client.HTTPSConnection(host)
-        conn.request("GET", "/face/v1.0/persongroups/" + personGroupId +
-                     "/persons?%s" % params, "{body}", headers)
-        response = conn.getresponse()
-        data = response.read()
-        #print(data)
-        persons = json.loads(str(data, 'UTF-8'))
-        conn.close()
-        return persons
-    except Exception as e:
-        print("[Errno {0}] {1}".format(e.errno, e.strerror))
 
 
 def DetectingLocal(imagepath):

@@ -1,6 +1,8 @@
 {
-    "api_key": "<您的 Key>",
-    "host": "westcentralus.api.cognitive.microsoft.com",
+    //"api_key": "<您的 Key>",
+    "api_key": "f3e388f66ee146d3b6e96f6ca2ac25d3",
+    //"host": "westcentralus.api.cognitive.microsoft.com",
+    "host": "eastasia.api.cognitive.microsoft.com",
     "personGroupId": "<自訂的 personGroupId>",
-    "title" : "<自訂的 title>"
+    "title": "<自訂的 title>"
 }
