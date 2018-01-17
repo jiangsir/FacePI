@@ -155,7 +155,7 @@ def Signin():
     for face in faces:
         faceids[face['faceId']] = imagepath
     print('faceids =', faceids)
-    facejsons = faceapi.identify(faceids, personGroupId)
+    facejsons = faceapi.identify(list(faceids.keys()), personGroupId)
     print("facejsons=", facejsons, type(facejsons))
     
     for facejson in facejsons:

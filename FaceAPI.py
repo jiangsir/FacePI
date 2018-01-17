@@ -296,8 +296,8 @@ class Face:
         self.api_key = api_key
         self.host = host
 
-    def identify(self, faceids, personGroupId):
-        print("開始辨識。faceids=", faceids, " , personGroupId=", personGroupId)
+    def identify(self, faceidkeys, personGroupId):
+        print("開始辨識。faceidkeys=", faceidkeys, " , personGroupId=", personGroupId)
         headers = {
             # Request headers
             'Content-Type': 'application/json',
@@ -308,7 +308,7 @@ class Face:
 
         requestbody = '''{
             "personGroupId": "''' + personGroupId + '''",
-            "faceIds":''' + str(faceids) + ''',
+            "faceIds":''' + str(faceidkeys) + ''',
             "maxNumOfCandidatesReturned":1,
             "confidenceThreshold": 0.5
         }'''
