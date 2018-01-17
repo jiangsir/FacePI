@@ -70,8 +70,7 @@ def trainNewPerson(text, imagepath):
     w = imagefile.width()
     if w > maxwidth:
         imagefile = imagefile.subsample(w // maxwidth, w // maxwidth)
-    canvas = tk.Canvas(
-        top, height=imagefile.height(), width=imagefile.width())
+    canvas = tk.Canvas(top, height=imagefile.height(), width=imagefile.width())
 
     image = canvas.create_image(10, 10, anchor="nw", image=imagefile)
     canvas.pack()
@@ -121,9 +120,9 @@ def showGUI(text, imagepath):
     if w > maxwidth:
         imagefile = imagefile.subsample(w // maxwidth, w // maxwidth)
 
-    canvas = tk.Canvas(
-        top, height=imagefile.height(), width=imagefile.width())
-
+    print('imagefile=', imagefile)
+    canvas = tk.Canvas(top, height=imagefile.height(), width=imagefile.width())
+    
     image = canvas.create_image(10, 10, anchor="nw", image=imagefile)
     canvas.pack()
 
