@@ -102,7 +102,8 @@ def trainNewPerson(text, imagepath):
 
 
 def showGUI(text, imagepath):
-    top = tk.Tk()
+    #top = tk.Tk()
+    top = tk.Toplevel()
     top.geometry('400x400')
     top.title(text)
     ###image = ImageTk.PhotoImage(Image.open("./tmp/"+face['faceId']+".jpg"))
