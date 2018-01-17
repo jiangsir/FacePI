@@ -350,7 +350,7 @@ class Face:
             print("[Errno {0}] {1}".format(e.errno, e.strerror))
             sys.exit()
 
-    def detect(self):
+    def detect(self, imagepath):
         headers = {
             # Request headers
             'Content-Type': 'application/json',
