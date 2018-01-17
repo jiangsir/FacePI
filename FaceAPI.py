@@ -375,7 +375,7 @@ class Face:
                         headers)
             response = conn.getresponse()
             data = response.read()
-            #print(data)
+            print('Face.detect data = ', data)
             faces = json.loads(str(data, 'UTF-8'))
             #print(parsed[0]['faceId'])
             #faceids.append(parsed[0]['faceId'])
