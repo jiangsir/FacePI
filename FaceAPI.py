@@ -264,28 +264,6 @@ class Person:
             except Exception as e:
                 print("[Errno {0}] {1}".format(e.errno, e.strerror))
 
-        def get_a_person(self, personGroupId, personId):
-            headers = {
-                # Request headers
-                'Ocp-Apim-Subscription-Key': self.api_key,
-            }
-
-            params = urllib.parse.urlencode({})
-
-            try:
-                conn = http.client.HTTPSConnection(self.host)
-                conn.request(
-                    "GET", "/face/v1.0/persongroups/" + personGroupId +
-                    "/persons/" + personId + "?%s" % params, "{body}", headers)
-                response = conn.getresponse()
-                data = response.read()
-                personjson = json.loads(str(data, 'UTF-8'))
-                conn.close()
-                print("get_a_person = " + str(personjson))
-                return personjson
-            except Exception as e:
-                print("[Errno {0}] {1}".format(e.errno, e.strerror))
-
         def list_persons_in_group(self, personGroupId):
             headers = {
                 # Request headers
