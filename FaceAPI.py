@@ -297,7 +297,7 @@ class Face:
         self.host = host
 
     def identify(self, faceids, personGroupId):
-        print("開始辨識。")
+        print("開始辨識。faceids=", faceids, 'personGroupId=', personGroupId)
         headers = {
             # Request headers
             'Content-Type': 'application/json',
