@@ -359,12 +359,9 @@ class Face:
 
         params = urllib.parse.urlencode({
             # Request parameters
-            'returnFaceId':
-            'true',
-            'returnFaceLandmarks':
-            'false',
-            'returnFaceAttributes':
-            'age,gender,headPose,smile,facialHair,glasses,emotion,hair,makeup,occlusion,accessories,blur,exposure',
+            'returnFaceId':'true',
+            'returnFaceLandmarks':'false',
+            'returnFaceAttributes':'age,gender,headPose,smile,facialHair,glasses,emotion,hair,makeup,occlusion,accessories,blur,exposure'
         })
 
         requestbody = open(imagepath, "rb").read()
