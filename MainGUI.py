@@ -1,7 +1,7 @@
 import tkinter as tk
 from tkinter import font
 import os, sys, json, time
-import FaceAPI 
+import FaceAPI, Camera
 
 basepath = os.path.dirname(os.path.realpath(__file__))
 
@@ -31,19 +31,11 @@ top.title(title + " for " + personGroupId)
 label = tk.Label(top, text=title, font=font_helv36)
 label.pack()
 
-def takePicture():
-    imagepath = basepath + "/takepictures/Identity_" + personGroupId + "_" + time.strftime(
-        "%Y-%m-%d_%H:%M:%S", time.localtime()) + ".jpg"
-    if not os.path.exists(os.path.dirname(imagepath)):
-        os.makedirs(os.path.dirname(imagepath))
-    os.system("raspistill -t 3000 -o " + imagepath)
-    return imagepath
-
-
 def Signin():
     faceapi = FaceAPI.Face(api_key, host)
-
-
+    imagepath = Camera.takePicture(personGroupId)
+    faces = faceapi.detect(imagepath)
+    print('faces = ', faces)
     #os.system('python3 ' + basepath + '/FacePI-Identity.py ' + personGroupId)
 
 
