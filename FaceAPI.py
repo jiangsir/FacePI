@@ -350,10 +350,10 @@ class Face:
             print("[Errno {0}] {1}".format(e.errno, e.strerror))
             sys.exit()
 
-    def detect(self, imagepath):
+    def detectLocalImage(self, imagepath):
         headers = {
             # Request headers
-            'Content-Type': 'application/json',
+            'Content-Type': 'application/octet-stream',  # 用本地圖檔辨識
             'Ocp-Apim-Subscription-Key': self.api_key,
         }
 
@@ -365,7 +365,7 @@ class Face:
         })
         print('imagepath=', imagepath)
         requestbody = open(imagepath, "rb").read()
-
+        print('requestbody=', requestbody)
         try:
             conn = http.client.HTTPSConnection(self.host)
             conn.request("POST", "/face/v1.0/detect?%s" % params, requestbody,
