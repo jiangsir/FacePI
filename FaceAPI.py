@@ -306,12 +306,12 @@ class Face:
 
         params = urllib.parse.urlencode({})
 
-        requestbody = '''{
-            "personGroupId": "''' + personGroupId + '''",
-            "faceIds":''' + str(faceids) + ''',
+        requestbody = {
+            "personGroupId":  personGroupId ,
+            "faceIds": str(faceids) ,
             "maxNumOfCandidatesReturned":1,
             "confidenceThreshold": 0.5
-        }'''
+        }
 
         try:
             conn = http.client.HTTPSConnection(self.host)

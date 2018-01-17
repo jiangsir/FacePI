@@ -1,7 +1,6 @@
 import tkinter as tk
 from tkinter import font
 from tkinter import Text
-
 import os, sys, json, time, csv
 import FaceAPI, Camera
 from PIL import Image
