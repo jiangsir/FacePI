@@ -306,12 +306,12 @@ class Face:
 
         params = urllib.parse.urlencode({})
 
-        requestbody = {
-            "personGroupId": "\"" + personGroupId + "\"",
-            "faceIds": "\"" + str(faceids) + "\"",
-            "maxNumOfCandidatesReturned": 1,
+        requestbody = '''{
+            "personGroupId": "''' + personGroupId + '''",
+            "faceIds":''' + str(faceids) + ''',
+            "maxNumOfCandidatesReturned":1,
             "confidenceThreshold": 0.5
-        }
+        }'''
 
         try:
             conn = http.client.HTTPSConnection(self.host)
@@ -337,19 +337,16 @@ class Face:
 
         params = urllib.parse.urlencode({
             # Request parameters
-            'returnFaceId':
-            'true',
-            'returnFaceLandmarks':
-            'false',
-            'returnFaceAttributes':
-            'age,gender,headPose,smile,facialHair,glasses,emotion,hair,makeup,occlusion,accessories,blur,exposure'
+            'returnFaceId':'true',
+            'returnFaceLandmarks':'false',
+            'returnFaceAttributes':'age,gender,headPose,smile,facialHair,glasses,emotion,hair,makeup,occlusion,accessories,blur,exposure'
         })
         print('imagepath=', imagepath)
         requestbody = open(imagepath, "rb").read()
         try:
             conn = http.client.HTTPSConnection(self.host)
             conn.request("POST", "/face/v1.0/detect?%s" % params, requestbody,
-                         headers)
+                        headers)
             response = conn.getresponse()
             data = response.read()
             faces = json.loads(str(data, 'UTF-8'))
