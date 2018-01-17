@@ -124,7 +124,7 @@ def showGUI(text, imagepath):
     canvas = tk.Canvas(
         top, height=imagefile.height(), width=imagefile.width())
 
-    image = canvas.create_image(10, 10, anchor="nw", image=imagefile)
+    ###image = canvas.create_image(10, 10, anchor="nw", image=imagefile)
     canvas.pack()
 
     label = tk.Label(top, text=text, font=('Arial', 20))
