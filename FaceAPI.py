@@ -312,7 +312,7 @@ class Face:
             "maxNumOfCandidatesReturned":1,
             "confidenceThreshold": 0.5
         }'''
-
+        print('requestbody=', requestbody)
         try:
             conn = http.client.HTTPSConnection(self.host)
             conn.request("POST", "/face/v1.0/identify?%s" % params,
