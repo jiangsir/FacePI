@@ -110,7 +110,7 @@ def showGUI(text, imagepath):
     #image = tkinter.PhotoImage(file=("./tmp/"+face['faceId']+".jpg"))
     ###labelimage = tkinter.Label(top, image=image)
     ###labelimage.pack()
-
+    print('showGUI imagepath=', imagepath)
     img = Image.open(imagepath)
     img.save(imagepath + ".gif", 'GIF')
 
