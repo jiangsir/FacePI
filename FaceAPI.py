@@ -365,14 +365,12 @@ class Face:
         })
         print('imagepath=', imagepath)
         requestbody = open(imagepath, "rb").read()
-        print('requestbody=', requestbody)
         try:
             conn = http.client.HTTPSConnection(self.host)
             conn.request("POST", "/face/v1.0/detect?%s" % params, requestbody,
                         headers)
             response = conn.getresponse()
             data = response.read()
-            print('Face.detect data = ', data)
             faces = json.loads(str(data, 'UTF-8'))
             #print(parsed[0]['faceId'])
             #faceids.append(parsed[0]['faceId'])

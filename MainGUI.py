@@ -35,7 +35,7 @@ def Signin():
     faceapi = FaceAPI.Face(api_key, host)
     imagepath = Camera.takePicture(personGroupId)
     faces = faceapi.detectLocalImage(imagepath)
-    print('faces = ', faces)
+    print('faces[',len(faces),'] = ', faces)
     #os.system('python3 ' + basepath + '/FacePI-Identity.py ' + personGroupId)
 
 
