@@ -36,7 +36,10 @@ def Signin():
     imagepath = Camera.takePicture(personGroupId)
     faces = faceapi.detectLocalImage(imagepath)
     print('faces[',len(faces),'] = ', faces)
-    #os.system('python3 ' + basepath + '/FacePI-Identity.py ' + personGroupId)
+    faceids = {}
+    for face in faces:
+        faceids[face['faceId']] = imagepath
+    print('faceids =', faceids)
 
 
 b2 = tk.Button(
