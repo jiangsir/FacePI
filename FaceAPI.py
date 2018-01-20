@@ -353,6 +353,7 @@ class Face:
             response = conn.getresponse()
             data = response.read()
             faces = json.loads(str(data, 'UTF-8'))
+            print("faces=", faces)
             #print(parsed[0]['faceId'])
             #faceids.append(parsed[0]['faceId'])
             conn.close()
