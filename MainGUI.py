@@ -159,6 +159,7 @@ def Signin():
     print("facejsons=", facejsons, type(facejsons))
     if 'error' in facejsons and 'not trained' in facejsons['error']['message']:
         persongroupapi.train_personGroup(personGroupId)
+        persongroupapi.personGroup_status(personGroupId)
         facejsons = faceapi.identify(list(faceids.keys()), personGroupId)
     
     for facejson in facejsons:
