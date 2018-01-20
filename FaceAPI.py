@@ -188,8 +188,10 @@ class PersonGroup:
                              headers)
             response = conn.getresponse()
             data = response.read()
-            print(data)
+            status = json.loads(str(data, 'UTF-8'))
             conn.close()
+            print('status=', status)
+            return status
         except Exception as e:
             print("[Errno {0}] {1}".format(e.errno, e.strerror))
 
