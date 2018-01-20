@@ -161,7 +161,7 @@ def Signin():
         persongroupapi.train_personGroup(personGroupId)
         status = persongroupapi.personGroup_status(personGroupId)
         if status['status'] == 'failed' and 'no person in group' in status['message']:
-            trainNewPerson(personGroupId, imagepath)
+            trainNewPerson('群組裡沒有任何一個人，訓練一個新人！', imagepath)
         facejsons = faceapi.identify(list(faceids.keys()), personGroupId)
         
     
