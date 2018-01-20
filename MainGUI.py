@@ -157,12 +157,12 @@ def Signin():
     print('faceids =', faceids)
     facejsons = faceapi.identify(list(faceids.keys()), personGroupId)
     print("facejsons=", facejsons, type(facejsons))
+    if 'error' in facejsons and 'not trained' in facejsons['error']['message']:
+        persongroupapi.train_personGroup(personGroupId)
+        facejsons = faceapi.identify(list(faceids.keys()), personGroupId)
     
     for facejson in facejsons:
-        print("facejson type = ", type(facejson), "  ", facejson == 'error')
-        if facejson == 'error' and 'not trained' in facejson['message']:
-            persongroupapi.train_personGroup(personGroupId)
-            
+        print("facejson type = ", type(facejson), "  ", facejson == 'error')            
         #if facejson == 'error':
         #    break
         #display(Image(filename="tmp/"+facejson['faceId']+".jpg"))
