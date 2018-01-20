@@ -160,6 +160,9 @@ def Signin():
     
     for facejson in facejsons:
         print("facejson type = ", type(facejson), "  ", facejson == 'error')
+        if facejson == 'error' and 'not trained' in facejson['message']:
+            persongroupapi.train_personGroup(personGroupId)
+            
         #if facejson == 'error':
         #    break
         #display(Image(filename="tmp/"+facejson['faceId']+".jpg"))

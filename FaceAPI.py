@@ -150,48 +150,48 @@ class PersonGroup:
         except Exception as e:
             print(e.args)
 
-        def train_personGroup(self, personGroupId):
-            print("開始訓練一個 personGroup personGroupId=" + personGroupId + "。")
+    def train_personGroup(self, personGroupId):
+        print("開始訓練一個 personGroup personGroupId=" + personGroupId + "。")
 
-            headers = {
-                # Request headers
-                'Ocp-Apim-Subscription-Key': self.api_key,
-            }
+        headers = {
+            # Request headers
+            'Ocp-Apim-Subscription-Key': self.api_key,
+        }
 
-            params = urllib.parse.urlencode({'personGroupId': personGroupId})
+        params = urllib.parse.urlencode({'personGroupId': personGroupId})
 
-            try:
-                conn = http.client.HTTPSConnection(self.host)
-                conn.request("POST", "/face/v1.0/persongroups/" +
-                             personGroupId + "/train?%s" % params, "{body}",
-                             headers)
-                response = conn.getresponse()
-                data = response.read()
-                print(data)
-                conn.close()
-            except Exception as e:
-                print("[Errno {0}] {1}".format(e.errno, e.strerror))
+        try:
+            conn = http.client.HTTPSConnection(self.host)
+            conn.request("POST", "/face/v1.0/persongroups/" +
+                         personGroupId + "/train?%s" % params, "{body}",
+                         headers)
+            response = conn.getresponse()
+            data = response.read()
+            print(data)
+            conn.close()
+        except Exception as e:
+            print("[Errno {0}] {1}".format(e.errno, e.strerror))
 
-        def personGroup_status(self, personGroupId):
-            print("personGroup_status: 查看一個 personGroup 的狀態，也就是看看訓練是否成功！")
-            headers = {
-                # Request headers
-                'Ocp-Apim-Subscription-Key': self.api_key,
-            }
+    def personGroup_status(self, personGroupId):
+        print("personGroup_status: 查看一個 personGroup 的狀態，也就是看看訓練是否成功！")
+        headers = {
+            # Request headers
+            'Ocp-Apim-Subscription-Key': self.api_key,
+        }
 
-            params = urllib.parse.urlencode({'personGroupId': personGroupId})
+        params = urllib.parse.urlencode({'personGroupId': personGroupId})
 
-            try:
-                conn = http.client.HTTPSConnection(self.host)
-                conn.request("GET", "/face/v1.0/persongroups/" +
+        try:
+            conn = http.client.HTTPSConnection(self.host)
+            conn.request("GET", "/face/v1.0/persongroups/" +
                              personGroupId + "/training?%s" % params, "{body}",
                              headers)
-                response = conn.getresponse()
-                data = response.read()
-                print(data)
-                conn.close()
-            except Exception as e:
-                print("[Errno {0}] {1}".format(e.errno, e.strerror))
+            response = conn.getresponse()
+            data = response.read()
+            print(data)
+            conn.close()
+        except Exception as e:
+            print("[Errno {0}] {1}".format(e.errno, e.strerror))
 
 
 class Person:
