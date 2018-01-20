@@ -102,7 +102,7 @@ def trainNewPerson(text, imagepath):
 
 
 def showGUI(text, imagepath):
-    #top = tk.Tk()
+    #top = tk.Tk() # 直接 Tk() 會出現 pyimage2 not found 的問題，改成 tk.Toplevel()
     top = tk.Toplevel()
     top.geometry('400x400')
     top.title(text)
