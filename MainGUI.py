@@ -60,11 +60,12 @@ def trainNewPerson(text, imagepath):
     top = tk.Tk()
     top.geometry('400x400')
     top.title(text)
-    #img = Image.open(imagepath)
-    #img.save(imagepath+".gif", 'GIF')
     print("訓練新人: imagepath=" + imagepath)
+    # 把圖片轉成 gif
+    img = Image.open(imagepath)
+    img.save(imagepath+".gif", 'GIF')
 
-    imagefile = tk.PhotoImage(file=imagepath)
+    imagefile = tk.PhotoImage(file=imagepath+".gif")
     maxwidth = 160
     h = imagefile.height()
     w = imagefile.width()
