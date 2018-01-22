@@ -2,6 +2,8 @@ import http.client, urllib.request, urllib.parse, urllib.error, base64, json
 import os, sys
 from PIL import Image
 
+basepath = os.path.dirname(os.path.realpath(__file__))
+
 class PersonGroup:
     def __init__(self, api_key, host):
         self.api_key = api_key
