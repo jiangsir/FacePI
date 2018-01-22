@@ -173,13 +173,13 @@ def Signin():
     if 'error' in facejsons and 'not trained' in facejsons['error']['message']:
         persongroupapi.train_personGroup(personGroupId)
         status = persongroupapi.personGroup_status(personGroupId)
-    if status['status'] == 'failed' and 'no person in group' in status['message']:
-        personid = personapi.create_a_person(personGroupId, 'unknown name', 'unknown descript')
-        personapi.add_a_person_face(imagepath, personid, personGroupId)
-        persongroupapi.train_personGroup(personGroupId)
-        status = persongroupapi.personGroup_status(personGroupId)
+        if status['status'] == 'failed' and 'no person in group' in status['message']:
+            personid = personapi.create_a_person(personGroupId, 'unknown name', 'unknown descript')
+            personapi.add_a_person_face(imagepath, personid, personGroupId)
+            persongroupapi.train_personGroup(personGroupId)
+            status = persongroupapi.personGroup_status(personGroupId)
+            trainNewPerson('訓練一個新人！', imagepath)
 
-            #trainNewPerson('群組裡沒有任何一個人，訓練一個新人！', imagepath)
     facejsons = faceapi.identify(list(faceids.keys()), personGroupId)
         
     
