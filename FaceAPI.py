@@ -238,59 +238,59 @@ class Person:
         except Exception as e:
             print("[Errno {0}] {1}".format(e.errno, e.strerror))
 
-        def create_a_person(self, personGroupId, name, descript):
-            print("在 personGroupid=" + personGroupId + " 裡 建立一個 person name=" +
-                  name)
-            headers = {
-                # Request headers
-                'Content-Type': 'application/json',
-                'Ocp-Apim-Subscription-Key': self.api_key,
-            }
+    def create_a_person(self, personGroupId, name, descript):
+        print("在 personGroupid=" + personGroupId + " 裡 建立一個 person name=" +
+                 name)
+        headers = {
+            # Request headers
+            'Content-Type': 'application/json',
+            'Ocp-Apim-Subscription-Key': self.api_key,
+        }
 
-            params = urllib.parse.urlencode({'personGroupId': personGroupId})
+        params = urllib.parse.urlencode({'personGroupId': personGroupId})
 
-            requestbody = '{"name":"' + name + '","userData":"' + descript + '"}'
+        requestbody = '{"name":"' + name + '","userData":"' + descript + '"}'
 
-            try:
-                conn = http.client.HTTPSConnection(self.host)
-                conn.request("POST", "/face/v1.0/persongroups/" +
-                             personGroupId + "/persons?%s" % params,
-                             requestbody, headers)
-                response = conn.getresponse()
-                data = response.read()
-                #print(data)
-                create_a_person_json = json.loads(str(data, 'UTF-8'))
+        try:
+            conn = http.client.HTTPSConnection(self.host)
+            conn.request("POST", "/face/v1.0/persongroups/" +
+                            personGroupId + "/persons?%s" % params,
+                            requestbody, headers)
+            response = conn.getresponse()
+            data = response.read()
+            #print(data)
+            create_a_person_json = json.loads(str(data, 'UTF-8'))
 
-                conn.close()
-                return create_a_person_json['personId']
-            except Exception as e:
-                print("[Errno {0}] {1}".format(e.errno, e.strerror))
+            conn.close()
+            return create_a_person_json['personId']
+        except Exception as e:
+            print("[Errno {0}] {1}".format(e.errno, e.strerror))
 
-        def list_persons_in_group(self, personGroupId):
-            headers = {
-                # Request headers
-                'Ocp-Apim-Subscription-Key': self.api_key,
-            }
+    def list_persons_in_group(self, personGroupId):
+        headers = {
+            # Request headers
+            'Ocp-Apim-Subscription-Key': self.api_key,
+        }
 
-            params = urllib.parse.urlencode({
-                # Request parameters
-                #'start': '{string}',
-                #'top': '1000',
-            })
+        params = urllib.parse.urlencode({
+            # Request parameters
+            #'start': '{string}',
+            #'top': '1000',
+        })
 
-            try:
-                conn = http.client.HTTPSConnection(self.host)
-                conn.request("GET", "/face/v1.0/persongroups/" +
-                             personGroupId + "/persons?%s" % params, "{body}",
-                             headers)
-                response = conn.getresponse()
-                data = response.read()
-                #print(data)
-                persons = json.loads(str(data, 'UTF-8'))
-                conn.close()
-                return persons
-            except Exception as e:
-                print("[Errno {0}] {1}".format(e.errno, e.strerror))
+        try:
+            conn = http.client.HTTPSConnection(self.host)
+            conn.request("GET", "/face/v1.0/persongroups/" +
+                            personGroupId + "/persons?%s" % params, "{body}",
+                            headers)
+            response = conn.getresponse()
+            data = response.read()
+            #print(data)
+            persons = json.loads(str(data, 'UTF-8'))
+            conn.close()
+            return persons
+        except Exception as e:
+            print("[Errno {0}] {1}".format(e.errno, e.strerror))
 
 
 class Face:

@@ -63,7 +63,16 @@ def trainNewPerson(text, imagepath):
     print("訓練新人: imagepath=" + imagepath)
     # 把圖片轉成 gif
     img = Image.open(imagepath)
-    img.save(imagepath+".gif", 'GIF')
+    #faceRectangle =  {'top': 141, 'height': 261, 'width': 261, 'left': 664}
+    img2 = img.crop((left, top, left + width, top + height))
+
+    saveimage = basepath + "/tmp/" + face['faceId'] + ".gif"
+    if not os.path.exists(os.path.dirname(saveimage)):
+        os.makedirs(os.path.dirname(saveimage))
+    img2.save(saveimage, 'GIF')
+
+    #img = Image.open(imagepath)
+    #img.save(imagepath+".gif", 'GIF')
 
     imagefile = tk.PhotoImage(file=imagepath+".gif")
     maxwidth = 160
@@ -150,6 +159,8 @@ def showGUI(text, imagepath):
 def Signin():
     faceapi = FaceAPI.Face(api_key, host)
     persongroupapi = FaceAPI.PersonGroup(api_key, host)
+    personapi = FaceAPI.Person(api_key, host)
+
     imagepath = Camera.takePicture(personGroupId)
     faces = faceapi.detectLocalImage(imagepath)
     print('faces[',len(faces),'] = ', faces)
@@ -162,9 +173,14 @@ def Signin():
     if 'error' in facejsons and 'not trained' in facejsons['error']['message']:
         persongroupapi.train_personGroup(personGroupId)
         status = persongroupapi.personGroup_status(personGroupId)
-        if status['status'] == 'failed' and 'no person in group' in status['message']:
-            trainNewPerson('群組裡沒有任何一個人，訓練一個新人！', imagepath)
-        facejsons = faceapi.identify(list(faceids.keys()), personGroupId)
+    if status['status'] == 'failed' and 'no person in group' in status['message']:
+        personid = personapi.create_a_person(personGroupId, 'unknown name', 'unknown descript')
+        personapi.add_a_person_face(imagepath, personid, personGroupId)
+        persongroupapi.train_personGroup(personGroupId)
+        status = persongroupapi.personGroup_status(personGroupId)
+
+            #trainNewPerson('群組裡沒有任何一個人，訓練一個新人！', imagepath)
+    facejsons = faceapi.identify(list(faceids.keys()), personGroupId)
         
     
     for facejson in facejsons:
