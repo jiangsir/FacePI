@@ -62,17 +62,17 @@ def trainNewPerson(text, imagepath):
     top.title(text)
     print("訓練新人: imagepath=" + imagepath)
     # 把圖片轉成 gif
-    img = Image.open(imagepath)
-    #faceRectangle =  {'top': 141, 'height': 261, 'width': 261, 'left': 664}
-    img2 = img.crop((left, top, left + width, top + height))
-
-    saveimage = basepath + "/tmp/" + face['faceId'] + ".gif"
-    if not os.path.exists(os.path.dirname(saveimage)):
-        os.makedirs(os.path.dirname(saveimage))
-    img2.save(saveimage, 'GIF')
-
     #img = Image.open(imagepath)
-    #img.save(imagepath+".gif", 'GIF')
+    #faceRectangle =  {'top': 141, 'height': 261, 'width': 261, 'left': 664}
+    #img2 = img.crop((left, top, left + width, top + height))
+
+    #saveimage = basepath + "/tmp/" + face['faceId'] + ".gif"
+    #if not os.path.exists(os.path.dirname(saveimage)):
+    #    os.makedirs(os.path.dirname(saveimage))
+    #img2.save(saveimage, 'GIF')
+
+    img = Image.open(imagepath)
+    img.save(imagepath+".gif", 'GIF')
 
     imagefile = tk.PhotoImage(file=imagepath+".gif")
     maxwidth = 160
