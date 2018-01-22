@@ -359,6 +359,31 @@ class Face:
             #print(parsed[0]['faceId'])
             #faceids.append(parsed[0]['faceId'])
             conn.close()
+
+            print(imagepath + "偵測到 {0} 個人".format(len(faces)))
+            #display(Image(filename=imagepath))
+            for face in faces:
+                #print("face = ", face)
+                print("faceRectangle = ", face['faceRectangle'])
+                print("faceId = ", face['faceId'])
+                left = face['faceRectangle']['left']
+                top = face['faceRectangle']['top']
+                height = face['faceRectangle']['height']
+                width = face['faceRectangle']['width']
+
+                img = Image.open(imagepath)
+                #faceRectangle =  {'top': 141, 'height': 261, 'width': 261, 'left': 664}
+                img2 = img.crop((left, top, left + width, top + height))
+
+                saveimage = basepath + "/tmp/" + face['faceId'] + ".gif"
+                if not os.path.exists(os.path.dirname(saveimage)):
+                    os.makedirs(os.path.dirname(saveimage))
+                img2.save(saveimage, 'GIF')
+                #display(img2)
+                #area = (left, top, left+width, top+height)
+                #cropped_img = img.crop(area)
+                #cropped_img.show()
+
             return faces
         except Exception as e:
             print("[Errno {0}] {1}".format(e.errno, e.strerror))
