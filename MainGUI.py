@@ -69,9 +69,9 @@ def trainNewPerson(text, imagepath):
     maxwidth = 160
     h = imagefile.height()
     w = imagefile.width()
-    print('h=', h , 'w=', w)
     if w > maxwidth:
         imagefile = imagefile.subsample(w // maxwidth, w // maxwidth)
+    print('h=', imagefile.height() , 'w=', imagefile.width())
     canvas = tk.Canvas(top, height=imagefile.height(), width=imagefile.width())
 
     image = canvas.create_image(10, 10, anchor="nw", image=imagefile)
