@@ -55,7 +55,7 @@ def train(top, e, imagepath):
     top.destroy()
     sys.exit()
 
-def trainNewPerson(text, imagepath):
+def trainNewPersonGUI(text, imagepath):
     # 當辨識不到人的時候，跳這個畫面。以便用這個圖片去訓練新人。
     top = tk.Tk()
     top.geometry('400x400')
@@ -175,12 +175,12 @@ def Signin():
         status = persongroupapi.personGroup_status(personGroupId)
         if status['status'] == 'failed' and 'no person in group' in status['message']:
             personid = personapi.create_a_person(personGroupId, 'unknown name', 'unknown descript')
-            print('imagepath=', imagepath)
+            print('imagepath1=', imagepath)
             personapi.add_a_person_face(imagepath, personid, personGroupId)
             persongroupapi.train_personGroup(personGroupId)
             status = persongroupapi.personGroup_status(personGroupId)
-            print('imagepath=', imagepath)
-            trainNewPerson('訓練一個新人！', imagepath)
+            print('imagepath2=', imagepath)
+            trainNewPersonGUI('訓練一個新人！', imagepath)
 
     facejsons = faceapi.identify(list(faceids.keys()), personGroupId)
         
@@ -197,13 +197,14 @@ def Signin():
             confidence = facejson["candidates"][0]["confidence"]
             print("personId: " + facejson["candidates"][0]["personId"] + ", 信心指數："
                 + str(confidence))
-            personjson = persongroupapi.get_a_person(personGroupId,
-                                    facejson["candidates"][0]["personId"])
+            personjson = persongroupapi.get_a_person(
+                                    facejson["candidates"][0]["personId"], personGroupId)
             text = ""
             if 'error' in personjson.keys():
                 text = "查無此人！"
+                print('imagepath2=', imagepath)
                 imagepath = basepath + "/tmp/" + facejson['faceId'] + ".gif"
-                trainNewPerson(text, imagepath)
+                trainNewPersonGUI(text, imagepath)
                 sys.exit()
             elif confidence >= 0.9:
                 if personjson['name'] in id_names.keys():
@@ -229,7 +230,7 @@ def Signin():
         elif facejson != 'error' and len(facejson['candidates']) == 0:
             text = "哈囉，你哪位？"
             imagepath = basepath + "/tmp/" + facejson['faceId'] + ".gif"
-            trainNewPerson(text, imagepath)
+            trainNewPersonGUI(text, imagepath)
 
 
 b2 = tk.Button(
