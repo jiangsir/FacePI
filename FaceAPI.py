@@ -1,6 +1,6 @@
 import http.client, urllib.request, urllib.parse, urllib.error, base64, json
 import os, sys
-
+from PIL import Image
 
 class PersonGroup:
     def __init__(self, api_key, host):
