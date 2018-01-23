@@ -99,7 +99,7 @@ def trainNewPersonGUI(text, imagepath):
 
     b1 = tk.Button(
         top,
-        text='記住我！',
+        text='進行 5 連拍並記住我！',
         width=15,
         height=4,
         command=lambda: train(top, e, imagepath))
