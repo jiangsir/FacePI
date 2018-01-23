@@ -14,6 +14,7 @@ while True:
     print('2. 列出某個「人群」裡有哪些 Person')
     print('3. 刪除某個 PersonGroups')
     print('4. 刪除某個 PersonGroups 裡的 Person')
+    print('5. 鏡頭對焦')
     index = input('選擇功能？ ')
     if index == '0':
         sys.exit()
@@ -41,4 +42,5 @@ while True:
             print('person:', person)
         personid = input('請輸入 personid: ')
         personApi.deleteAPerson(personGroupId, personid)
-
+    elif index == '5':
+        Camera.takePicture('test camera', 10000)

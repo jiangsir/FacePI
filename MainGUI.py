@@ -71,10 +71,10 @@ def trainNewPersonGUI(text, imagepath):
     #    os.makedirs(os.path.dirname(saveimage))
     #img2.save(saveimage, 'GIF')
 
-    img = Image.open(imagepath)
-    img.save(imagepath+".gif", 'GIF')
+    #img = Image.open(imagepath)
+    #img.save(imagepath+".gif", 'GIF')
 
-    imagefile = tk.PhotoImage(file=imagepath+".gif")
+    imagefile = tk.PhotoImage(file=imagepath)
     maxwidth = 160
     h = imagefile.height()
     w = imagefile.width()
@@ -161,7 +161,7 @@ def Signin():
     persongroupapi = FaceAPI.PersonGroup(api_key, host)
     personapi = FaceAPI.Person(api_key, host)
 
-    imagepath = Camera.takePicture(personGroupId)
+    imagepath = Camera.takePicture(personGroupId, 2000)
     faces = faceapi.detectLocalImage(imagepath)
     print('faces[',len(faces),'] = ', faces)
     faceids = {}
