@@ -224,7 +224,7 @@ class Person:
         self.host = host
 
     def add_a_person_face(self, imagepath, personId, personGroupId):
-        print("用一個圖片放入一個 person 當中 personId=" + personId)
+        print("用一個圖片放入一個 person 當中 personId=" + personId, 'imagepath=', imagepath)
         #display(Image(url=imagepath))
 
         headers = {
