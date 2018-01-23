@@ -16,6 +16,7 @@ while True:
     print('4. 刪除某個 PersonGroups 裡的 Person')
     print('5. 鏡頭對焦')
     print('6. 列出所有的 facelists ')
+    print('7. 觀察 PersonGroup status ')
     index = input('選擇功能？ ')
     if index == '0':
         sys.exit()
@@ -48,3 +49,6 @@ while True:
     elif index == '6':
         faceList = FaceAPI.FaceList(api_key, host)
         faceList.listFacelists()
+    elif index == '7':
+        personGroupId = input('請輸入 personGroupId: ')
+        PersonGroup.personGroup_status(personGroupId)

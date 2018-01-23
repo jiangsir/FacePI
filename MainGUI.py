@@ -168,7 +168,7 @@ def Signin():
 
     imagepath = Camera.takePicture(personGroupId, 2000)
     faces = faceapi.detectLocalImage(imagepath)
-    print('faces[',len(faces),'] = ', faces)
+    print('本地圖片偵測到 ',len(faces),' 人, faces=', faces)
     faceids = {}
     for face in faces:
         faceids[face['faceId']] = imagepath

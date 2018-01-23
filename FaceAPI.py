@@ -386,7 +386,8 @@ class Face:
             'returnFaceLandmarks':
             'false',
             'returnFaceAttributes':
-            'age,gender,headPose,smile,facialHair,glasses,emotion,hair,makeup,occlusion,accessories,blur,exposure'
+            #'age,gender,headPose,smile,facialHair,glasses,emotion,hair,makeup,occlusion,accessories,blur,exposure'
+            'age,gender'
         })
         print('imagepath=', imagepath)
         requestbody = open(imagepath, "rb").read()
