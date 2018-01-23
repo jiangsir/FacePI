@@ -17,6 +17,8 @@ while True:
     print('5. 鏡頭對焦')
     print('6. 列出所有的 facelists ')
     print('7. 觀察 PersonGroup status ')
+    print('8. 訓練 PersonGroup ')
+    print('9. 建立一個 PersonGroup ')
     index = input('選擇功能？ ')
     if index == '0':
         sys.exit()
@@ -52,3 +54,10 @@ while True:
     elif index == '7':
         personGroupId = input('請輸入 personGroupId: ')
         PersonGroup.personGroup_status(personGroupId)
+    elif index == '8':
+        personGroupId = input('請輸入 personGroupId: ')
+        PersonGroup.train_personGroup(personGroupId)
+    elif index == '9':
+        personGroupId = input('建立一個 personGroupId: ')
+        PersonGroup.createPersonGroup(personGroupId,'group namename','group datadata')
+        

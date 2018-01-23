@@ -166,9 +166,18 @@ def Signin():
     persongroupapi = FaceAPI.PersonGroup(api_key, host)
     personapi = FaceAPI.Person(api_key, host)
 
+    status = persongroupapi.personGroup_status(personGroupId)
+    if status['error']['code'] == 'PersonGroupNotFound':
+        persongroupapi.createPersonGroup(personGroupId, 'group name', 'group data')
+    if status['error']['code'] == 'PersonGroupNotTrained':
+        persongroupapi.train_personGroup(personGroupId)
+        
     imagepath = Camera.takePicture(personGroupId, 2000)
     faces = faceapi.detectLocalImage(imagepath)
     print('本地圖片偵測到 ',len(faces),' 人, faces=', faces)
+    if len(faces) == 0:
+        showGUI("本圖片沒有偵測到任何人！", imagepath)
+
     faceids = {}
     for face in faces:
         faceids[face['faceId']] = imagepath
@@ -182,6 +191,7 @@ def Signin():
         status = persongroupapi.personGroup_status(personGroupId)
         if status['status'] == 'failed' and 'no person in group' in status['message']:
             personid = personapi.create_a_person(personGroupId, 'unknown name', 'unknown descript')
+            imagepath = basepath + "/tmp/" + faceids[] + ".gif"
             print('imagepath1=', imagepath)
             personapi.add_a_person_face(imagepath, personid, personGroupId)
             persongroupapi.train_personGroup(personGroupId)
