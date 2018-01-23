@@ -191,7 +191,6 @@ def Signin():
         status = persongroupapi.personGroup_status(personGroupId)
         if status['status'] == 'failed' and 'no person in group' in status['message']:
             personid = personapi.create_a_person(personGroupId, 'unknown name', 'unknown descript')
-            imagepath = basepath + "/tmp/" + faceids[] + ".gif"
             print('imagepath1=', imagepath)
             personapi.add_a_person_face(imagepath, personid, personGroupId)
             persongroupapi.train_personGroup(personGroupId)
