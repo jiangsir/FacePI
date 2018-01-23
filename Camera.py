@@ -9,5 +9,5 @@ def takePicture(personGroupId, delay):
         "%Y-%m-%d_%H:%M:%S", time.localtime()) + ".jpg"
     if not os.path.exists(os.path.dirname(imagepath)):
         os.makedirs(os.path.dirname(imagepath))
-    os.system("raspistill -t "+delay+" -o " + imagepath)
+    os.system("raspistill -t " + str(delay) + " -o " + imagepath)
     return imagepath
