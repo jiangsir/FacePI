@@ -50,7 +50,11 @@ def train(top, e, imagepath):
     newpersonname = e.get()
     print(newpersonname)
     personapi = FaceAPI.Person(api_key, host)
+    personGroupapi = FaceAPI.PersonGroup(api_key, host)
     personid = personapi.create_a_person(personGroupId, newpersonname, 'unknown descript')
+    personapi.add_a_person_face(imagepath, personid, personGroupId)
+
+    personGroupapi.train_personGroup(personGroupId)
 
     top.destroy()
     #sys.exit()
