@@ -102,6 +102,40 @@ def create_a_person(personGroupId, name, descript):
     except Exception as e:
         print("[Errno {0}] {1}".format(e.errno, e.strerror))    
         
+def add_a_person_face(imagepath, personId, personGroupId):
+    print("用一個圖片放入一個 person 當中 personId="+personId)
+    #display(Image(url=imagepath))
+
+    headers = {
+        # Request headers
+#        'Content-Type': 'application/json',
+        'Content-Type': 'application/octet-stream', #上傳圖檔
+        'Ocp-Apim-Subscription-Key': api_key,
+    }
+
+    params = urllib.parse.urlencode({
+        # Request parameters
+        'personGroupId': personGroupId,
+        #'personId': '03cb1134-ad35-4b80-8bf2-3200f44eef31',
+        'personId': personId,
+        #'userData': '{string}',
+        #'targetFace': '{string}',
+    })
+#"https://lh3.googleusercontent.com/AuJtzSdWCTZ6pWW9pMxec86gVZEjP00O7qvl8RNbzYfmJvsiUfDL-BXfel5Sw2jgPNUy7rcIVQ-HFDxDEFuIZxp56NpKwOjYncgMjL_dt0-FnoBIYyUpplx4LlE5ShN2hJ3-URLwOA4=w597-h796-no"
+
+#    requestbody = '{"url": "'+imageurl+'"}'
+    requestbody = open(imagepath, "rb").read()
+    
+
+    try:
+        conn = http.client.HTTPSConnection(host)
+        conn.request("POST", "/face/v1.0/persongroups/"+personGroupId+"/persons/"+personId+"/persistedFaces?%s" % params, requestbody, headers)
+        response = conn.getresponse()
+        data = response.read()
+        print(data)
+        conn.close()
+    except Exception as e:
+        print("[Errno {0}] {1}".format(e.errno, e.strerror))
 
 
 

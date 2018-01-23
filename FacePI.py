@@ -15,6 +15,7 @@ while True:
     print('3. 刪除某個 PersonGroups')
     print('4. 刪除某個 PersonGroups 裡的 Person')
     print('5. 鏡頭對焦')
+    print('6. 列出所有的 facelists ')
     index = input('選擇功能？ ')
     if index == '0':
         sys.exit()
@@ -44,3 +45,6 @@ while True:
         personApi.deleteAPerson(personGroupId, personid)
     elif index == '5':
         Camera.takePicture('test camera', 10000)
+    elif index == '6':
+        faceList = FaceAPI.FaceList(api_key, host)
+        faceList.listFacelists()

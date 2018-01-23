@@ -434,3 +434,21 @@ class FaceList:
     def __init__(self, api_key, host):
         self.api_key = api_key
         self.host = host
+    def listFacelists(self):
+        headers = {
+            # Request headers
+            'Ocp-Apim-Subscription-Key': self.api_key,
+        }
+
+        params = urllib.parse.urlencode({
+        })
+
+        try:
+            conn = http.client.HTTPSConnection(self.host)
+            conn.request("GET", "/face/v1.0/facelists?%s" % params, "{body}", headers)
+            response = conn.getresponse()
+            data = response.read()
+            print(data)
+            conn.close()
+        except Exception as e:
+            print("[Errno {0}] {1}".format(e.errno, e.strerror))        
