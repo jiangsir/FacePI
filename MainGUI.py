@@ -51,8 +51,9 @@ def train(top, e, imagepath):
     print(newpersonname)
     personapi = FaceAPI.Person(api_key, host)
     personid = personapi.create_a_person(personGroupId, newpersonname, 'unknown descript')
+
     top.destroy()
-    sys.exit()
+    #sys.exit()
 
 def trainNewPersonGUI(text, imagepath):
     # 當辨識不到人的時候，跳這個畫面。以便用這個圖片去訓練新人。
