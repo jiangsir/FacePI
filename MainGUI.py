@@ -53,7 +53,7 @@ def train(top, e, imagepath):
     personGroupapi = FaceAPI.PersonGroup(api_key, host)
     personid = personapi.create_a_person(personGroupId, newpersonname, 'unknown descript')
     personapi.add_a_person_face(imagepath, personid, personGroupId)
-
+    print('FROM train()')
     personGroupapi.train_personGroup(personGroupId)
 
     top.destroy()
@@ -175,6 +175,8 @@ def Signin():
     print('faceids =', faceids)
     facejsons = faceapi.identify(list(faceids.keys()), personGroupId)
     print("facejsons=", facejsons, type(facejsons))
+    if 'error' in facejsons and 'PersonGroupNotFound' in facejsons['error']['code']:
+        persongroupapi.createPersonGroup(personGroupId, 'group name', 'group data')
     if 'error' in facejsons and 'not trained' in facejsons['error']['message']:
         persongroupapi.train_personGroup(personGroupId)
         status = persongroupapi.personGroup_status(personGroupId)
