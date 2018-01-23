@@ -57,7 +57,8 @@ def train(top, e, imagepath):
 
 def trainNewPersonGUI(text, imagepath):
     # 當辨識不到人的時候，跳這個畫面。以便用這個圖片去訓練新人。
-    top = tk.Tk()
+    #top = tk.Tk()
+    top = tk.Toplevel()
     top.geometry('400x400')
     top.title(text)
     print("訓練新人: imagepath=" + imagepath)
