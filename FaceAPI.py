@@ -116,7 +116,7 @@ class PersonGroup:
             print("[Errno {0}] {1}".format(e.errno, e.strerror))
 
     def createPersonGroup(self, personGroupId, groupname, groupdata):
-        print("建立一個 personGroupid = " + personGroupId)
+        print("createPersonGroup: 建立一個 personGroupid = " + personGroupId)
         headers = {
             # Request headers.
             'Content-Type': 'application/json',
@@ -154,7 +154,7 @@ class PersonGroup:
             print(e.args)
 
     def train_personGroup(self, personGroupId):
-        print("開始訓練一個 personGroup personGroupId=" + personGroupId + "。")
+        print("train_personGroup: 開始訓練一個 personGroup personGroupId=" + personGroupId + "。")
 
         headers = {
             # Request headers
@@ -224,7 +224,7 @@ class Person:
         self.host = host
 
     def add_a_person_face(self, imagepath, personId, personGroupId):
-        print("用一個圖片放入一個 person 當中 personId=" + personId, 'imagepath=', imagepath)
+        print("'add_a_person_face': 用一個圖片放入一個 person 當中 personId=" + personId, 'imagepath=', imagepath)
         #display(Image(url=imagepath))
 
         headers = {
@@ -261,7 +261,7 @@ class Person:
             print("[Errno {0}] {1}".format(e.errno, e.strerror))
 
     def create_a_person(self, personGroupId, name, descript):
-        print("在 personGroupid=" + personGroupId + " 裡 建立一個 person name=" +
+        print("'create_a_person': 在 personGroupid=" + personGroupId + " 裡 建立一個 person name=" +
               name)
         headers = {
             # Request headers
@@ -288,6 +288,7 @@ class Person:
             print("[Errno {0}] {1}".format(e.errno, e.strerror))
 
     def list_persons_in_group(self, personGroupId):
+        print("'list_persons_in_group'")
         headers = {
             # Request headers
             'Ocp-Apim-Subscription-Key': self.api_key,
