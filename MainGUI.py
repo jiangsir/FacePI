@@ -169,6 +169,7 @@ def Signin():
     status = persongroupapi.personGroup_status(personGroupId)
     if 'error' in status and status['error']['code'] == 'PersonGroupNotFound':
         persongroupapi.createPersonGroup(personGroupId, 'group name', 'group data')
+        persongroupapi.train_personGroup(personGroupId)
     if 'error' in status and status['error']['code'] == 'PersonGroupNotTrained':
         persongroupapi.train_personGroup(personGroupId)
         
@@ -184,22 +185,6 @@ def Signin():
     print('faceids =', faceids)
     facejsons = faceapi.identify(list(faceids.keys()), personGroupId)
     print("facejsons=", facejsons, type(facejsons))
-    if 'error' in facejsons and 'PersonGroupNotFound' in facejsons['error']['code']:
-        persongroupapi.createPersonGroup(personGroupId, 'group name', 'group data')
-    if 'error' in facejsons and 'not trained' in facejsons['error']['message']:
-        persongroupapi.train_personGroup(personGroupId)
-        status = persongroupapi.personGroup_status(personGroupId)
-        if status['status'] == 'failed' and 'no person in group' in status['message']:
-            personid = personapi.create_a_person(personGroupId, 'unknown name', 'unknown descript')
-            print('imagepath1=', imagepath)
-            personapi.add_a_person_face(imagepath, personid, personGroupId)
-            persongroupapi.train_personGroup(personGroupId)
-            status = persongroupapi.personGroup_status(personGroupId)
-            print('imagepath2=', imagepath)
-            trainNewPersonGUI('訓練一個新人！', imagepath)
-
-    facejsons = faceapi.identify(list(faceids.keys()), personGroupId)
-        
     
     for facejson in facejsons:
         print("facejson type = ", type(facejson), "  ", facejson == 'error')            
