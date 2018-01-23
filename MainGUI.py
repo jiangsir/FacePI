@@ -167,9 +167,9 @@ def Signin():
     personapi = FaceAPI.Person(api_key, host)
 
     status = persongroupapi.personGroup_status(personGroupId)
-    if status['error']['code'] == 'PersonGroupNotFound':
+    if 'error' in status and status['error']['code'] == 'PersonGroupNotFound':
         persongroupapi.createPersonGroup(personGroupId, 'group name', 'group data')
-    if status['error']['code'] == 'PersonGroupNotTrained':
+    if 'error' in status and status['error']['code'] == 'PersonGroupNotTrained':
         persongroupapi.train_personGroup(personGroupId)
         
     imagepath = Camera.takePicture(personGroupId, 2000)
