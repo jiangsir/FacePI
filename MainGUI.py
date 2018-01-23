@@ -47,11 +47,10 @@ def close_window(top):
 
 
 def train(top, e, imagepath):
-    newpersonid = e.get()
-    print(newpersonid)
-    if newpersonid != None and newpersonid.strip() != '':
-        os.system('python3 ' + basepath + '/FacePI-Train.py ' + personGroupId +
-                  ' ' + newpersonid + ' ' + imagepath)
+    newpersonname = e.get()
+    print(newpersonname)
+    personapi = FaceAPI.Person(api_key, host)
+    personid = personapi.create_a_person(personGroupId, newpersonname, 'unknown descript')
     top.destroy()
     sys.exit()
 

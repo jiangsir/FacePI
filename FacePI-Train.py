@@ -75,6 +75,32 @@ def create_personGroup(personGroupId, groupname, groupdata):
         
         
         
+def create_a_person(personGroupId, name, descript):
+    print("在 personGroupid="+personGroupId+" 裡 建立一個 person name="+name)
+    headers = {
+        # Request headers
+        'Content-Type': 'application/json',
+        'Ocp-Apim-Subscription-Key': api_key,
+    }
+
+    params = urllib.parse.urlencode({
+            'personGroupId':personGroupId
+    })
+
+    requestbody = '{"name":"'+name+'","userData":"'+descript+'"}'
+
+    try:
+        conn = http.client.HTTPSConnection(host)
+        conn.request("POST", "/face/v1.0/persongroups/"+personGroupId+"/persons?%s" % params, requestbody, headers)
+        response = conn.getresponse()
+        data = response.read()
+        #print(data)
+        create_a_person_json = json.loads(str(data,'UTF-8'))
+
+        conn.close()
+        return create_a_person_json['personId']
+    except Exception as e:
+        print("[Errno {0}] {1}".format(e.errno, e.strerror))    
         
 
 
