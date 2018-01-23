@@ -4,6 +4,7 @@ from PIL import Image
 
 basepath = os.path.dirname(os.path.realpath(__file__))
 
+
 class PersonGroup:
     def __init__(self, api_key, host):
         self.api_key = api_key
@@ -65,7 +66,7 @@ class PersonGroup:
             print("[Errno {0}] {1}".format(e.errno, e.strerror))
 
     def ListPersonGroups(self):
-        print('列出所有的 person Groups')
+        #print('列出所有的 person Groups')
         headers = {
             # Request headers
             'Ocp-Apim-Subscription-Key': self.api_key,
@@ -85,7 +86,7 @@ class PersonGroup:
             data = response.read()
             personGroups = json.loads(str(data, 'UTF-8'))
             conn.close()
-            print('共', len(personGroups), '個 =', personGroups)
+            #print('共', len(personGroups), '個 =', personGroups)
             return personGroups
         except Exception as e:
             print("[Errno {0}] {1}".format(e.errno, e.strerror))
@@ -164,9 +165,8 @@ class PersonGroup:
 
         try:
             conn = http.client.HTTPSConnection(self.host)
-            conn.request("POST", "/face/v1.0/persongroups/" +
-                         personGroupId + "/train?%s" % params, "{body}",
-                         headers)
+            conn.request("POST", "/face/v1.0/persongroups/" + personGroupId +
+                         "/train?%s" % params, "{body}", headers)
             response = conn.getresponse()
             data = response.read()
             print(data)
@@ -185,15 +185,35 @@ class PersonGroup:
 
         try:
             conn = http.client.HTTPSConnection(self.host)
-            conn.request("GET", "/face/v1.0/persongroups/" +
-                             personGroupId + "/training?%s" % params, "{body}",
-                             headers)
+            conn.request("GET", "/face/v1.0/persongroups/" + personGroupId +
+                         "/training?%s" % params, "{body}", headers)
             response = conn.getresponse()
             data = response.read()
             status = json.loads(str(data, 'UTF-8'))
             conn.close()
             print('status=', status)
             return status
+        except Exception as e:
+            print("[Errno {0}] {1}".format(e.errno, e.strerror))
+
+    def deletePersonGroup(self, personGroupId):
+        headers = {
+            # Request headers
+            'Ocp-Apim-Subscription-Key': self.api_key,
+        }
+
+        params = urllib.parse.urlencode({})
+
+        try:
+            conn = http.client.HTTPSConnection(self.host)
+            conn.request(
+                "DELETE",
+                "/face/v1.0/persongroups/" + personGroupId + "?%s" % params,
+                "{body}", headers)
+            response = conn.getresponse()
+            data = response.read()
+            print(data)
+            conn.close()
         except Exception as e:
             print("[Errno {0}] {1}".format(e.errno, e.strerror))
 
@@ -242,7 +262,7 @@ class Person:
 
     def create_a_person(self, personGroupId, name, descript):
         print("在 personGroupid=" + personGroupId + " 裡 建立一個 person name=" +
-                 name)
+              name)
         headers = {
             # Request headers
             'Content-Type': 'application/json',
@@ -255,9 +275,8 @@ class Person:
 
         try:
             conn = http.client.HTTPSConnection(self.host)
-            conn.request("POST", "/face/v1.0/persongroups/" +
-                            personGroupId + "/persons?%s" % params,
-                            requestbody, headers)
+            conn.request("POST", "/face/v1.0/persongroups/" + personGroupId +
+                         "/persons?%s" % params, requestbody, headers)
             response = conn.getresponse()
             data = response.read()
             #print(data)
@@ -282,15 +301,34 @@ class Person:
 
         try:
             conn = http.client.HTTPSConnection(self.host)
-            conn.request("GET", "/face/v1.0/persongroups/" +
-                            personGroupId + "/persons?%s" % params, "{body}",
-                            headers)
+            conn.request("GET", "/face/v1.0/persongroups/" + personGroupId +
+                         "/persons?%s" % params, "{body}", headers)
             response = conn.getresponse()
             data = response.read()
             #print(data)
             persons = json.loads(str(data, 'UTF-8'))
             conn.close()
             return persons
+        except Exception as e:
+            print("[Errno {0}] {1}".format(e.errno, e.strerror))
+
+    def deleteAPerson(self, personGroupId, personId):
+        headers = {
+            # Request headers
+            'Ocp-Apim-Subscription-Key': self.api_key,
+        }
+
+        params = urllib.parse.urlencode({})
+
+        try:
+            conn = http.client.HTTPSConnection(self.host)
+            conn.request("DELETE", "/face/v1.0/persongroups/" + personGroupId +
+                         "/persons/" + personId + "?%s" % params, "{body}",
+                         headers)
+            response = conn.getresponse()
+            data = response.read()
+            print(data)
+            conn.close()
         except Exception as e:
             print("[Errno {0}] {1}".format(e.errno, e.strerror))
 
@@ -301,7 +339,8 @@ class Face:
         self.host = host
 
     def identify(self, faceidkeys, personGroupId):
-        print("開始辨識。faceidkeys=", faceidkeys, " , personGroupId=", personGroupId)
+        print("開始辨識。faceidkeys=", faceidkeys, " , personGroupId=",
+              personGroupId)
         headers = {
             # Request headers
             'Content-Type': 'application/json',
