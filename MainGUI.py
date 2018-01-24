@@ -128,7 +128,7 @@ def NotMeGUI(top, gifimagepath):
     # 辨識出來，但是不是正確的人。
     top = tk.Toplevel()
     top.geometry('400x400')
-    top.title('這不是我！！')
+    top.title('')
     print("不是我！: gifimagepath=" + gifimagepath)
 
     imagefile = tk.PhotoImage(file=gifimagepath)
@@ -143,7 +143,7 @@ def NotMeGUI(top, gifimagepath):
     image = canvas.create_image(10, 10, anchor="nw", image=imagefile)
     canvas.pack()
 
-    label = tk.Label(top, text='這不是我！！', font=('Arial', 20))
+    label = tk.Label(top, text='', font=('Arial', 20))
     label.pack()
 
     #frame = tkinter.Frame(master=top).grid(row=1, column=2)
