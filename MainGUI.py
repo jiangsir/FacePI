@@ -222,12 +222,15 @@ def Signin():
                 else:
                     name = personjson['name']
                 text = "" + name + " 報到成功！！！" + str(confidence)
+                showGUI(text, basepath + "/tmp/" + facejson['faceId'] + ".gif")
             elif confidence >= 0.7:
                 if personjson['name'] in id_names.keys():
                     name = id_names[personjson['name']]['name']
                 else:
                     name = personjson['name']
                 text = name + " 報到成功！！" + str(confidence)
+                showGUI(text, basepath + "/tmp/" + facejson['faceId'] + ".gif")
+
 #            elif confidence >= 0.5:
 #                if personjson['name'] in id_names.keys():
 #                    name = id_names[personjson['name']]['name']
@@ -237,10 +240,6 @@ def Signin():
             else:
                 gifimagepath = basepath + "/tmp/" + facejson['faceId'] + ".gif"
                 trainNewPersonGUI(text, gifimagepath)
-
-            print(text)
-            showGUI(text, basepath + "/tmp/" + facejson['faceId'] + ".gif")
-
         elif facejson != 'error' and len(facejson['candidates']) == 0:
             text = "哈囉，你哪位？"
             gifimagepath = basepath + "/tmp/" + facejson['faceId'] + ".gif"
