@@ -259,7 +259,7 @@ def Signin():
             confidence = facejson["candidates"][0]["confidence"]
             print("personId: " + facejson["candidates"][0]["personId"] + ", 信心指數："
                 + str(confidence))
-            personjson = persongroupapi.get_a_person(
+            personjson = personapi.get_a_person(
                                     facejson["candidates"][0]["personId"], personGroupId)
             text = ""
             if 'error' in personjson.keys():
