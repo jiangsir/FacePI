@@ -173,7 +173,7 @@ def showGUI(personname, imagepath):
     #top = tk.Tk() # 直接 Tk() 會出現 pyimage2 not found 的問題，改成 tk.Toplevel()
     top = tk.Toplevel()
     top.geometry('400x400')
-    top.title(personname, '報到成功')
+    top.title(personname+ ' 報到成功')
     ###image = ImageTk.PhotoImage(Image.open("./tmp/"+face['faceId']+".jpg"))
     #image = tkinter.PhotoImage(file=("./tmp/"+face['faceId']+".jpg"))
     ###labelimage = tkinter.Label(top, image=image)
@@ -195,14 +195,14 @@ def showGUI(personname, imagepath):
     image = canvas.create_image(10, 10, anchor="nw", image=imagefile)
     canvas.pack()
 
-    label = tk.Label(top, text=text, font=('Arial', 20))
+    label = tk.Label(top, text='報到成功', font=('Arial', 20))
     label.pack()
 
     b1 = tk.Button(
         top, text='下一位！', width=15, height=2, command=lambda: YesMe(top, personname, imagepath + ".gif"))
     b1.pack()
     b2 = tk.Button(
-        top, text='我不是！', width=15, height=2, command=lambda: NotMeGUI(top, imagepath + ".gif"))
+        top, text='我不是'+personname+'！', width=15, height=2, command=lambda: NotMeGUI(top, imagepath + ".gif"))
     b2.pack()
 
     # Code to add widgets will go here...
