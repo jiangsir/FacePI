@@ -59,7 +59,7 @@ def train(top, e, imagepath):
     top.destroy()
     #sys.exit()
 
-def trainNewPersonGUI(text, imagepath):
+def trainNewPersonGUI(text, gifimagepath):
     # 當辨識不到人的時候，跳這個畫面。以便用這個圖片去訓練新人。
     #top = tk.Tk()
     top = tk.Toplevel()
@@ -187,7 +187,8 @@ def Signin():
     if 'error' in facejsons:
         status = persongroupapi.personGroup_status(personGroupId)
         if status['status'] == 'failed' and 'no persisted faces of person' in status['message']:
-            trainNewPersonGUI('jsjsjs', imagepath)
+            gifimagepath = basepath + "/tmp/" + faceids.keys()[0] + ".gif"
+            trainNewPersonGUI('jsjsjs', gifimagepath)
 
     print("facejsons=", facejsons, type(facejsons))
     
@@ -209,8 +210,8 @@ def Signin():
             if 'error' in personjson.keys():
                 text = "查無此人！"
                 print('imagepath2=', imagepath)
-                imagepath = basepath + "/tmp/" + facejson['faceId'] + ".gif"
-                trainNewPersonGUI(text, imagepath)
+                gifimagepath = basepath + "/tmp/" + facejson['faceId'] + ".gif"
+                trainNewPersonGUI(text, gifimagepath)
                 sys.exit()
             elif confidence >= 0.9:
                 if personjson['name'] in id_names.keys():
@@ -235,8 +236,8 @@ def Signin():
             showGUI(text, basepath + "/tmp/" + facejson['faceId'] + ".gif")
         elif facejson != 'error' and len(facejson['candidates']) == 0:
             text = "哈囉，你哪位？"
-            imagepath = basepath + "/tmp/" + facejson['faceId'] + ".gif"
-            trainNewPersonGUI(text, imagepath)
+            gifimagepath = basepath + "/tmp/" + facejson['faceId'] + ".gif"
+            trainNewPersonGUI(text, gifimagepath)
 
 
 b2 = tk.Button(
