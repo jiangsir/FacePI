@@ -184,6 +184,11 @@ def Signin():
         faceids[face['faceId']] = imagepath
     print('faceids =', faceids)
     facejsons = faceapi.identify(list(faceids.keys()), personGroupId)
+    if 'error' in facejsons:
+        status = persongroupapi.personGroup_status(personGroupId)
+        if status['status'] == 'failed' and 'no persisted faces of person' in status['message']:
+            trainNewPersonGUI('jsjsjs', imagepath)
+
     print("facejsons=", facejsons, type(facejsons))
     
     for facejson in facejsons:
