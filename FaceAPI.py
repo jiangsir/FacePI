@@ -333,8 +333,8 @@ class Person:
         except Exception as e:
             print("[Errno {0}] {1}".format(e.errno, e.strerror))
 
-    def getPersonByName(personGroupId, personname):
-        persons = list_persons_in_group(personGroupId)
+    def getPersonByName(self, personGroupId, personname):
+        persons = self.list_persons_in_group(personGroupId)
         thisperson = None
         for person in persons:
             if person['name'] == personname:
