@@ -66,6 +66,7 @@ def YesMe(top, personname, gifimagepath):
     personapi = FaceAPI.Person(api_key, host)
     person = personapi.getPersonByName(personGroupId, personname)
     personapi.add_a_person_face(gifimagepath, person['personId'], personGroupId)
+    top.destroy()
 
 def trainNewPersonGUI(text, gifimagepath):
     # 當辨識不到人的時候，跳這個畫面。以便用這個圖片去訓練新人。
