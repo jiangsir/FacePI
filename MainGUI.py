@@ -197,9 +197,12 @@ def Signin():
         #if facejson == 'error':
         #    break
         #display(Image(filename="tmp/"+facejson['faceId']+".jpg"))
-        text = "恐怖喔，你確定有人嗎？"
-        if facejson == 'error':
-            showGUI(text, imagepath)
+        text = ""
+        if facejson == 'error' and 'PersonGroupNotTrained' in facejsons['error']['code']:
+            gifimagepath = basepath + "/tmp/" + list(faceids.keys())[0] + ".gif"
+            persongroupapi.train_personGroup(personGroupId)
+            trainNewPersonGUI('訓練一個人群', gifimagepath)
+            #showGUI(text, imagepath)
         elif facejson != 'error' and len(facejson['candidates']) > 0:
             confidence = facejson["candidates"][0]["confidence"]
             print("personId: " + facejson["candidates"][0]["personId"] + ", 信心指數："
