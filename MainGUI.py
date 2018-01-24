@@ -50,14 +50,18 @@ def train(top, e, imagepath):
     newpersonname = e.get()
     print(newpersonname)
     personapi = FaceAPI.Person(api_key, host)
-    personGroupapi = FaceAPI.PersonGroup(api_key, host)
-    personid = personapi.create_a_person(personGroupId, newpersonname, 'unknown descript')
-    personapi.add_a_person_face(imagepath, personid, personGroupId)
+    person = personapi.getPersonByName(newpersonname)
+    if person == None:
+        personGroupapi = FaceAPI.PersonGroup(api_key, host)
+        personid = personapi.create_a_person(personGroupId, newpersonname, 'unknown descript')
+        personapi.add_a_person_face(imagepath, personid, personGroupId)
+    else:
+        personapi.add_a_person_face(imagepath, person['personId'], personGroupId)
     print('FROM train()')
     personGroupapi.train_personGroup(personGroupId)
-
     top.destroy()
     #sys.exit()
+
 
 def trainNewPersonGUI(text, gifimagepath):
     # 當辨識不到人的時候，跳這個畫面。以便用這個圖片去訓練新人。
@@ -116,6 +120,51 @@ def trainNewPersonGUI(text, gifimagepath):
     # Code to add widgets will go here...
     top.mainloop()
 
+def NotMeGUI(gifimagepath):
+    # 辨識出來，但是不是正確的人。
+    top = tk.Toplevel()
+    top.geometry('400x400')
+    top.title('這不是我！！')
+    print("不是我！: gifimagepath=" + gifimagepath)
+
+    imagefile = tk.PhotoImage(file=gifimagepath)
+    maxwidth = 160
+    h = imagefile.height()
+    w = imagefile.width()
+    if w > maxwidth:
+        imagefile = imagefile.subsample(w // maxwidth, w // maxwidth)
+    print('h=', imagefile.height() , 'w=', imagefile.width())
+    canvas = tk.Canvas(top, height=imagefile.height(), width=imagefile.width())
+
+    image = canvas.create_image(10, 10, anchor="nw", image=imagefile)
+    canvas.pack()
+
+    label = tk.Label(top, text='這不是我！！', font=('Arial', 20))
+    label.pack()
+
+    #frame = tkinter.Frame(master=top).grid(row=1, column=2)
+    label1 = tk.Label(top, text='請輸入學號：', font=('Arial', 18))
+    label1.pack()
+    e = tk.Entry(top, font=("Calibri", 24), width=10, show="")
+    e.pack()
+    e.insert(0, "在此輸入姓名(目前僅接受英數文字)")
+
+    b1 = tk.Button(
+        top,
+        text='記住我！',
+        width=15,
+        height=4,
+        command=lambda: train(top, e, gifimagepath))
+    b1.pack()
+
+    b2 = tk.Button(
+        top, text='下一位！', width=15, height=4, command=top.destroy)
+    b2.pack()
+
+    # Code to add widgets will go here...
+    top.mainloop()
+
+
 
 def showGUI(text, imagepath):
     #top = tk.Tk() # 直接 Tk() 會出現 pyimage2 not found 的問題，改成 tk.Toplevel()
@@ -149,6 +198,9 @@ def showGUI(text, imagepath):
     b1 = tk.Button(
         top, text='下一位！', width=15, height=2, command=top.destroy)
     b1.pack()
+    b2 = tk.Button(
+        top, text='這不是我！', width=15, height=2, command=NotMe)
+    b2.pack()
 
     # Code to add widgets will go here...
     top.mainloop()
