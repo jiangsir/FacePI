@@ -354,7 +354,7 @@ class Face:
             "personGroupId": "''' + personGroupId + '''",
             "faceIds":''' + str(faceidkeys) + ''',
             "maxNumOfCandidatesReturned":1,
-            "confidenceThreshold": 0.5
+            "confidenceThreshold": 0.7
         }'''
         print('requestbody=', requestbody)
         try:
