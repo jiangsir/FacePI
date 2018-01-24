@@ -199,7 +199,7 @@ def showGUI(text, imagepath):
         top, text='下一位！', width=15, height=2, command=top.destroy)
     b1.pack()
     b2 = tk.Button(
-        top, text='這不是我！', width=15, height=2, command=NotMe)
+        top, text='這不是我！', width=15, height=2, command=NotMeGUI)
     b2.pack()
 
     # Code to add widgets will go here...
