@@ -65,7 +65,7 @@ def trainNewPersonGUI(text, gifimagepath):
     top = tk.Toplevel()
     top.geometry('400x400')
     top.title(text)
-    print("訓練新人: imagepath=" + imagepath)
+    print("訓練新人: gifimagepath=" + gifimagepath)
     # 把圖片轉成 gif
     #img = Image.open(imagepath)
     #faceRectangle =  {'top': 141, 'height': 261, 'width': 261, 'left': 664}
@@ -79,7 +79,7 @@ def trainNewPersonGUI(text, gifimagepath):
     #img = Image.open(imagepath)
     #img.save(imagepath+".gif", 'GIF')
 
-    imagefile = tk.PhotoImage(file=imagepath)
+    imagefile = tk.PhotoImage(file=gifimagepath)
     maxwidth = 160
     h = imagefile.height()
     w = imagefile.width()
@@ -106,7 +106,7 @@ def trainNewPersonGUI(text, gifimagepath):
         text='進行 5 連拍並記住我！',
         width=15,
         height=4,
-        command=lambda: train(top, e, imagepath))
+        command=lambda: train(top, e, gifimagepath))
     b1.pack()
 
     b2 = tk.Button(
