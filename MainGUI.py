@@ -50,7 +50,7 @@ def train(top, e, imagepath):
     newpersonname = e.get()
     print(newpersonname)
     personapi = FaceAPI.Person(api_key, host)
-    person = personapi.getPersonByName(newpersonname)
+    person = personapi.getPersonByName(personGroupId, newpersonname)
     if person == None:
         personGroupapi = FaceAPI.PersonGroup(api_key, host)
         personid = personapi.create_a_person(personGroupId, newpersonname, 'unknown descript')
@@ -64,7 +64,7 @@ def train(top, e, imagepath):
 
 def YesMe(top, personname, gifimagepath):
     personapi = FaceAPI.Person(api_key, host)
-    person = personapi.getPersonByName(personname)
+    person = personapi.getPersonByName(personGroupId, personname)
     personapi.add_a_person_face(gifimagepath, person['personId'], personGroupId)
 
 def trainNewPersonGUI(text, gifimagepath):
