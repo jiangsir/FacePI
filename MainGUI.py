@@ -195,7 +195,7 @@ def showGUI(personname, imagepath, text):
     image = canvas.create_image(10, 10, anchor="nw", image=imagefile)
     canvas.pack()
 
-    label = tk.Label(top, text=text, font=('Arial', 20))
+    label = tk.Label(top, text=personname + text, font=('Arial', 20))
     label.pack()
 
     b1 = tk.Button(
