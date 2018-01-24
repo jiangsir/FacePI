@@ -62,6 +62,10 @@ def train(top, e, imagepath):
     top.destroy()
     #sys.exit()
 
+def YesMe(top, personname, gifimagepath):
+    personapi = FaceAPI.Person(api_key, host)
+    person = personapi.getPersonByName(personname)
+    personapi.add_a_person_face(gifimagepath, person['personId'], personGroupId)
 
 def trainNewPersonGUI(text, gifimagepath):
     # 當辨識不到人的時候，跳這個畫面。以便用這個圖片去訓練新人。
@@ -165,11 +169,11 @@ def NotMeGUI(top, gifimagepath):
     top.mainloop()
 
 
-def showGUI(text, imagepath):
+def showGUI(personname, imagepath):
     #top = tk.Tk() # 直接 Tk() 會出現 pyimage2 not found 的問題，改成 tk.Toplevel()
     top = tk.Toplevel()
     top.geometry('400x400')
-    top.title(text)
+    top.title(personname, '報到成功')
     ###image = ImageTk.PhotoImage(Image.open("./tmp/"+face['faceId']+".jpg"))
     #image = tkinter.PhotoImage(file=("./tmp/"+face['faceId']+".jpg"))
     ###labelimage = tkinter.Label(top, image=image)
@@ -195,10 +199,10 @@ def showGUI(text, imagepath):
     label.pack()
 
     b1 = tk.Button(
-        top, text='下一位！', width=15, height=2, command=top.destroy)
+        top, text='下一位！', width=15, height=2, command=lambda: YesMe(top, personname, imagepath + ".gif"))
     b1.pack()
     b2 = tk.Button(
-        top, text='這不是我！', width=15, height=2, command=lambda: NotMeGUI(top, imagepath + ".gif"))
+        top, text='我不是！', width=15, height=2, command=lambda: NotMeGUI(top, imagepath + ".gif"))
     b2.pack()
 
     # Code to add widgets will go here...
