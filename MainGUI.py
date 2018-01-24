@@ -120,7 +120,7 @@ def trainNewPersonGUI(text, gifimagepath):
     # Code to add widgets will go here...
     top.mainloop()
 
-def NotMeGUI(gifimagepath):
+def NotMeGUI(top, gifimagepath):
     # 辨識出來，但是不是正確的人。
     top = tk.Toplevel()
     top.geometry('400x400')
@@ -165,7 +165,6 @@ def NotMeGUI(gifimagepath):
     top.mainloop()
 
 
-
 def showGUI(text, imagepath):
     #top = tk.Tk() # 直接 Tk() 會出現 pyimage2 not found 的問題，改成 tk.Toplevel()
     top = tk.Toplevel()
@@ -199,7 +198,7 @@ def showGUI(text, imagepath):
         top, text='下一位！', width=15, height=2, command=top.destroy)
     b1.pack()
     b2 = tk.Button(
-        top, text='這不是我！', width=15, height=2, command=NotMeGUI)
+        top, text='這不是我！', width=15, height=2, command=lambda: NotMeGUI(top, imagepath + ".gif"))
     b2.pack()
 
     # Code to add widgets will go here...
