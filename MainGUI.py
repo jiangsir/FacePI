@@ -187,7 +187,7 @@ def Signin():
     if 'error' in facejsons:
         status = persongroupapi.personGroup_status(personGroupId)
         if status['status'] == 'failed' and 'no persisted faces of person' in status['message']:
-            gifimagepath = basepath + "/tmp/" + faceids.keys()[0] + ".gif"
+            gifimagepath = basepath + "/tmp/" + list(faceids.keys())[0] + ".gif"
             trainNewPersonGUI('jsjsjs', gifimagepath)
 
     print("facejsons=", facejsons, type(facejsons))
