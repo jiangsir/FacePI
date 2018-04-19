@@ -1,6 +1,7 @@
 {
-    "api_key": "<請填入您所申請到的 API KEY>",
+    "api_key": "90dd6135652e45ba8ad9d222b4643545",
     "host": "westcentralus.api.cognitive.microsoft.com",
     "personGroupId": "Default_PersonGroupId",
-    "title": "<請自行定義標題>"
+    "camera":"CSIcamera,*webcam",
+    "title": "高師大附中刷臉簽到系統"
 }

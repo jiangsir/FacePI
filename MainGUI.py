@@ -10,14 +10,14 @@ import ClassCamera as Camera
 
 basepath = os.path.dirname(os.path.realpath(__file__))
 
-#with open(basepath + '/FacePI-Config.json', 'r') as f:
-#    config = json.load(f)
-#api_key = config["api_key"]
-#host = config["host"]
-#personGroupId = config['personGroupId']
+with open(basepath + '/Config.json', 'r') as f:
+    config = json.load(f)
+print(config)
 
-api_key = "90dd6135652e45ba8ad9d222b4643545" # 透過 github 帳戶獲得的 api key
-host = "westcentralus.api.cognitive.microsoft.com"
+api_key = config['api_key']
+host = config['host']
+#api_key = "90dd6135652e45ba8ad9d222b4643545" # 透過 github 帳戶獲得的 api key
+#host = "westcentralus.api.cognitive.microsoft.com"
 
 #api_key = "f3e388f66ee146d3b6e96f6ca2ac25d3"
 #host = "eastasia.api.cognitive.microsoft.com"
@@ -270,10 +270,11 @@ def Signin():
         persongroupapi.train_personGroup(personGroupId)
     if 'error' in status and status['error']['code'] == 'PersonGroupNotTrained':
         persongroupapi.train_personGroup(personGroupId)
-        
+    
+    config
     #imagepath = Camera.takePicture_CSI(personGroupId, 2000)
     imagepath = Camera.takePicture_fswebcam(personGroupId, 2000)
-    
+
     faces = faceapi.detectLocalImage(imagepath)
     print('本地圖片偵測到 ',len(faces),' 人, faces=', faces)
     if len(faces) == 0:
