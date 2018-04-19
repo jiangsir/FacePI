@@ -412,7 +412,6 @@ class Face:
             conn.close()
             if('error' in faces):
                 print("讀取 faces 發生錯誤！！ message="+faces['error']['message'])
-                
                 return []
 
             print("detectLocalImage:",imagepath + "偵測到 {0} 個人".format(len(faces)))
