@@ -13,4 +13,4 @@ def takePicture(personGroupId, delay):
     return imagepath
 
 def takePicture_WebCam():
-    return ""
+    return "webcam"
