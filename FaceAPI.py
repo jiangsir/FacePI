@@ -406,12 +406,15 @@ class Face:
             response = conn.getresponse()
             data = response.read()
             faces = json.loads(str(data, 'UTF-8'))
-            print("faces=", faces)
+            print("detectLocalImage.faces=", faces)
             #print(parsed[0]['faceId'])
             #faceids.append(parsed[0]['faceId'])
             conn.close()
+            if('error' in faces):
+                print("讀取 faces 發生錯誤！！ message="+faces['error']['message'])
+                return []
 
-            print(imagepath + "偵測到 {0} 個人".format(len(faces)))
+            print("detectLocalImage:",imagepath + "偵測到 {0} 個人".format(len(faces)))
             #display(Image(filename=imagepath))
             for face in faces:
                 #print("face = ", face)

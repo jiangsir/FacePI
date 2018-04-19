@@ -12,8 +12,12 @@ basepath = os.path.dirname(os.path.realpath(__file__))
 #api_key = config["api_key"]
 #host = config["host"]
 #personGroupId = config['personGroupId']
-api_key = "f3e388f66ee146d3b6e96f6ca2ac25d3"
-host = "eastasia.api.cognitive.microsoft.com"
+
+api_key = "90dd6135652e45ba8ad9d222b4643545" # 透過 github 帳戶獲得的 api key
+host = "westcentralus.api.cognitive.microsoft.com"
+
+#api_key = "f3e388f66ee146d3b6e96f6ca2ac25d3"
+#host = "eastasia.api.cognitive.microsoft.com"
 personGroupId = "junior"
 title = "高師大附中 刷臉簽到系統"
 
