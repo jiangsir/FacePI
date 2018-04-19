@@ -2,7 +2,8 @@ import sys
 sys.path.append('classes')
 import os
 import json
-import ClassFaceAPI, ClassCamera
+import ClassFaceAPI as FaceAPI
+import ClassCamera as Camera
 
 basepath = os.path.dirname(os.path.realpath(__file__))
 

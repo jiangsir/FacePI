@@ -4,7 +4,8 @@ from tkinter import Text
 import os, sys, json, time, csv
 from PIL import Image
 
-import ClassFaceAPI, ClassCamera
+import ClassFaceAPI as FaceAPI
+import ClassCamera as Camera
 
 
 basepath = os.path.dirname(os.path.realpath(__file__))
