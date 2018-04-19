@@ -437,7 +437,7 @@ class Face:
 
             return faces
         except Exception as e:
-            print("[Errno {0}] {1}".format(e.errno, e.strerror))
+            print("[Errno {0}] {1}".format("e.errno", "e.strerror"))
 
 
 class FaceList:
