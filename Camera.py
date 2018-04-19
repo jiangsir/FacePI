@@ -11,3 +11,6 @@ def takePicture(personGroupId, delay):
         os.makedirs(os.path.dirname(imagepath))
     os.system("raspistill -t " + str(delay) + " -o " + imagepath)
     return imagepath
+
+def takePicture_WebCam():
+    return ""

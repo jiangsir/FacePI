@@ -1,1 +1,6 @@
-{"api_key": "90dd6135652e45ba8ad9d222b4643545", "host": "westcentralus.api.cognitive.microsoft.com", "personGroupId": "<自訂的 personGroupId>", "title": "高師大附中刷臉簽到系統"}
+{
+    "api_key": "90dd6135652e45ba8ad9d222b4643545",
+    "host": "westcentralus.api.cognitive.microsoft.com",
+    "personGroupId": "<自訂的 personGroupId>",
+    "title": "高師大附中刷臉簽到系統"
+}
