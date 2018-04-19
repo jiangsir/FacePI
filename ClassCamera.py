@@ -5,7 +5,7 @@ import picamera
 basepath = os.path.dirname(os.path.realpath(__file__))
 
 
-def takePicture(personGroupId, delay):
+def takePicture_CSI(personGroupId, delay):
     # delay in ms 3000ms = 3s
     imagepath = basepath + "/takepictures/Identity_" + personGroupId + "_" + time.strftime(
         "%Y-%m-%d_%H:%M:%S", time.localtime()) + ".jpg"
@@ -30,7 +30,7 @@ def takePicture_fswebcam(personGroupId, delay):
     except OSError:
         print('EXCEPTION: fswebcam 無法執行或不存在！！', file=sys.stderr)
         imagepath = None
-    return "webcam"
+    return imagepath
 
 def takePicture_Picamera(personGroupId, delay):
     # 安裝 sudo apt-get install python3-picamera
