@@ -162,7 +162,7 @@ confidence|	Number|	信心指數從 0 ~ 1
 
 執行主畫面：
 
-        python3 FacePI/mainGUI.py
+        python3 FacePI/MainGUI.py
 
 實際畫面截圖：
 
