@@ -1,8 +1,9 @@
-import FaceAPI
 import Camera
 import sys
+sys.path.append('classes')
 import os
 import json
+import FaceAPI
 
 basepath = os.path.dirname(os.path.realpath(__file__))
 

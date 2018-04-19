@@ -2,8 +2,11 @@ import tkinter as tk
 from tkinter import font
 from tkinter import Text
 import os, sys, json, time, csv
-import FaceAPI, Camera
 from PIL import Image
+
+sys.path.append('classes')
+import FaceAPI, Camera
+
 
 basepath = os.path.dirname(os.path.realpath(__file__))
 
