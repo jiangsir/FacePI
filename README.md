@@ -143,7 +143,7 @@ confidence|	Number|	信心指數從 0 ~ 1
 
 修改設定檔：
 
-        nano FacePI/FacePI-Config.json
+        nano FacePI/Config.json
 
 ```json
 {
@@ -162,7 +162,7 @@ confidence|	Number|	信心指數從 0 ~ 1
 
 執行主畫面：
 
-        python3 FacePI/FacePI-mainGUI.py
+        python3 FacePI/mainGUI.py
 
 實際畫面截圖：
 
