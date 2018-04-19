@@ -68,7 +68,7 @@ while True:
         personid = input('請輸入 personid: ')
         personApi.deleteAPerson(personGroupId, personid)
     elif index == '5':
-        Camera.takePicture('test camera', 10000)
+        Camera.takePicture_CSI('test camera', 5000)
     elif index == '6':
         faceList = FaceAPI.FaceList(api_key, host)
         faceList.listFacelists()
