@@ -24,7 +24,7 @@ while True:
     print('============================================')
     print('當前設定檔內容：')
     for key in config.keys():
-        print(key+": ", config[key])
+        print(key + ": ", config[key])
     print('0. 結束程式！')
     print('1. 列出所有的 PersonGroups')
     print('2. 列出某個「人群」裡有哪些 Person')
@@ -80,17 +80,17 @@ while True:
         PersonGroup.train_personGroup(personGroupId)
     elif index == '9':
         personGroupId = input('建立一個 personGroupId: ')
-        PersonGroup.createPersonGroup(
-            personGroupId, 'group namename', 'group datadata')
+        PersonGroup.createPersonGroup(personGroupId, 'group namename',
+                                      'group datadata')
     elif index == '10':
-        api_key = input('請輸入有效的 API KEY['+config['api_key']+']:')
+        api_key = input('請輸入有效的 API KEY[' + config['api_key'] + ']:')
         if api_key != '':
             config['api_key'] = api_key
-        host = input("驗證主機["+config['host']+"]: ")
+        host = input("驗證主機[" + config['host'] + "]: ")
         if host != '':
             config['host'] = host
         #personGroupId = input("現有一個預設的 person: ")
-        title = input("自訂標題["+config['title']+"]：")
+        title = input("自訂標題[" + config['title'] + "]：")
         if title != '':
             config['title'] = title
         with open(basepath + '/Config.json', 'w') as outfile:
