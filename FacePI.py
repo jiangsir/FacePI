@@ -3,7 +3,6 @@ import Camera
 import sys
 import os
 import json
-from PIL import Image
 
 basepath = os.path.dirname(os.path.realpath(__file__))
 
