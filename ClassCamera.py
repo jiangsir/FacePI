@@ -1,9 +1,23 @@
-import os, time, sys
+import os, time, sys, json
 import subprocess
 import picamera
 
 basepath = os.path.dirname(os.path.realpath(__file__))
+basepath = os.path.dirname(os.path.realpath(__file__))
+with open(basepath + '/Config.json', 'r') as f:
+    config = json.load(f)
+print(config)
 
+def takePicture(personGroupId, delay):
+    cameras = config['camera'].split()
+    for camera in cameras:
+        if camera[0] == '*' and camera == '*webcam':
+            takePicture_fswebcam(personGroupId, delay)
+            return
+        elif camera[0] == '*' and camera == '*CSIcamera':
+            takePicture_CSI(personGroupId, delay)
+            return
+    takePicture_CSI(personGroupId, delay)
 
 def takePicture_CSI(personGroupId, delay):
     # delay in ms 3000ms = 3s
