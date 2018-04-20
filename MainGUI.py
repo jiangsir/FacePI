@@ -244,7 +244,7 @@ def showGUI(personname, imagepath, text):
     label = tk.Label(top, text=personname + text, font=('Arial', 20))
     label.pack()
     if personname == '__Nobody':
-        b1 = tk.Button(top, text='下一位！', width=15, height=4)
+        b1 = tk.Button(top, text='下一位！', width=15, height=4, command=top.destroy)
         b1.pack()
     else:
         b1 = tk.Button(
