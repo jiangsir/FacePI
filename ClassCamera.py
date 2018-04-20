@@ -9,7 +9,7 @@ with open(basepath + '/Config.json', 'r') as f:
 print(config)
 
 def takePicture(personGroupId, delay):
-    cameras = config['camera'].split()
+    cameras = config['camera'].split(',')
     for camera in cameras:
         if camera[0] == '*' and camera == '*webcam':
             return takePicture_fswebcam(personGroupId, delay)
