@@ -46,14 +46,14 @@ while True:
             continue
         print('總共有 ', len(persongroups), '個「人群」')
         for persongroup in persongroups:
-            print('personGroupId=', persongroup)
+            print('personGroupId=' + persongroup['personGroupId'], persongroup)
     elif index == '2':
         persons = PersonGroup.list_persons_in_group(
             input('請輸入 personGroupId: '))
         if len(persons) == 0:
             print('本 personGroupId 內沒有任何一個 person')
         for person in persons:
-            print('person:', person)
+            print('name=' + person['name'] + ':', person)
     elif index == '3':
         PersonGroup.deletePersonGroup(input('請輸入要刪除的 personGroupId:'))
     elif index == '4':
