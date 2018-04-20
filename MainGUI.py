@@ -252,7 +252,7 @@ def showGUI(personname, imagepath, text):
             top, text='下一位！', width=15, height=2, command=lambda: YesMe(top, personname, imagepath + ".gif"))
         b1.pack()
         b2 = tk.Button(
-            top, text='我不是'+personname+'！', width=15, height=2, command=lambda: NotMeGUI(top, imagepath))
+            top, text='我不是'+personname+'！', width=15, height=2, command=lambda: NotMeGUI(top, imagepath+".gif"))
         b2.pack()
 
     # Code to add widgets will go here...
