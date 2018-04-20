@@ -12,12 +12,10 @@ def takePicture(personGroupId, delay):
     cameras = config['camera'].split()
     for camera in cameras:
         if camera[0] == '*' and camera == '*webcam':
-            takePicture_fswebcam(personGroupId, delay)
-            return
+            return takePicture_fswebcam(personGroupId, delay)
         elif camera[0] == '*' and camera == '*CSIcamera':
-            takePicture_CSI(personGroupId, delay)
-            return
-    takePicture_CSI(personGroupId, delay)
+            return takePicture_CSI(personGroupId, delay)
+    return takePicture_CSI(personGroupId, delay)
 
 def takePicture_CSI(personGroupId, delay):
     # delay in ms 3000ms = 3s
