@@ -59,9 +59,9 @@ def train(top, e, imagepath):
     personapi = FaceAPI.Person(api_key, host)
     person = personapi.getPersonByName(personGroupId, newpersonname)
     print('getPersonByName: person=',person)
+    personGroupapi = FaceAPI.PersonGroup(api_key, host)
     if person == None:
         print('call create_a_person')
-        personGroupapi = FaceAPI.PersonGroup(api_key, host)
         personid = personapi.create_a_person(personGroupId, newpersonname, 'unknown descript')
         personapi.add_a_person_face(imagepath, personid, personGroupId)
     else:
