@@ -243,13 +243,16 @@ def showGUI(personname, imagepath, text):
 
     label = tk.Label(top, text=personname + text, font=('Arial', 20))
     label.pack()
-
-    b1 = tk.Button(
-        top, text='下一位！', width=15, height=2, command=lambda: YesMe(top, personname, imagepath + ".gif"))
-    b1.pack()
-    b2 = tk.Button(
-        top, text='我不是'+personname+'！', width=15, height=2, command=lambda: NotMeGUI(top, imagepath))
-    b2.pack()
+    if personname == '__Nobody':
+        b1 = tk.Button(top, text='下一位！', width=15, height=4)
+        b1.pack()
+    else:
+        b1 = tk.Button(
+            top, text='下一位！', width=15, height=2, command=lambda: YesMe(top, personname, imagepath + ".gif"))
+        b1.pack()
+        b2 = tk.Button(
+            top, text='我不是'+personname+'！', width=15, height=2, command=lambda: NotMeGUI(top, imagepath))
+        b2.pack()
 
     # Code to add widgets will go here...
     top.mainloop()
@@ -281,7 +284,7 @@ def Signin():
     faces = faceapi.detectLocalImage(imagepath)
     print('本地圖片偵測到 ',len(faces),' 人, faces=', faces)
     if len(faces) == 0:
-        showGUI('', imagepath, "本圖片沒有偵測到任何人！")
+        showGUI('__Nobody', imagepath, "本圖片沒有偵測到任何人！")
 
     faceids = {}
     for face in faces:
