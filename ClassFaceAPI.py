@@ -233,7 +233,9 @@ class Person:
                 requestbody, headers)
             response = conn.getresponse()
             data = response.read()
-            print('persistedFaces:', data)
+            jsondata = json.loads(str(data, 'UTF-8'))
+            if 'error' in jsondata.keys():
+                print("EXCEPTION: 這個圖片中沒有偵測到臉部。:", jsondata['error']['message'] )
             conn.close()
         except Exception as e:
             print("[Errno {0}] {1}".format(e.errno, e.strerror))

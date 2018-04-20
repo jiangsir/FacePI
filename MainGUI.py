@@ -54,6 +54,7 @@ def close_window(top):
 
 
 def train(top, e, imagepath):
+    print('imagepath=', imagepath)
     newpersonname = e.get()
     print("newpersonname=",newpersonname)
     personapi = FaceAPI.Person(api_key, host)
@@ -124,12 +125,12 @@ def trainNewPersonGUI(text, gifimagepath):
         top,
         text='記住我！',
         width=15,
-        height=4,
+        height=3,
         command=lambda: train(top, e, gifimagepath))
     b1.pack()
 
     b2 = tk.Button(
-        top, text='下一位！', width=15, height=4, command=top.destroy)
+        top, text='下一位！', width=15, height=2, command=top.destroy)
     b2.pack()
 
     # Code to add widgets will go here...
