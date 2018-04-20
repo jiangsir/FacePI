@@ -193,11 +193,11 @@ def NotMeGUI(top, gifimagepath):
     label.pack()
 
     #frame = tkinter.Frame(master=top).grid(row=1, column=2)
-    label1 = tk.Label(top, text='請輸入學號：', font=('Arial', 18))
+    label1 = tk.Label(top, text='請輸入學號(目前僅接受英數文字)：', font=('Arial', 18))
     label1.pack()
     e = tk.Entry(top, font=("Calibri", 24), width=10, show="")
     e.pack()
-    e.insert(0, "在此輸入姓名(目前僅接受英數文字)")
+    e.insert(0, "")
 
     b1 = tk.Button(
         top,
@@ -248,7 +248,7 @@ def showGUI(personname, imagepath, text):
         top, text='下一位！', width=15, height=2, command=lambda: YesMe(top, personname, imagepath + ".gif"))
     b1.pack()
     b2 = tk.Button(
-        top, text='我不是'+personname+'！', width=15, height=2, command=lambda: NotMeGUI(top, imagepath + ".gif"))
+        top, text='我不是'+personname+'！', width=15, height=2, command=lambda: NotMeGUI(top, imagepath))
     b2.pack()
 
     # Code to add widgets will go here...
