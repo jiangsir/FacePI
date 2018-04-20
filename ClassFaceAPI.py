@@ -233,7 +233,7 @@ class Person:
                 requestbody, headers)
             response = conn.getresponse()
             data = response.read()
-            print(data)
+            print('persistedFaces:', data)
             conn.close()
         except Exception as e:
             print("[Errno {0}] {1}".format(e.errno, e.strerror))

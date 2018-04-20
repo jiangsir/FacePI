@@ -55,14 +55,17 @@ def close_window(top):
 
 def train(top, e, imagepath):
     newpersonname = e.get()
-    print(newpersonname)
+    print("newpersonname=",newpersonname)
     personapi = FaceAPI.Person(api_key, host)
     person = personapi.getPersonByName(personGroupId, newpersonname)
+    print('getPersonByName: person=',person)
     if person == None:
+        print('call create_a_person')
         personGroupapi = FaceAPI.PersonGroup(api_key, host)
         personid = personapi.create_a_person(personGroupId, newpersonname, 'unknown descript')
         personapi.add_a_person_face(imagepath, personid, personGroupId)
     else:
+        print('call add_a_person_face, personId=', person['personId'])
         personapi.add_a_person_face(imagepath, person['personId'], personGroupId)
     print('FROM train()')
     personGroupapi.train_personGroup(personGroupId)
