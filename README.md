@@ -137,8 +137,9 @@ confidence|	Number|	信心指數從 0 ~ 1
         Interfacing Options -> P1 Camera  設定啟用
 
 * 安裝軟體：
+
         apt-get install fswebcom
-        
+
 
 接下來測試相機模組是否正常拍照。
 
