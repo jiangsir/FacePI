@@ -136,6 +136,7 @@ confidence|	Number|	信心指數從 0 ~ 1
         sudo raspi-config
         Interfacing Options -> P1 Camera  設定啟用
 
+
 * 安裝軟體：
 
         apt-get install fswebcom
