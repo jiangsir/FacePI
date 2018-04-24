@@ -125,11 +125,20 @@ confidence|	Number|	信心指數從 0 ~ 1
 樹莓派上的準備工作
 ===
 
-由於我們要在樹莓派上安裝，因此需要有一些準備工作。請準備一個「相機模組」，並正確安裝好，請在樹莓派上安裝好 Raspbian 然後啟用相機
+由於我們要在樹莓派上安裝，因此需要有一些準備工作。
+* 配置鍵盤：請先修改鍵盤配置。
+
+        sudo raspi-config
+        Interfacing Options -> Keyboard Layout -> 將 UK 改成 US
+
+* 啟用相機：請準備一個「CSI相機模組」，並正確安裝好，請在樹莓派上安裝好 Raspbian 然後啟用相機
 
         sudo raspi-config
         Interfacing Options -> P1 Camera  設定啟用
 
+* 安裝軟體：
+        apt-get install fswebcom
+        
 
 接下來測試相機模組是否正常拍照。
 
