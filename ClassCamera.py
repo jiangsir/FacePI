@@ -1,8 +1,6 @@
 import os, time, sys, json
 import subprocess
-import picamera
 
-basepath = os.path.dirname(os.path.realpath(__file__))
 basepath = os.path.dirname(os.path.realpath(__file__))
 with open(basepath + '/Config.json', 'r') as f:
     config = json.load(f)
@@ -43,7 +41,7 @@ def takePicture_fswebcam(personGroupId, delay):
         print('EXCEPTION: fswebcam 無法執行或不存在！！', file=sys.stderr)
         imagepath = None
     return imagepath
-
+'''
 def takePicture_Picamera(personGroupId, delay):
     # 安裝 sudo apt-get install python3-picamera
     # 預設解析度1280x800
@@ -57,3 +55,4 @@ def takePicture_Picamera(personGroupId, delay):
         sleep(delay)
         camera.capture(imagepath)
         return imagepath
+'''
