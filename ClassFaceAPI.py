@@ -42,7 +42,7 @@ class PersonGroup:
             conn.close()
             if 'error' in persons.keys():
                 ClassMessageBox.FaceAPIErrorGUI(persons['error'])
-                
+                return []
             return persons
         except Exception as e:
             print("[Errno {0}] {1}".format(e.errno, e.strerror))
