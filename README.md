@@ -139,7 +139,12 @@ confidence|	Number|	信心指數從 0 ~ 1
 
 * 安裝軟體：
 
+        安裝 webcam 程式
         apt-get install fswebcom
+        安裝幾個中文字型
+        sudo apt-get install fonts-wqy-microhei fonts-wqy-zenhei xfonts-wqy
+        安裝中文輸入法
+        sudo apt-get install scim scim-tables-zh scim-chewing scim-gtk-immodule im-switch
 
 
 接下來測試相機模組是否正常拍照。

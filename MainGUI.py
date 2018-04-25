@@ -21,8 +21,10 @@ host = config['host']
 
 #api_key = "f3e388f66ee146d3b6e96f6ca2ac25d3"
 #host = "eastasia.api.cognitive.microsoft.com"
-personGroupId = "junior"
-title = "高師大附中 刷臉簽到系統"
+#personGroupId = "junior"
+#title = "高師大附中 刷臉簽到系統"
+personGroupId = config['personGroupId']
+title = config['title']
 
 top = tk.Tk()
 font_helv36 = font.Font(family='Helvetica', size=36, weight='bold')
