@@ -40,9 +40,6 @@ class PersonGroup:
             #print(data)
             persons = json.loads(str(data, 'UTF-8'))
             conn.close()
-            if 'error' in persons.keys():
-                ClassMessageBox.FaceAPIErrorGUI(persons['error'])
-                return []
             return persons
         except Exception as e:
             print("[Errno {0}] {1}".format(e.errno, e.strerror))
@@ -416,9 +413,13 @@ class Face:
             #print(parsed[0]['faceId'])
             #faceids.append(parsed[0]['faceId'])
             conn.close()
-            if('error' in faces):
-                print("讀取 faces 發生錯誤！！ message="+faces['error']['message'])
+            if 'error' in faces:
+                ClassMessageBox.FaceAPIErrorGUI(faces['error']['message'])
                 return []
+
+            # if('error' in faces):
+            #     print("讀取 faces 發生錯誤！！ message="+faces['error']['message'])
+            #     return []
 
             print("detectLocalImage:",imagepath + "偵測到 {0} 個人".format(len(faces)))
             #display(Image(filename=imagepath))
