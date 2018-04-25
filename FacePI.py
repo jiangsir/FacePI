@@ -1,9 +1,9 @@
-import Camera
 import sys
 sys.path.append('classes')
 import os
 import json
-import FaceAPI
+import ClassFaceAPI as FaceAPI
+import ClassCamera as Camera
 
 basepath = os.path.dirname(os.path.realpath(__file__))
 
@@ -24,7 +24,7 @@ while True:
     print('============================================')
     print('當前設定檔內容：')
     for key in config.keys():
-        print(key+": ", config[key])
+        print(key + ": ", config[key])
     print('0. 結束程式！')
     print('1. 列出所有的 PersonGroups')
     print('2. 列出某個「人群」裡有哪些 Person')
@@ -46,14 +46,14 @@ while True:
             continue
         print('總共有 ', len(persongroups), '個「人群」')
         for persongroup in persongroups:
-            print('personGroupId=', persongroup)
+            print('personGroupId=' + persongroup['personGroupId'], persongroup)
     elif index == '2':
         persons = PersonGroup.list_persons_in_group(
             input('請輸入 personGroupId: '))
         if len(persons) == 0:
             print('本 personGroupId 內沒有任何一個 person')
         for person in persons:
-            print('person:', person)
+            print('name=' + person['name'] + ':', person)
     elif index == '3':
         PersonGroup.deletePersonGroup(input('請輸入要刪除的 personGroupId:'))
     elif index == '4':
@@ -68,7 +68,7 @@ while True:
         personid = input('請輸入 personid: ')
         personApi.deleteAPerson(personGroupId, personid)
     elif index == '5':
-        Camera.takePicture('test camera', 10000)
+        Camera.takePicture_CSI('test camera', 5000)
     elif index == '6':
         faceList = FaceAPI.FaceList(api_key, host)
         faceList.listFacelists()
@@ -80,17 +80,17 @@ while True:
         PersonGroup.train_personGroup(personGroupId)
     elif index == '9':
         personGroupId = input('建立一個 personGroupId: ')
-        PersonGroup.createPersonGroup(
-            personGroupId, 'group namename', 'group datadata')
+        PersonGroup.createPersonGroup(personGroupId, 'group namename',
+                                      'group datadata')
     elif index == '10':
-        api_key = input('請輸入有效的 API KEY['+config['api_key']+']:')
+        api_key = input('請輸入有效的 API KEY[' + config['api_key'] + ']:')
         if api_key != '':
             config['api_key'] = api_key
-        host = input("驗證主機["+config['host']+"]: ")
+        host = input("驗證主機[" + config['host'] + "]: ")
         if host != '':
             config['host'] = host
         #personGroupId = input("現有一個預設的 person: ")
-        title = input("自訂標題["+config['title']+"]：")
+        title = input("自訂標題[" + config['title'] + "]：")
         if title != '':
             config['title'] = title
         with open(basepath + '/Config.json', 'w') as outfile:

@@ -4,25 +4,27 @@ from tkinter import Text
 import os, sys, json, time, csv
 from PIL import Image
 
-sys.path.append('classes')
-import FaceAPI, Camera
+import ClassFaceAPI as FaceAPI
+import ClassCamera as Camera
 
 
 basepath = os.path.dirname(os.path.realpath(__file__))
 
-#with open(basepath + '/FacePI-Config.json', 'r') as f:
-#    config = json.load(f)
-#api_key = config["api_key"]
-#host = config["host"]
-#personGroupId = config['personGroupId']
+with open(basepath + '/Config.json', 'r') as f:
+    config = json.load(f)
+print(config)
 
-api_key = "90dd6135652e45ba8ad9d222b4643545" # 透過 github 帳戶獲得的 api key
-host = "westcentralus.api.cognitive.microsoft.com"
+api_key = config['api_key']
+host = config['host']
+#api_key = "90dd6135652e45ba8ad9d222b4643545" # 透過 github 帳戶獲得的 api key
+#host = "westcentralus.api.cognitive.microsoft.com"
 
 #api_key = "f3e388f66ee146d3b6e96f6ca2ac25d3"
 #host = "eastasia.api.cognitive.microsoft.com"
-personGroupId = "junior"
-title = "高師大附中 刷臉簽到系統"
+#personGroupId = "junior"
+#title = "高師大附中 刷臉簽到系統"
+personGroupId = config['personGroupId']
+title = config['title']
 
 top = tk.Tk()
 font_helv36 = font.Font(family='Helvetica', size=36, weight='bold')
@@ -54,15 +56,19 @@ def close_window(top):
 
 
 def train(top, e, imagepath):
+    print('imagepath=', imagepath)
     newpersonname = e.get()
-    print(newpersonname)
+    print("newpersonname=",newpersonname)
     personapi = FaceAPI.Person(api_key, host)
     person = personapi.getPersonByName(personGroupId, newpersonname)
+    print('getPersonByName: person=',person)
+    personGroupapi = FaceAPI.PersonGroup(api_key, host)
     if person == None:
-        personGroupapi = FaceAPI.PersonGroup(api_key, host)
+        print('call create_a_person')
         personid = personapi.create_a_person(personGroupId, newpersonname, 'unknown descript')
         personapi.add_a_person_face(imagepath, personid, personGroupId)
     else:
+        print('call add_a_person_face, personId=', person['personId'])
         personapi.add_a_person_face(imagepath, person['personId'], personGroupId)
     print('FROM train()')
     personGroupapi.train_personGroup(personGroupId)
@@ -121,12 +127,12 @@ def trainNewPersonGUI(text, gifimagepath):
         top,
         text='記住我！',
         width=15,
-        height=4,
+        height=3,
         command=lambda: train(top, e, gifimagepath))
     b1.pack()
 
     b2 = tk.Button(
-        top, text='下一位！', width=15, height=4, command=top.destroy)
+        top, text='下一位！', width=15, height=2, command=top.destroy)
     b2.pack()
 
     # Code to add widgets will go here...
@@ -190,11 +196,11 @@ def NotMeGUI(top, gifimagepath):
     label.pack()
 
     #frame = tkinter.Frame(master=top).grid(row=1, column=2)
-    label1 = tk.Label(top, text='請輸入學號：', font=('Arial', 18))
+    label1 = tk.Label(top, text='請輸入學號(目前僅接受英數文字)：', font=('Arial', 18))
     label1.pack()
     e = tk.Entry(top, font=("Calibri", 24), width=10, show="")
     e.pack()
-    e.insert(0, "在此輸入姓名(目前僅接受英數文字)")
+    e.insert(0, "")
 
     b1 = tk.Button(
         top,
@@ -240,13 +246,16 @@ def showGUI(personname, imagepath, text):
 
     label = tk.Label(top, text=personname + text, font=('Arial', 20))
     label.pack()
-
-    b1 = tk.Button(
-        top, text='下一位！', width=15, height=2, command=lambda: YesMe(top, personname, imagepath + ".gif"))
-    b1.pack()
-    b2 = tk.Button(
-        top, text='我不是'+personname+'！', width=15, height=2, command=lambda: NotMeGUI(top, imagepath + ".gif"))
-    b2.pack()
+    if personname == '__Nobody':
+        b1 = tk.Button(top, text='下一位！', width=15, height=4, command=top.destroy)
+        b1.pack()
+    else:
+        b1 = tk.Button(
+            top, text='下一位！', width=15, height=2, command=lambda: YesMe(top, personname, imagepath + ".gif"))
+        b1.pack()
+        b2 = tk.Button(
+            top, text='我不是'+personname+'！', width=15, height=2, command=lambda: NotMeGUI(top, imagepath+".gif"))
+        b2.pack()
 
     # Code to add widgets will go here...
     top.mainloop()
@@ -270,12 +279,15 @@ def Signin():
         persongroupapi.train_personGroup(personGroupId)
     if 'error' in status and status['error']['code'] == 'PersonGroupNotTrained':
         persongroupapi.train_personGroup(personGroupId)
-        
+    
+    config
+    #imagepath = Camera.takePicture_CSI(personGroupId, 2000)
     imagepath = Camera.takePicture(personGroupId, 2000)
+
     faces = faceapi.detectLocalImage(imagepath)
     print('本地圖片偵測到 ',len(faces),' 人, faces=', faces)
     if len(faces) == 0:
-        showGUI('', imagepath, "本圖片沒有偵測到任何人！")
+        showGUI('__Nobody', imagepath, "本圖片沒有偵測到任何人！")
 
     faceids = {}
     for face in faces:
