@@ -138,23 +138,12 @@ def trainNewPersonGUI(text, gifimagepath):
     # Code to add widgets will go here...
     top.mainloop()
 
-def ApiKeyErrorGUI(text):
+# FaceAPI 相關的錯誤。有些可能是如：RateLimit Exceed 用量超過
+# API Key 有錯要更新之類的問題。
+def FaceAPIErrorGUI(text):
     top = tk.Toplevel()
     top.geometry('400x400')
     top.title(text)
-
-    imagefile = tk.PhotoImage(file=gifimagepath)
-    maxwidth = 160
-    h = imagefile.height()
-    w = imagefile.width()
-    if w > maxwidth:
-        imagefile = imagefile.subsample(w // maxwidth, w // maxwidth)
-    print('h=', imagefile.height() , 'w=', imagefile.width())
-    canvas = tk.Canvas(top, height=imagefile.height(), width=imagefile.width())
-
-    image = canvas.create_image(10, 10, anchor="nw", image=imagefile)
-    canvas.pack()
-
     label = tk.Label(top, text=text, font=('Arial', 20))
     label.pack()
 

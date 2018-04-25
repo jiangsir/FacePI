@@ -1,6 +1,7 @@
 import http.client, urllib.request, urllib.parse, urllib.error, base64, json
 import os, sys
 from PIL import Image
+import ClassMessageBox
 
 basepath = os.path.dirname(os.path.realpath(__file__))
 
@@ -39,6 +40,9 @@ class PersonGroup:
             #print(data)
             persons = json.loads(str(data, 'UTF-8'))
             conn.close()
+            if 'error' in persons.keys():
+                ClassMessageBox.FaceAPIErrorGUI(persons['error'])
+                
             return persons
         except Exception as e:
             print("[Errno {0}] {1}".format(e.errno, e.strerror))
