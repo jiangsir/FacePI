@@ -133,7 +133,8 @@ class PersonGroup:
             print(e.args)
 
     def train_personGroup(self, personGroupId):
-        print("train_personGroup: 開始訓練一個 personGroup personGroupId=" + personGroupId + "。")
+        print("train_personGroup: 開始訓練一個 personGroup personGroupId=" +
+              personGroupId + "。")
 
         headers = {
             # Request headers
@@ -171,6 +172,11 @@ class PersonGroup:
             status = json.loads(str(data, 'UTF-8'))
             conn.close()
             print('status=', status)
+            if 'error' in status:
+                ClassMessageBox.FaceAPIErrorGUI('def personGroup_status',
+                                                status['error']['code'],
+                                                status['error']['message'])
+                return []
             return status
         except Exception as e:
             print("[Errno {0}] {1}".format(e.errno, e.strerror))
@@ -203,7 +209,8 @@ class Person:
         self.host = host
 
     def add_a_person_face(self, imagepath, personId, personGroupId):
-        print("'add_a_person_face': 用一個圖片放入一個 person 當中 personId=" + personId, 'imagepath=', imagepath)
+        print("'add_a_person_face': 用一個圖片放入一個 person 當中 personId=" + personId,
+              'imagepath=', imagepath)
         #display(Image(url=imagepath))
 
         headers = {
@@ -235,15 +242,23 @@ class Person:
             response = conn.getresponse()
             data = response.read()
             jsondata = json.loads(str(data, 'UTF-8'))
-            if 'error' in jsondata.keys():
-                print("EXCEPTION: 這個圖片中沒有偵測到臉部。:", jsondata['error']['message'] )
             conn.close()
+            if 'error' in jsondata.keys():
+                print("EXCEPTION: 這個圖片中沒有偵測到臉部。:",
+                      jsondata['error']['message'])
+            if 'error' in jsondata:
+                ClassMessageBox.FaceAPIErrorGUI(
+                    'def add_a_person_face',
+                    '這個圖片中沒有偵測到臉部。' + jsondata['error']['code'],
+                    jsondata['error']['message'])
+                return []
+
         except Exception as e:
             print("[Errno {0}] {1}".format(e.errno, e.strerror))
 
     def create_a_person(self, personGroupId, name, descript):
-        print("'create_a_person': 在 personGroupid=" + personGroupId + " 裡 建立一個 person name=" +
-              name)
+        print("'create_a_person': 在 personGroupid=" + personGroupId +
+              " 裡 建立一個 person name=" + name)
         headers = {
             # Request headers
             'Content-Type': 'application/json',
@@ -290,6 +305,12 @@ class Person:
             #print(data)
             persons = json.loads(str(data, 'UTF-8'))
             conn.close()
+            if 'error' in persons:
+                ClassMessageBox.FaceAPIErrorGUI('def list_persons_in_group',
+                                                persons['error']['code'],
+                                                persons['error']['message'])
+                return []
+
             return persons
         except Exception as e:
             print("[Errno {0}] {1}".format(e.errno, e.strerror))
@@ -345,6 +366,7 @@ class Person:
                 break
         return thisperson
 
+
 class Face:
     def __init__(self, api_key, host):
         self.api_key = api_key
@@ -378,6 +400,12 @@ class Face:
             facejson = json.loads(str(data, 'UTF-8'))
             #print(facejson)
             conn.close()
+            if 'error' in facejson:
+                ClassMessageBox.FaceAPIErrorGUI('def identify',
+                                                facejson['error']['code'],
+                                                facejson['error']['message'])
+                return []
+
             return facejson
         except Exception as e:
             print("[Errno {0}] {1}".format(e.errno, e.strerror))
@@ -392,10 +420,8 @@ class Face:
 
         params = urllib.parse.urlencode({
             # Request parameters
-            'returnFaceId':
-            'true',
-            'returnFaceLandmarks':
-            'false',
+            'returnFaceId': 'true',
+            'returnFaceLandmarks': 'false',
             'returnFaceAttributes':
             #'age,gender,headPose,smile,facialHair,glasses,emotion,hair,makeup,occlusion,accessories,blur,exposure'
             'age,gender'
@@ -414,14 +440,17 @@ class Face:
             #faceids.append(parsed[0]['faceId'])
             conn.close()
             if 'error' in faces:
-                ClassMessageBox.FaceAPIErrorGUI(faces['error']['message'])
+                ClassMessageBox.FaceAPIErrorGUI('def detectLocalImage',
+                                                faces['error']['code'],
+                                                faces['error']['message'])
                 return []
 
             # if('error' in faces):
             #     print("讀取 faces 發生錯誤！！ message="+faces['error']['message'])
             #     return []
 
-            print("detectLocalImage:",imagepath + "偵測到 {0} 個人".format(len(faces)))
+            print("detectLocalImage:",
+                  imagepath + "偵測到 {0} 個人".format(len(faces)))
             #display(Image(filename=imagepath))
             for face in faces:
                 #print("face = ", face)
@@ -455,21 +484,22 @@ class FaceList:
     def __init__(self, api_key, host):
         self.api_key = api_key
         self.host = host
+
     def listFacelists(self):
         headers = {
             # Request headers
             'Ocp-Apim-Subscription-Key': self.api_key,
         }
 
-        params = urllib.parse.urlencode({
-        })
+        params = urllib.parse.urlencode({})
 
         try:
             conn = http.client.HTTPSConnection(self.host)
-            conn.request("GET", "/face/v1.0/facelists?%s" % params, "{body}", headers)
+            conn.request("GET", "/face/v1.0/facelists?%s" % params, "{body}",
+                         headers)
             response = conn.getresponse()
             data = response.read()
             print(data)
             conn.close()
         except Exception as e:
-            print("[Errno {0}] {1}".format(e.errno, e.strerror))        
+            print("[Errno {0}] {1}".format(e.errno, e.strerror))
