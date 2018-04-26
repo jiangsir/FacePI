@@ -218,8 +218,11 @@ def showGUI(personname, imagepath, text):
         b1 = tk.Button(top, text='下一位！', width=15, height=4, command=top.destroy)
         b1.pack()
     else:
-        b1 = tk.Button(
-            top, text='下一位！', width=15, height=2, command=lambda: YesMe(top, personname, imagepath + ".gif"))
+        # 暫時不處理 YesMe 的狀況
+        # b1 = tk.Button(
+        #     top, text='下一位！', width=15, height=2, command=lambda: YesMe(top, personname, imagepath + ".gif"))
+        # b1.pack()
+        b1 = tk.Button(top, text='下一位！', width=15, height=4, command=top.destroy)
         b1.pack()
         
         ## 暫時註解掉，不處理。
