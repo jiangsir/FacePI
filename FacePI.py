@@ -25,18 +25,18 @@ def train_image(personGroupId, personname, imagepath):
 
 options = {
     0: '結束程式',
-    1: '列出所有的 PersonGroups',
-    2: '列出某個「人群」裡有哪些 Person',
-    3: '刪除某個 PersonGroups',
-    4: '刪除某個 PersonGroups 裡的 Person',
-    5: '鏡頭對焦，拍照',
-    6: '列出所有的 facelists',
+    1: '進行 3 連拍',
+    2: '列出所有的 PersonGroups',
+    3: '列出「人群」裡有哪些 Person',
+    4: '刪除某個 PersonGroups',
+    5: '刪除某個 PersonGroups 裡的 Person',
+    #6: '列出所有的 facelists',
     7: '觀察 PersonGroup status',
     8: '訓練 PersonGroup',
     9: '建立一個 PersonGroup',
     10: '列出 Config.json 設定。',
-    11: '訓練 traindatas 裡的圖檔',
-    12: '搜尋 PersonGroup 的 personName',
+    11: '訓練 /traindatas 裡的圖檔',
+    12: '搜尋 PersonGroup 裡的 personName',
     13: '設定繼電器',
 }
 
@@ -71,6 +71,11 @@ print(str(index)+'.', options[index])
 if index == 0:
     sys.exit()
 elif index == 1:
+    personname = input('進行 3 連拍，請輸入姓名：')
+    for i in range(3):
+        jpgimagepath = Camera.takePicture(personGroupId, 2000)
+        train_image(personGroupId, personname, jpgimagepath)
+elif index == 2:
     persongroups = PersonGroup.ListPersonGroups()
     if 'error' in persongroups:
         print("讀取 PersonGroup 發生錯誤！: ", persongroups['error']['message'])
@@ -78,16 +83,16 @@ elif index == 1:
     for persongroup in persongroups:
         print('personGroupId=' + persongroup['personGroupId'])
         print(persongroup)
-elif index == 2:
+elif index == 3:
     print('personGroupId = ' + personGroupId)
     persons = PersonGroup.list_persons_in_group(personGroupId)
     if len(persons) == 0:
         print('本 personGroupId 內沒有任何一個 person')
     for person in persons:
         print('name=' + person['name'] + ':', person)
-elif index == 3:
-    PersonGroup.deletePersonGroup(input('請輸入要刪除的 personGroupId:'))
 elif index == 4:
+    PersonGroup.deletePersonGroup(input('請輸入要刪除的 personGroupId:'))
+elif index == 5:
     persongroups = PersonGroup.ListPersonGroups()
     print('總共有 ', len(persongroups), '個「人群」')
     for persongroup in persongroups:
@@ -95,17 +100,12 @@ elif index == 4:
     #personGroupId = input('請輸入 personGroupId: ')
     persons = PersonGroup.list_persons_in_group(personGroupId)
     for person in persons:
-        print('person:', person)
-    personid = input('請輸入 personid: ')
+        print('name='+person['name']+':', person)
+    personid = input('請輸入將要刪除的 personid: ')
     personApi.deleteAPerson(personGroupId, personid)
-elif index == 5:
-    personname = input('進行 3 連拍，請輸入姓名：')
-    for i in range(3):
-        jpgimagepath = Camera.takePicture(personGroupId, 2000)
-        train_image(personGroupId, personname, jpgimagepath)
-elif index == 6:
-    faceList = FaceAPI.FaceList(api_key, host)
-    faceList.listFacelists()
+# elif index == 6:
+#     faceList = FaceAPI.FaceList(api_key, host)
+#     faceList.listFacelists()
 elif index == 7:
     print('personGroupId = ' + personGroupId)
     PersonGroup.personGroup_status(personGroupId)
@@ -138,7 +138,6 @@ elif index == 11:
         train_image(personGroupId, personname,
                     os.path.join(basepath + '/traindatas/', file))
 elif index == 12:
-    personGroupId = input('請輸入 personGroupId: ')
     personname = input('請輸入要找尋的 personname: ')
     persons = personApi.getPersonsByName(personGroupId, personname)
     for person in persons:
