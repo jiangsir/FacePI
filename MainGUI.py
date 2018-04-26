@@ -118,11 +118,11 @@ def trainNewPersonGUI(text, gifimagepath):
     label.pack()
 
     #frame = tkinter.Frame(master=top).grid(row=1, column=2)
-    label1 = tk.Label(top, text='請輸入學號：', font=('Arial', 18))
+    label1 = tk.Label(top, text='請輸入姓名：', font=('Arial', 18))
     label1.pack()
     e = tk.Entry(top, font=("Calibri", 24), width=10, show="")
     e.pack()
-    e.insert(0, "在此輸入學號")
+    e.insert(0, "在此輸入姓名")
 
     b1 = tk.Button(
         top,
@@ -164,7 +164,7 @@ def NotMeGUI(top, gifimagepath):
     label.pack()
 
     #frame = tkinter.Frame(master=top).grid(row=1, column=2)
-    label1 = tk.Label(top, text='請輸入學號(目前僅接受英數文字)：', font=('Arial', 18))
+    label1 = tk.Label(top, text='請輸入姓名：', font=('Arial', 18))
     label1.pack()
     e = tk.Entry(top, font=("Calibri", 24), width=10, show="")
     e.pack()
