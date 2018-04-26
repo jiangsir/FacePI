@@ -38,8 +38,8 @@ def FaceAPIErrorGUI(title, errorcode, errormessage):
     # e.pack()
     # e.insert(0, "message: " + title)
 
-    b2 = tk.Button(top, text='關閉', width=15, height=3, command=top.destroy)
-    b2.pack()
+    # b2 = tk.Button(top, text='關閉', width=15, height=3, command=top.destroy)
+    # b2.pack()
 
     # Code to add widgets will go here...
     top.mainloop()

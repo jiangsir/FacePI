@@ -29,7 +29,7 @@ def takePicture_CSI(personGroupId, delay):
                                         'CSI 攝影機無法啟動！',
                                         'OSError: raspistill 無法執行或不存在！！')        
         #print('EXCEPTION: raspistill 無法執行或不存在！！', file=sys.stderr)
-        jpgimagepath = None
+        #jpgimagepath = None
 
     #os.system("raspistill -t " + str(delay) + " -o " + imagepath)
     return jpgimagepath
