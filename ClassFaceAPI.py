@@ -365,6 +365,15 @@ class Person:
                 break
         return thisperson
 
+    # 找出所有 指定 personname 的 person. personname 是可以重複的。
+    def getPersonsByName(self, personGroupId, personname):
+        persons = self.list_persons_in_group(personGroupId)
+        returnpersons = []
+        for person in persons:
+            if person['name'] == personname:
+                returnpersons.append(person)
+        return returnpersons
+
 
 class Face:
     def __init__(self, api_key, host):

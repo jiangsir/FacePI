@@ -1,4 +1,4 @@
-import sys, os, json
+import sys, os, json, time
 import ClassFaceAPI as FaceAPI
 import ClassCamera as Camera
 
@@ -25,7 +25,8 @@ def train_image(personname, imagepath):
 options = {
     '0': '結束程式',
     '1': '列出所有的 PersonGroups',
-    '3': '列出某個「人群」裡有哪些 Person',
+    '2': '列出某個「人群」裡有哪些 Person',
+    '3': '刪除某個 PersonGroups',
     '4': '刪除某個 PersonGroups 裡的 Person',
     '5': '鏡頭對焦',
     '6': '列出所有的 facelists',
@@ -33,7 +34,8 @@ options = {
     '8': '訓練 PersonGroup',
     '9': '建立一個 PersonGroup',
     '10': '列出 Config.json 設定。',
-    '11': '訓練 traindatas 裡的圖檔'
+    '11': '訓練 traindatas 裡的圖檔',
+    '12': '搜尋 PersonGroup 的 personName'
 }
 
 if len(sys.argv) != 2:
@@ -126,8 +128,15 @@ elif index == '11':
     filelist = os.listdir(basepath + '/traindatas/')
     print('目前 traindatas/ 內的圖檔如下：')
     for file in filelist:
+        time.sleep(10)
         personname = file.split('_')[0]
         train_image(personname, os.path.join(basepath + '/traindatas/', file))
+elif index == '12':
+    personGroupId = input('請輸入 personGroupId: ')
+    personname = input('請輸入要找尋的 personname: ')
+    persons = personApi.getPersonsByName(personGroupId, personname)
+    for person in persons:
+        print("person: ", person)
 else:
     print("使用方式:", sys.argv[0], "<選項>")
     print("如:", sys.argv[0], "1")
