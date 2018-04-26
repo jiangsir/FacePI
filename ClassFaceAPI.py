@@ -36,7 +36,7 @@ class PersonGroup:
                          "/persons?%s" % params, "{body}", headers)
             response = conn.getresponse()
             data = response.read()
-            #print(data)
+            print('persons=', str(data, 'UTF-8'))
             persons = json.loads(str(data, 'UTF-8'))
             conn.close()
             return persons
