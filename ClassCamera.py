@@ -18,37 +18,37 @@ def takePicture(personGroupId, delay):
 
 def takePicture_CSI(personGroupId, delay):
     # delay in ms 3000ms = 3s
-    imagepath = basepath + "/takepictures/Identity_" + personGroupId + "_" + time.strftime(
+    jpgimagepath = basepath + "/takepictures/Identity_" + personGroupId + "_" + time.strftime(
         "%Y-%m-%d_%H:%M:%S", time.localtime()) + ".jpg"
-    if not os.path.exists(os.path.dirname(imagepath)):
-        os.makedirs(os.path.dirname(imagepath))
+    if not os.path.exists(os.path.dirname(jpgimagepath)):
+        os.makedirs(os.path.dirname(jpgimagepath))
     try:
-        subprocess.call(['raspistill', '-t', str(delay), '-o', imagepath])
+        subprocess.call(['raspistill', '-t', str(delay), '-o', jpgimagepath])
     except OSError:
         ClassMessageBox.FaceAPIErrorGUI('def takePicture_CSI',
                                         'CSI 攝影機無法啟動！',
                                         'OSError: raspistill 無法執行或不存在！！')        
         #print('EXCEPTION: raspistill 無法執行或不存在！！', file=sys.stderr)
-        imagepath = None
+        jpgimagepath = None
 
     #os.system("raspistill -t " + str(delay) + " -o " + imagepath)
-    return imagepath
+    return jpgimagepath
 
 
 def takePicture_fswebcam(personGroupId, delay):
-    imagepath = basepath + "/takepictures/Identity_" + personGroupId + "_" + time.strftime(
+    jpgimagepath = basepath + "/takepictures/Identity_" + personGroupId + "_" + time.strftime(
         "%Y-%m-%d_%H:%M:%S", time.localtime()) + ".jpg"
-    if not os.path.exists(os.path.dirname(imagepath)):
-        os.makedirs(os.path.dirname(imagepath))
+    if not os.path.exists(os.path.dirname(jpgimagepath)):
+        os.makedirs(os.path.dirname(jpgimagepath))
     try:
-        subprocess.call(['fswebcam', "--no-banner", imagepath])
+        subprocess.call(['fswebcam', "--no-banner", jpgimagepath])
     except OSError:
         ClassMessageBox.FaceAPIErrorGUI('def takePicture_fswebcam',
                                         'web cam 無法啟動！',
                                         'OSError: fswebcam 無法執行或不存在！！')
         #print('EXCEPTION: fswebcam 無法執行或不存在！！', file=sys.stderr)
-        imagepath = None
-    return imagepath
+        jpgimagepath = None
+    return jpgimagepath
 
 
 '''
