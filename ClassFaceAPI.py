@@ -5,7 +5,6 @@ import ClassMessageBox
 
 basepath = os.path.dirname(os.path.realpath(__file__))
 
-
 class PersonGroup:
     def __init__(self, api_key, host):
         self.api_key = api_key
@@ -272,7 +271,7 @@ class Person:
         try:
             conn = http.client.HTTPSConnection(self.host)
             conn.request("POST", "/face/v1.0/persongroups/" + personGroupId +
-                         "/persons?%s" % params, requestbody, headers)
+                         "/persons?%s" % params, requestbody.encode('UTF-8'), headers)
             response = conn.getresponse()
             data = response.read()
             #print(data)

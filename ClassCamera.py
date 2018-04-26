@@ -5,8 +5,6 @@ import ClassMessageBox
 basepath = os.path.dirname(os.path.realpath(__file__))
 with open(basepath + '/Config.json', 'r') as f:
     config = json.load(f)
-print(config)
-
 
 def takePicture(personGroupId, delay):
     cameras = config['camera'].split(',')
