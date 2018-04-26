@@ -23,7 +23,7 @@ def takePicture_CSI(personGroupId, delay):
     if not os.path.exists(os.path.dirname(jpgimagepath)):
         os.makedirs(os.path.dirname(jpgimagepath))
     try:
-        subprocess.call(['raspistill', '-t', str(delay), '-o', jpgimagepath])
+        subprocess.call(['raspistill','-hf', '-t', str(delay), '-o', jpgimagepath])
     except OSError:
         ClassMessageBox.FaceAPIErrorGUI('def takePicture_CSI',
                                         'CSI 攝影機無法啟動！',
