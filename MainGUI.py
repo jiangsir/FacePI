@@ -6,6 +6,7 @@ from PIL import Image
 
 import ClassFaceAPI as FaceAPI
 import ClassCamera as Camera
+import ClassGPIO
 
 
 basepath = os.path.dirname(os.path.realpath(__file__))
@@ -300,6 +301,7 @@ def Signin():
                     name = personjson['name']
                 text = " 報到成功！！！" + str(confidence)
                 showGUI(name, basepath + "/tmp/" + facejson['faceId'] + ".gif", text)
+                ClassGPIO.RelayExchange()
             elif confidence >= 0.7:
                 if personjson['name'] in id_names.keys():
                     name = id_names[personjson['name']]['name']
@@ -307,7 +309,7 @@ def Signin():
                     name = personjson['name']
                 text = " 報到成功！！" + str(confidence)
                 showGUI(name, basepath + "/tmp/" + facejson['faceId'] + ".gif", text)
-
+                ClassGPIO.RelayExchange()
 #            elif confidence >= 0.5:
 #                if personjson['name'] in id_names.keys():
 #                    name = id_names[personjson['name']]['name']
