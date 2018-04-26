@@ -1,7 +1,7 @@
 import sys, os, json, time
 import ClassFaceAPI as FaceAPI
 import ClassCamera as Camera
-import ClassGPIO
+#import ClassGPIO
 
 
 def train_image(personname, imagepath):

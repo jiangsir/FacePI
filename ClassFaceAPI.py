@@ -245,12 +245,12 @@ class Person:
             if 'error' in jsondata.keys():
                 print("EXCEPTION: 這個圖片中沒有偵測到臉部。:",
                       jsondata['error']['message'])
-            if 'error' in jsondata:
-                ClassMessageBox.FaceAPIErrorGUI(
-                    'def add_a_person_face',
-                    '這個圖片中沒有偵測到臉部。' + jsondata['error']['code'],
-                    jsondata['error']['message'])
-                return []
+            # if 'error' in jsondata:
+            #     ClassMessageBox.FaceAPIErrorGUI(
+            #         'def add_a_person_face',
+            #         '這個圖片中沒有偵測到臉部。' + jsondata['error']['code'],
+            #         jsondata['error']['message'])
+            #     return []
 
         except Exception as e:
             print("[Errno {0}] {1}".format(e.errno, e.strerror))
