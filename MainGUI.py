@@ -300,7 +300,7 @@ def Signin():
                 else:
                     name = personjson['name']
                 text = " 報到成功！！！" + str(confidence)
-                os.system('python3 FacePI.py 13')
+                os.system('python3 '+basepath+'/FacePI.py 13')
                 showGUI(name, basepath + "/tmp/" + facejson['faceId'] + ".gif", text)
             elif confidence >= 0.7:
                 if personjson['name'] in id_names.keys():
@@ -308,7 +308,7 @@ def Signin():
                 else:
                     name = personjson['name']
                 text = " 報到成功！！" + str(confidence)
-                os.system('python3 FacePI.py 13')
+                os.system('python3 '+basepath+'/FacePI.py 13')
                 showGUI(name, basepath + "/tmp/" + facejson['faceId'] + ".gif", text)
 #            elif confidence >= 0.5:
 #                if personjson['name'] in id_names.keys():
