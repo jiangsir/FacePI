@@ -1,10 +1,10 @@
 import sys, os, json, time
 import ClassFaceAPI as FaceAPI
 import ClassCamera as Camera
-#import ClassGPIO
+import ClassGPIO
 
 
-def train_image(personname, imagepath):
+def train_image(personGroupId, personname, imagepath):
     print("訓練圖檔路徑:", imagepath)
     print("personname=", personname)
     personapi = FaceAPI.Person(api_key, host)
@@ -29,7 +29,7 @@ options = {
     '2': '列出某個「人群」裡有哪些 Person',
     '3': '刪除某個 PersonGroups',
     '4': '刪除某個 PersonGroups 裡的 Person',
-    '5': '鏡頭對焦',
+    '5': '鏡頭對焦，拍照',
     '6': '列出所有的 facelists',
     '7': '觀察 PersonGroup status',
     '8': '訓練 PersonGroup',
@@ -37,7 +37,7 @@ options = {
     '10': '列出 Config.json 設定。',
     '11': '訓練 traindatas 裡的圖檔',
     '12': '搜尋 PersonGroup 的 personName',
-    '13': '設定繼電器'
+    '13': '設定繼電器',
 }
 
 if len(sys.argv) != 2:
@@ -80,7 +80,8 @@ elif index == '1':
         print('personGroupId=' + persongroup['personGroupId'])
         print(persongroup)
 elif index == '2':
-    persons = PersonGroup.list_persons_in_group(input('請輸入 personGroupId: '))
+    print('personGroupId = ' + personGroupId)
+    persons = PersonGroup.list_persons_in_group(personGroupId)
     if len(persons) == 0:
         print('本 personGroupId 內沒有任何一個 person')
     for person in persons:
@@ -92,22 +93,25 @@ elif index == '4':
     print('總共有 ', len(persongroups), '個「人群」')
     for persongroup in persongroups:
         print('personGroupId=', persongroup)
-    personGroupId = input('請輸入 personGroupId: ')
+    #personGroupId = input('請輸入 personGroupId: ')
     persons = PersonGroup.list_persons_in_group(personGroupId)
     for person in persons:
         print('person:', person)
     personid = input('請輸入 personid: ')
     personApi.deleteAPerson(personGroupId, personid)
 elif index == '5':
-    Camera.takePicture_CSI('test camera', 5000)
+    personname = input('進行 3 連拍，請輸入姓名：')
+    for i in range(3):
+        jpgimagepath = Camera.takePicture(personGroupId, 2000)
+        train_image(personGroupId, personname, jpgimagepath)
 elif index == '6':
     faceList = FaceAPI.FaceList(api_key, host)
     faceList.listFacelists()
 elif index == '7':
-    personGroupId = input('請輸入 personGroupId: ')
+    print('personGroupId = ' + personGroupId)
     PersonGroup.personGroup_status(personGroupId)
 elif index == '8':
-    personGroupId = input('請輸入 personGroupId: ')
+    print('personGroupId = ' + personGroupId)
     PersonGroup.train_personGroup(personGroupId)
 elif index == '9':
     personGroupId = input('建立一個 personGroupId: ')
@@ -132,7 +136,8 @@ elif index == '11':
     for file in filelist:
         time.sleep(10)
         personname = file.split('_')[0]
-        train_image(personname, os.path.join(basepath + '/traindatas/', file))
+        train_image(personGroupId, personname,
+                    os.path.join(basepath + '/traindatas/', file))
 elif index == '12':
     personGroupId = input('請輸入 personGroupId: ')
     personname = input('請輸入要找尋的 personname: ')
