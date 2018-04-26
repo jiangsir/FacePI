@@ -408,11 +408,11 @@ class Face:
             facejson = json.loads(str(data, 'UTF-8'))
             #print(facejson)
             conn.close()
-            if 'error' in facejson:
-                ClassMessageBox.FaceAPIErrorGUI('def identify',
-                                                facejson['error']['code'],
-                                                facejson['error']['message'])
-                return []
+            # if 'error' in facejson:
+            #     ClassMessageBox.FaceAPIErrorGUI('def identify',
+            #                                     facejson['error']['code'],
+            #                                     facejson['error']['message'])
+            #     return []
 
             return facejson
         except Exception as e:
