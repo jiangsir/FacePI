@@ -221,9 +221,11 @@ def showGUI(personname, imagepath, text):
         b1 = tk.Button(
             top, text='下一位！', width=15, height=2, command=lambda: YesMe(top, personname, imagepath + ".gif"))
         b1.pack()
-        b2 = tk.Button(
-            top, text='我不是'+personname+'！', width=15, height=2, command=lambda: NotMeGUI(top, imagepath+".gif"))
-        b2.pack()
+        
+        ## 暫時註解掉，不處理。
+        # b2 = tk.Button(
+        #     top, text='我不是'+personname+'！', width=15, height=2, command=lambda: NotMeGUI(top, imagepath+".gif"))
+        # b2.pack()
 
     # Code to add widgets will go here...
     top.mainloop()
@@ -250,16 +252,16 @@ def Signin():
     
     #config
     #imagepath = Camera.takePicture_CSI(personGroupId, 2000)
-    imagepath = Camera.takePicture(personGroupId, 2000)
+    jpgimagepath = Camera.takePicture(personGroupId, 2000)
 
-    faces = faceapi.detectLocalImage(imagepath)
+    faces = faceapi.detectLocalImage(jpgimagepath)
     print('本地圖片偵測到 ',len(faces),' 人, faces=', faces)
     if len(faces) == 0:
-        showGUI('__Nobody', imagepath, "本圖片沒有偵測到任何人！")
+        showGUI('__Nobody', jpgimagepath, "本圖片沒有偵測到任何人！")
 
     faceids = {}
     for face in faces:
-        faceids[face['faceId']] = imagepath
+        faceids[face['faceId']] = jpgimagepath
     print('faceids =', faceids)
     facejsons = faceapi.identify(list(faceids.keys()), personGroupId)
     if 'error' in facejsons:
@@ -290,7 +292,7 @@ def Signin():
             text = ""
             if 'error' in personjson.keys():
                 text = "查無此人！"
-                print('imagepath2=', imagepath)
+                print('imagepath2=', jpgimagepath)
                 gifimagepath = basepath + "/tmp/" + facejson['faceId'] + ".gif"
                 trainNewPersonGUI(text, gifimagepath)
                 sys.exit()
