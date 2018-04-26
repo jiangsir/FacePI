@@ -1,6 +1,7 @@
 import sys, os, json, time
 import ClassFaceAPI as FaceAPI
 import ClassCamera as Camera
+import ClassGPIO
 
 
 def train_image(personname, imagepath):
@@ -35,7 +36,8 @@ options = {
     '9': '建立一個 PersonGroup',
     '10': '列出 Config.json 設定。',
     '11': '訓練 traindatas 裡的圖檔',
-    '12': '搜尋 PersonGroup 的 personName'
+    '12': '搜尋 PersonGroup 的 personName',
+    '13': '設定繼電器'
 }
 
 if len(sys.argv) != 2:
@@ -137,6 +139,8 @@ elif index == '12':
     persons = personApi.getPersonsByName(personGroupId, personname)
     for person in persons:
         print("person: ", person)
+elif index == '13':
+    ClassGPIO.RelayExchange()
 else:
     print("使用方式:", sys.argv[0], "<選項>")
     print("如:", sys.argv[0], "1")
