@@ -247,7 +247,7 @@ def Signin():
     if 'error' in status and status['error']['code'] == 'PersonGroupNotTrained':
         persongroupapi.train_personGroup(personGroupId)
     
-    config
+    #config
     #imagepath = Camera.takePicture_CSI(personGroupId, 2000)
     imagepath = Camera.takePicture(personGroupId, 2000)
 
