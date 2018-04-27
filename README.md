@@ -129,7 +129,7 @@ confidence|	Number|	信心指數從 0 ~ 1
 * 配置鍵盤：請先修改鍵盤配置。
 
         sudo raspi-config
-        Interfacing Options -> Keyboard Layout -> 將 UK 改成 US
+        Internationalisation Options -> Change Keyboard Layout -> Generic 105-key (Intel) PC 選擇 English (US)
 
 * 啟用相機：請準備一個「CSI相機模組」，並正確安裝好，請在樹莓派上安裝好 Raspbian 然後啟用相機
 
