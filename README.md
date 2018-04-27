@@ -140,7 +140,7 @@ confidence|	Number|	信心指數從 0 ~ 1
 * 安裝軟體：
 
         安裝 webcam 程式
-        apt-get install fswebcom
+        sudo apt-get install fswebcom
         安裝幾個中文字型
         sudo apt-get install fonts-wqy-microhei fonts-wqy-zenhei xfonts-wqy
         安裝中文輸入法
@@ -155,7 +155,7 @@ confidence|	Number|	信心指數從 0 ~ 1
 
 接下來下載程式
 
-        git clone https://github.com/jiangsir/FacePI.git
+        git clone https://github.com/jiangsir/FacePI
 
 修改設定檔：
 
