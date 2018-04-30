@@ -1,28 +1,58 @@
 import sys, os, json, time
 import ClassFaceAPI as FaceAPI
 import ClassCamera as Camera
-import ClassGPIO
 
+#import ClassGPIO
 
-def train_image(personGroupId, personname, imagepath):
-    print("訓練圖檔路徑:", imagepath)
+# 加入一個人的眾多圖片，但不訓練
+def add_personimages(personname, imagepaths):
     print("personname=", personname)
-    personapi = FaceAPI.Person(api_key, host)
-    person = personapi.getPersonByName(personGroupId, personname)
+    print("訓練圖檔路徑:", imagepaths)
+    personAPI = FaceAPI.Person(api_key, host)
+    person = personAPI.getPersonByName(personGroupId, personname)
     print('getPersonByName: person=', person)
-    personGroupapi = FaceAPI.PersonGroup(api_key, host)
     if person == None:
         print('call create_a_person')
-        personid = personapi.create_a_person(personGroupId, personname,
+        personid = personAPI.create_a_person(personGroupId, personname,
                                              personname + ' 說明。')
-        personapi.add_a_person_face(imagepath, personid, personGroupId)
+        for imagepath in imagepaths:
+            personAPI.add_a_person_face(imagepath, personid, personGroupId)
     else:
         print('call add_a_person_face, personId=', person['personId'])
-        personapi.add_a_person_face(imagepath, person['personId'],
-                                    personGroupId)
+        for imagepath in imagepaths:
+            personAPI.add_a_person_face(imagepath, person['personId'],
+                                        personGroupId)
+
+
+# 加入一個人的眾多圖片，並訓練
+def train_personimages(personGroupId, personname, imagepaths):
+    add_personimages(personname, imagepaths)
+
+    personGroupapi = FaceAPI.PersonGroup(api_key, host)
     personGroupapi.train_personGroup(personGroupId)
 
+# 將整個 traindatas 的圖片全部送上去訓練
+def train_traindatas(personGroupId):
+    traindataPath = basepath + '/traindatas/'
+    trainfiles = os.listdir(traindataPath)
+    print('目前 traindatas/ 內的圖檔如下：')
+    imagepaths = []
 
+    for personname in trainfiles:
+        #print("file="+ os.path.join(traindataPath, trainfile))
+        personpath = os.path.join(traindataPath, personname)
+        if os.path.isdir(personpath):
+            print("person name=", personname)
+            personImagePaths = []
+            for personImagePath in os.listdir(personpath):
+                personImagePaths.append(os.path.join(personpath, personImagePath))
+            print(personGroupId, personname, personImagePaths)
+            time.sleep(3)
+            add_personimages(personname, personImagePaths)
+
+    personGroupapi = FaceAPI.PersonGroup(api_key, host)
+    personGroupapi.train_personGroup(personGroupId)
+    
 options = {
     0: '結束程式',
     1: '訓練新人 3 連拍',
@@ -42,10 +72,10 @@ options = {
 
 if len(sys.argv) != 2:
     print("使用方式:", sys.argv[0], "<選項>")
-    print("如:", sys.argv[0], "1")
+    print("如: python3 FacePI/" + sys.argv[0], "1")
     print("選項:")
     for key in sorted(options.keys()):
-        print(str(key)+'.', options[key])
+        print(str(key) + '.', options[key])
     sys.exit(0)
 
 basepath = os.path.dirname(os.path.realpath(__file__))
@@ -67,18 +97,26 @@ print('============================================')
 #     print(key + ": ", config[key])
 
 index = int(sys.argv[1])
-print(str(index)+'.', options[index])
+print(str(index) + '.', options[index])
 if index == 0:
     sys.exit()
 elif index == 1:
-    personname = input('進行 3 連拍，請輸入姓名：')
+    personname = input('進行 3 連拍，請輸入要訓練的對象姓名：')
+    jpgimagepaths = []
     for i in range(3):
         jpgimagepath = Camera.takePicture(personGroupId, 2000)
-        train_image(personGroupId, personname, jpgimagepath)
+        jpgimagepaths.append(jpgimagepath)
+
+    train_personimages(personGroupId, personname, jpgimagepaths)
+
 elif index == 2:
     persongroups = PersonGroup.ListPersonGroups()
+    if persongroups == None:
+        print("讀取 PersonGroup 發生錯誤！: ", persongroups)
+        sys.exit()
     if 'error' in persongroups:
         print("讀取 PersonGroup 發生錯誤！: ", persongroups['error']['message'])
+        sys.exit()
     print('總共有 ', len(persongroups), '個「人群」')
     for persongroup in persongroups:
         print('personGroupId=' + persongroup['personGroupId'])
@@ -88,6 +126,7 @@ elif index == 3:
     persons = PersonGroup.list_persons_in_group(personGroupId)
     if len(persons) == 0:
         print('本 personGroupId 內沒有任何一個 person')
+        sys.exit()
     for person in persons:
         print('name=' + person['name'] + ':', person)
 elif index == 4:
@@ -100,7 +139,7 @@ elif index == 5:
     #personGroupId = input('請輸入 personGroupId: ')
     persons = PersonGroup.list_persons_in_group(personGroupId)
     for person in persons:
-        print('name='+person['name']+':', person)
+        print('name=' + person['name'] + ':', person)
     personid = input('請輸入將要刪除的 personid: ')
     personApi.deleteAPerson(personGroupId, personid)
 # elif index == 6:
@@ -130,25 +169,19 @@ elif index == 10:
     with open(basepath + '/Config.json', 'w') as outfile:
         json.dump(config, outfile, ensure_ascii=False)
 elif index == 11:
-    filelist = os.listdir(basepath + '/traindatas/')
-    print('目前 traindatas/ 內的圖檔如下：')
-    for file in filelist:
-        time.sleep(10)
-        personname = file.split('_')[0]
-        train_image(personGroupId, personname,
-                    os.path.join(basepath + '/traindatas/', file))
+    train_traindatas(personGroupId)
 elif index == 12:
     personname = input('請輸入要找尋的 personname: ')
     persons = personApi.getPersonsByName(personGroupId, personname)
     for person in persons:
         print("person: ", person)
 elif index == 13:
-    ClassGPIO.RelayExchange()
-    print('')
+    #ClassGPIO.RelayExchange()
+    print('call ClassGPIO.RelayExchange()')
 else:
     print("使用方式:", sys.argv[0], "<選項>")
-    print("如:", sys.argv[0], "1")
+    print("如: python3 FacePI/" + sys.argv[0], "1")
     print("選項:")
     for key in sorted(options.keys()):
-        print(str(key)+'.', options[key])
+        print(str(key) + '.', options[key])
     sys.exit(1)
