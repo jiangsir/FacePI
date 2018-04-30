@@ -5,12 +5,10 @@ import ClassCamera as Camera
 #import ClassGPIO
 
 # 加入一個人的眾多圖片，但不訓練
-def add_personimages(personname, imagepaths):
-    print("personname=", personname)
-    print("訓練圖檔路徑:", imagepaths)
+def add_personimages(personGroupId, personname, imagepaths):
+    print("personname=", personname, "圖檔:", imagepaths)
     personAPI = FaceAPI.Person(api_key, host)
     person = personAPI.getPersonByName(personGroupId, personname)
-    print('getPersonByName: person=', person)
     if person == None:
         print('call create_a_person')
         personid = personAPI.create_a_person(personGroupId, personname,
@@ -26,7 +24,7 @@ def add_personimages(personname, imagepaths):
 
 # 加入一個人的眾多圖片，並訓練
 def train_personimages(personGroupId, personname, imagepaths):
-    add_personimages(personname, imagepaths)
+    add_personimages(personGroupId, personname, imagepaths)
 
     personGroupapi = FaceAPI.PersonGroup(api_key, host)
     personGroupapi.train_personGroup(personGroupId)
@@ -48,7 +46,7 @@ def train_traindatas(personGroupId):
                 personImagePaths.append(os.path.join(personpath, personImagePath))
             print(personGroupId, personname, personImagePaths)
             time.sleep(3)
-            add_personimages(personname, personImagePaths)
+            add_personimages(personGroupId, personname, personImagePaths)
 
     personGroupapi = FaceAPI.PersonGroup(api_key, host)
     personGroupapi.train_personGroup(personGroupId)
