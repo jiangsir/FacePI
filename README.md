@@ -177,8 +177,36 @@ confidence|	Number|	信心指數從 0 ~ 1
 
 
 執行主畫面：
+* 主畫面主要在進行「簽到」功能，為前端應用。
 
         python3 FacePI/MainGUI.py
+
+執行後台管理：
+* 後台管理主要進行名單管理、訓練...等工作。
+
+        python3 FacePI/FacePI.py
+
+執行後會有如下功能：
+
+使用方式: FacePI.py <選項>
+
+如: python3 FacePI/FacePI.py 1
+
+選項:
+0. 結束程式
+1. 進行 3 連拍
+2. 列出所有的 PersonGroups
+3. 列出「人群」裡有哪些 Person
+4. 刪除某個 PersonGroups
+5. 刪除某個 PersonGroups 裡的 Person
+7. 觀察 PersonGroup status
+8. 訓練 PersonGroup
+9. 建立一個 PersonGroup
+10. 列出 Config.json 設定。
+11. 訓練 /traindatas 裡的圖檔
+12. 搜尋 PersonGroup 裡的 personName
+13. 設定繼電器
+
 
 實際畫面截圖：
 
