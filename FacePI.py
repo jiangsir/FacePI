@@ -1,7 +1,7 @@
 import sys, os, json, time
 import ClassFaceAPI as FaceAPI
 import ClassCamera as Camera
-#import ClassGPIO
+import ClassGPIO
 
 
 def train_image(personGroupId, personname, imagepath):
@@ -143,7 +143,7 @@ elif index == 12:
     for person in persons:
         print("person: ", person)
 elif index == 13:
-    #ClassGPIO.RelayExchange()
+    ClassGPIO.RelayExchange()
     print('')
 else:
     print("使用方式:", sys.argv[0], "<選項>")
