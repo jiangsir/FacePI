@@ -25,7 +25,7 @@ def train_image(personGroupId, personname, imagepath):
 
 options = {
     0: '結束程式',
-    1: '進行 3 連拍',
+    1: '訓練新人 3 連拍',
     2: '列出所有的 PersonGroups',
     3: '列出「人群」裡有哪些 Person',
     4: '刪除某個 PersonGroups',
@@ -35,7 +35,7 @@ options = {
     8: '訓練 PersonGroup',
     9: '建立一個 PersonGroup',
     10: '列出 Config.json 設定。',
-    11: '訓練 /traindatas 裡的圖檔',
+    11: '訓練 /traindatas 裡的圖檔，同時訓練一群事先準備好的人與照片',
     12: '搜尋 PersonGroup 裡的 personName',
     13: '設定繼電器',
 }
