@@ -34,7 +34,6 @@ def train_traindatas(personGroupId):
     traindataPath = basepath + '/traindatas/'
     trainfiles = os.listdir(traindataPath)
     print('目前 traindatas/ 內的圖檔如下：')
-    imagepaths = []
 
     for personname in trainfiles:
         #print("file="+ os.path.join(traindataPath, trainfile))
@@ -45,8 +44,8 @@ def train_traindatas(personGroupId):
             for personImagePath in os.listdir(personpath):
                 personImagePaths.append(os.path.join(personpath, personImagePath))
             print(personGroupId, personname, personImagePaths)
-            time.sleep(3)
             add_personimages(personGroupId, personname, personImagePaths)
+            time.sleep(6)
 
     personGroupapi = FaceAPI.PersonGroup(api_key, host)
     personGroupapi.train_personGroup(personGroupId)

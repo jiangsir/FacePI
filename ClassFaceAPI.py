@@ -5,6 +5,7 @@ import ClassMessageBox
 
 basepath = os.path.dirname(os.path.realpath(__file__))
 
+
 class PersonGroup:
     def __init__(self, api_key, host):
         self.api_key = api_key
@@ -270,14 +271,21 @@ class Person:
 
         try:
             conn = http.client.HTTPSConnection(self.host)
-            conn.request("POST", "/face/v1.0/persongroups/" + personGroupId +
-                         "/persons?%s" % params, requestbody.encode('UTF-8'), headers)
+            conn.request("POST", "/face/v1.0/persongroups/" +
+                         personGroupId + "/persons?%s" % params,
+                         requestbody.encode('UTF-8'), headers)
             response = conn.getresponse()
             data = response.read()
-            #print(data)
             create_a_person_json = json.loads(str(data, 'UTF-8'))
-
             conn.close()
+            if 'error' in create_a_person_json:
+                print(data)
+                ClassMessageBox.FaceAPIErrorGUI(
+                    'def create_a_person',
+                    create_a_person_json['error']['code'],
+                    create_a_person_json['error']['message'])
+                return []
+
             return create_a_person_json['personId']
         except Exception as e:
             print("[Errno {0}] {1}".format(e.errno, e.strerror))
