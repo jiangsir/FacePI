@@ -29,7 +29,7 @@ FacePI 讓樹莓派變身刷臉報到系統
 * Person: 一個 person 可以加入好幾個臉
 * Person Group: 自訂一個人群，在人群裡面可以加入多個 person
 
-Face API 整體的基本流程如下：
+### Face API 整體的基本流程如下：
 
 * 先建立一個 Person Group 然後獲得一個 personGroupId 
 * 在這個 Person Group 裡面建立一個 Person 然後獲得一個 personId
@@ -40,6 +40,14 @@ Face API 整體的基本流程如下：
     * 照片必須先經過 Detect 然後獲得一個 faceid, 
     * 用這個 faceid 到一個 personGroupId 內辨識是否同一個人。
     * 設定信心門檻，預設 0.5。進行完畢就會回傳符合的 candidates
+
+### 用相片辨識的基本步驟如下：
+* 準備一張照片，可以是本地端的照片檔，也可以是一個 Image URL
+* 用這張照片進行 Detect(偵測), 會獲得 0~n 個 face
+* 將獲得的 faceid們 放入 Identify(辨認) 程序，會獲得同樣數量的 Identify Face(辨認出來的臉部資訊) 
+* Identify Face 就包含了每一個 faceid 所辨認到的 candidate(候選人)，可能有 0~n 個。
+* 可在 candidate(候選人) 當中獲得 personId, 然後藉由 personId 回 PersonAPI 取得 person 的完整資訊。
+
 
 
 接下來分別將這些動作用 Face API 的呼叫來替代，這當中包含了很多組不同的 API 呼叫，但基本用法大致都相同，因此僅就一個 Face Identity API 看一個典型的呼叫的程式碼寫法。
@@ -193,6 +201,7 @@ confidence|	Number|	信心指數從 0 ~ 1
 如: python3 FacePI/FacePI.py 1
 
 選項:
+
 0. 結束程式
 1. 進行 3 連拍
 2. 列出所有的 PersonGroups

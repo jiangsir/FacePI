@@ -8,7 +8,6 @@ import ClassFaceAPI as FaceAPI
 import ClassCamera as Camera
 import ClassGPIO
 
-
 basepath = os.path.dirname(os.path.realpath(__file__))
 
 with open(basepath + '/Config.json', 'r') as f:
@@ -59,28 +58,33 @@ def close_window(top):
 def train(top, e, imagepath):
     print('imagepath=', imagepath)
     newpersonname = e.get()
-    print("newpersonname=",newpersonname)
+    print("newpersonname=", newpersonname)
     personapi = FaceAPI.Person(api_key, host)
     person = personapi.getPersonByName(personGroupId, newpersonname)
-    print('getPersonByName: person=',person)
+    print('getPersonByName: person=', person)
     personGroupapi = FaceAPI.PersonGroup(api_key, host)
     if person == None:
         print('call create_a_person')
-        personid = personapi.create_a_person(personGroupId, newpersonname, 'unknown descript')
+        personid = personapi.create_a_person(personGroupId, newpersonname,
+                                             'unknown descript')
         personapi.add_a_person_face(imagepath, personid, personGroupId)
     else:
         print('call add_a_person_face, personId=', person['personId'])
-        personapi.add_a_person_face(imagepath, person['personId'], personGroupId)
+        personapi.add_a_person_face(imagepath, person['personId'],
+                                    personGroupId)
     print('FROM train()')
     personGroupapi.train_personGroup(personGroupId)
     top.destroy()
     #sys.exit()
 
+
 def YesMe(top, personname, gifimagepath):
     personapi = FaceAPI.Person(api_key, host)
     person = personapi.getPersonByName(personGroupId, personname)
-    personapi.add_a_person_face(gifimagepath, person['personId'], personGroupId)
+    personapi.add_a_person_face(gifimagepath, person['personId'],
+                                personGroupId)
     top.destroy()
+
 
 def trainNewPersonGUI(text, gifimagepath):
     # 當辨識不到人的時候，跳這個畫面。以便用這個圖片去訓練新人。
@@ -108,7 +112,7 @@ def trainNewPersonGUI(text, gifimagepath):
     w = imagefile.width()
     if w > maxwidth:
         imagefile = imagefile.subsample(w // maxwidth, w // maxwidth)
-    print('h=', imagefile.height() , 'w=', imagefile.width())
+    print('h=', imagefile.height(), 'w=', imagefile.width())
     canvas = tk.Canvas(top, height=imagefile.height(), width=imagefile.width())
 
     image = canvas.create_image(10, 10, anchor="nw", image=imagefile)
@@ -132,13 +136,11 @@ def trainNewPersonGUI(text, gifimagepath):
         command=lambda: train(top, e, gifimagepath))
     b1.pack()
 
-    b2 = tk.Button(
-        top, text='下一位！', width=15, height=2, command=top.destroy)
+    b2 = tk.Button(top, text='下一位！', width=15, height=2, command=top.destroy)
     b2.pack()
 
     # Code to add widgets will go here...
     top.mainloop()
-
 
 
 def NotMeGUI(top, gifimagepath):
@@ -154,7 +156,7 @@ def NotMeGUI(top, gifimagepath):
     w = imagefile.width()
     if w > maxwidth:
         imagefile = imagefile.subsample(w // maxwidth, w // maxwidth)
-    print('h=', imagefile.height() , 'w=', imagefile.width())
+    print('h=', imagefile.height(), 'w=', imagefile.width())
     canvas = tk.Canvas(top, height=imagefile.height(), width=imagefile.width())
 
     image = canvas.create_image(10, 10, anchor="nw", image=imagefile)
@@ -178,8 +180,7 @@ def NotMeGUI(top, gifimagepath):
         command=lambda: train(top, e, gifimagepath))
     b1.pack()
 
-    b2 = tk.Button(
-        top, text='下一位！', width=15, height=4, command=top.destroy)
+    b2 = tk.Button(top, text='下一位！', width=15, height=4, command=top.destroy)
     b2.pack()
 
     # Code to add widgets will go here...
@@ -208,23 +209,25 @@ def showGUI(personname, imagepath, text):
 
     print('imagefile=', imagefile)
     canvas = tk.Canvas(top, height=imagefile.height(), width=imagefile.width())
-    
+
     image = canvas.create_image(10, 10, anchor="nw", image=imagefile)
     canvas.pack()
 
     label = tk.Label(top, text=personname + text, font=('Arial', 20))
     label.pack()
     if personname == '__Nobody':
-        b1 = tk.Button(top, text='下一位！', width=15, height=4, command=top.destroy)
+        b1 = tk.Button(
+            top, text='下一位！', width=15, height=4, command=top.destroy)
         b1.pack()
     else:
         # 暫時不處理 YesMe 的狀況
         # b1 = tk.Button(
         #     top, text='下一位！', width=15, height=2, command=lambda: YesMe(top, personname, imagepath + ".gif"))
         # b1.pack()
-        b1 = tk.Button(top, text='下一位！', width=15, height=4, command=top.destroy)
+        b1 = tk.Button(
+            top, text='下一位！', width=15, height=4, command=top.destroy)
         b1.pack()
-        
+
         ## 暫時註解掉，不處理。
         # b2 = tk.Button(
         #     top, text='我不是'+personname+'！', width=15, height=2, command=lambda: NotMeGUI(top, imagepath+".gif"))
@@ -248,17 +251,18 @@ def Signin():
 
     status = persongroupapi.personGroup_status(personGroupId)
     if 'error' in status and status['error']['code'] == 'PersonGroupNotFound':
-        persongroupapi.createPersonGroup(personGroupId, 'group name', 'group data')
+        persongroupapi.createPersonGroup(personGroupId, 'group name',
+                                         'group data')
         persongroupapi.train_personGroup(personGroupId)
     if 'error' in status and status['error']['code'] == 'PersonGroupNotTrained':
         persongroupapi.train_personGroup(personGroupId)
-    
+
     #config
     #imagepath = Camera.takePicture_CSI(personGroupId, 2000)
     jpgimagepath = Camera.takePicture(personGroupId, 2000)
 
     faces = faceapi.detectLocalImage(jpgimagepath)
-    print('本地圖片偵測到 ',len(faces),' 人, faces=', faces)
+    print('本地圖片偵測到 ', len(faces), ' 人, faces=', faces)
     if len(faces) == 0:
         showGUI('__Nobody', jpgimagepath, "本圖片沒有偵測到任何人！")
 
@@ -266,37 +270,38 @@ def Signin():
     for face in faces:
         faceids[face['faceId']] = jpgimagepath
     print('faceids =', faceids)
-    facejsons = faceapi.identify(list(faceids.keys()), personGroupId)
-    if 'error' in facejsons:
+    candidates = faceapi.identify(list(faceids.keys()), personGroupId)
+    if 'error' in candidates:
         status = persongroupapi.personGroup_status(personGroupId)
         if status['status'] == 'failed' and 'no persisted faces of person' in status['message']:
-            gifimagepath = basepath + "/tmp/" + list(faceids.keys())[0] + ".gif"
+            gifimagepath = basepath + "/tmp/" + list(
+                faceids.keys())[0] + ".gif"
             trainNewPersonGUI('jsjsjs', gifimagepath)
 
-    print("facejsons=", facejsons, type(facejsons))
-    
-    for facejson in facejsons:
-        print("facejson type = ", type(facejson), "  ", facejson == 'error')            
+    print("candidates=", candidates, type(candidates))
+
+    for candidate in candidates:
+        print("facejson type = ", type(candidate), "  ", candidate == 'error')
         #if facejson == 'error':
         #    break
         #display(Image(filename="tmp/"+facejson['faceId']+".jpg"))
         text = ""
-        if facejson == 'error' and 'PersonGroupNotTrained' in facejsons['error']['code']:
-            gifimagepath = basepath + "/tmp/" + list(faceids.keys())[0] + ".gif"
+        if candidate == 'error' and 'PersonGroupNotTrained' in candidates['error']['code']:
+            gifimagepath = basepath + "/tmp/" + list(
+                faceids.keys())[0] + ".gif"
             persongroupapi.train_personGroup(personGroupId)
             trainNewPersonGUI('訓練一個人群', gifimagepath)
             #showGUI(text, imagepath)
-        elif facejson != 'error' and len(facejson['candidates']) > 0:
-            confidence = facejson["candidates"][0]["confidence"]
-            print("personId: " + facejson["candidates"][0]["personId"] + ", 信心指數："
-                + str(confidence))
-            personjson = personapi.get_a_person(
-                                    facejson["candidates"][0]["personId"], personGroupId)
+        elif candidate != 'error' and len(candidate['candidates']) > 0:
+            personId = candidate["candidates"][0]["personId"]
+            confidence = candidate["candidates"][0]["confidence"]
+            print("personId: " + personId + ", 信心指數：" + str(confidence))
+            personjson = personapi.get_a_person(personId, personGroupId)
             text = ""
             if 'error' in personjson.keys():
                 text = "查無此人！"
                 print('imagepath2=', jpgimagepath)
-                gifimagepath = basepath + "/tmp/" + facejson['faceId'] + ".gif"
+                gifimagepath = basepath + "/tmp/" + candidate['faceId'] + ".gif"
                 trainNewPersonGUI(text, gifimagepath)
                 sys.exit()
             elif confidence >= 0.9:
@@ -305,16 +310,22 @@ def Signin():
                 else:
                     name = personjson['name']
                 text = " 報到成功！！！" + str(confidence)
-                os.system('python3 '+basepath+'/FacePI.py 13')
-                showGUI(name, basepath + "/tmp/" + facejson['faceId'] + ".gif", text)
+                os.system('python3 ' + basepath + '/FacePI.py 13')
+                showGUI(name,
+                        basepath + "/tmp/" + candidate['faceId'] + ".gif",
+                        text)
             elif confidence >= 0.7:
                 if personjson['name'] in id_names.keys():
                     name = id_names[personjson['name']]['name']
                 else:
                     name = personjson['name']
                 text = " 報到成功！！" + str(confidence)
-                os.system('python3 '+basepath+'/FacePI.py 13')
-                showGUI(name, basepath + "/tmp/" + facejson['faceId'] + ".gif", text)
+                os.system('python3 ' + basepath + '/FacePI.py 13')
+                showGUI(name,
+                        basepath + "/tmp/" + candidate['faceId'] + ".gif",
+                        text)
+
+
 #            elif confidence >= 0.5:
 #                if personjson['name'] in id_names.keys():
 #                    name = id_names[personjson['name']]['name']
@@ -322,13 +333,12 @@ def Signin():
 #                    name = personjson['name']
 #                text = name + " 報到成功！"
             else:
-                gifimagepath = basepath + "/tmp/" + facejson['faceId'] + ".gif"
+                gifimagepath = basepath + "/tmp/" + candidate['faceId'] + ".gif"
                 trainNewPersonGUI(text, gifimagepath)
-        elif facejson != 'error' and len(facejson['candidates']) == 0:
+        elif candidate != 'error' and len(candidate['candidates']) == 0:
             text = "哈囉，你哪位？"
-            gifimagepath = basepath + "/tmp/" + facejson['faceId'] + ".gif"
+            gifimagepath = basepath + "/tmp/" + candidate['faceId'] + ".gif"
             trainNewPersonGUI(text, gifimagepath)
-
 
 b2 = tk.Button(
     top, text='簽到', font=font_helv36, width=10, height=5, command=Signin)

@@ -389,8 +389,7 @@ class Face:
         self.host = host
 
     def identify(self, faceidkeys, personGroupId):
-        print("開始辨識。faceidkeys=", faceidkeys, " , personGroupId=",
-              personGroupId)
+        print("def Face.identify 開始辨識。faceidkeys=", faceidkeys)
         headers = {
             # Request headers
             'Content-Type': 'application/json',
@@ -403,7 +402,7 @@ class Face:
             "personGroupId": "''' + personGroupId + '''",
             "faceIds":''' + str(faceidkeys) + ''',
             "maxNumOfCandidatesReturned":1,
-            "confidenceThreshold": 0.7
+            "confidenceThreshold": 0.6
         }'''
         print('requestbody=', requestbody)
         try:
@@ -413,7 +412,7 @@ class Face:
             response = conn.getresponse()
             data = response.read()
             #print(data)
-            facejson = json.loads(str(data, 'UTF-8'))
+            candidates = json.loads(str(data, 'UTF-8'))
             #print(facejson)
             conn.close()
             # if 'error' in facejson:
@@ -422,11 +421,53 @@ class Face:
             #                                     facejson['error']['message'])
             #     return []
 
-            return facejson
+            return candidates
         except Exception as e:
             print("[Errno {0}] {1}".format(e.errno, e.strerror))
             sys.exit()
 
+    # 用網路上的圖片進行偵測。
+    def detectURLImages(self, imageurls):
+        headers = {
+            # Request headers
+            'Content-Type': 'application/json',  # 
+            'Ocp-Apim-Subscription-Key': self.api_key,
+        }
+
+        params = urllib.parse.urlencode({
+            # Request parameters
+            'returnFaceId':
+            'true',
+            'returnFaceLandmarks':
+            'false',
+            'returnFaceAttributes':
+            'age,gender,emotion'
+        })
+        #'age,gender,headPose,smile,facialHair,glasses,emotion,hair,makeup,occlusion,accessories,blur,exposure'
+        print('imageurls=', imageurls)
+        requestbody = '{"url": "' + imageurls[0] + '"}'
+        try:
+            conn = http.client.HTTPSConnection(self.host)
+            conn.request("POST", "/face/v1.0/detect?%s" % params, requestbody,
+                         headers)
+            response = conn.getresponse()
+            data = response.read()
+            faces = json.loads(str(data, 'UTF-8'))
+            print("detecURLImage.faces 偵測到 faces 長度=", len(faces))
+            for index, face in enumerate(faces):
+                print('face[' + str(index) + ']=', face)
+            conn.close()
+            if 'error' in faces:
+                ClassMessageBox.FaceAPIErrorGUI('def detectURLImage',
+                                                faces['error']['code'],
+                                                faces['error']['message'])
+                return []
+            return faces
+        except Exception as e:
+            print("[Errno {0}] {1}".format(e.errno, e.strerror))
+            return []
+
+    # 用本地端的圖檔進行辨識。
     def detectLocalImage(self, imagepath):
         headers = {
             # Request headers
