@@ -1,4 +1,5 @@
 import sys, os, json, time
+from PIL import Image
 import ClassFaceAPI as FaceAPI
 import ClassCamera as Camera
 
@@ -184,19 +185,35 @@ elif index == 13:
     print('call ClassGPIO.RelayExchange()')
 elif index == 14:
     imageurl = input('請輸入準備要辨識的 image URL:')
-    imageurls = []
-    imageurls.append(imageurl)
-    faces = faceApi.detectURLImages(imageurls)
-    if len(faces) == 0:
+    if imageurl.startswith('http'):    
+        imageurls = []
+        imageurls.append(imageurl)
+        detectfaces = faceApi.detectURLImages(imageurls)
+    else:
+        imageurl = imageurl.strip()
+        statinfo = os.stat(imageurl)
+        print('檔案大小：', statinfo.st_size, 'Bytes')
+        if statinfo.st_size<1024:
+            print('圖檔太小 不可小於 1KB')
+            sys.exit(1)
+        elif statinfo.st_size>4*1024*1024:
+            print('圖檔太大 不可大於 4MB')
+            im = Image.open(imageurl)
+            out = im.resize((128, 128))
+            im.save(imageurl, "JPEG")
+            print('out=', type(out))
+        detectfaces = faceApi.detectLocalImage(imageurl)
+
+    if len(detectfaces) == 0:
         print('相片中找不到人！')
         sys.exit(1)
 
     faceids = []
-    for face in faces:
+    for face in detectfaces:
         print('所偵測到的 faceId=', face['faceId'])
         faceids.append(face['faceId'])
 
-    identifyfaces = faceApi.identify(faceids, personGroupId)
+    identifyfaces = faceApi.identify(faceids[:10], personGroupId)
     print('在所提供的相片中偵測到 identifyfaces 共 ', len(identifyfaces), '個', identifyfaces)
     for identifyface in identifyfaces:
         # print('candidateface 的[\'candidates\'] 其中有 ',
@@ -205,12 +222,9 @@ elif index == 14:
             personId = candidate["personId"]
             confidence = candidate["confidence"]
             print('辨認候選人 candidate: personId=', personId, confidence, candidate)
-            if confidence >= 0.6:
-                person = personApi.get_a_person(personId, personGroupId)
-                print('簽到成功（' + str(confidence) + '）！ name=', person['name'],
-                      person)
-            else:
-                print('信心不足！無法確定是否吻合。')
+            person = personApi.get_a_person(personId, personGroupId)
+            print('簽到成功（' + str(confidence) + '）！ name=', person['name'],
+                    person['personId'], len(person['persistedFaceIds']))
 
 else:
     print("使用方式:", sys.argv[0], "<選項>")

@@ -402,7 +402,7 @@ class Face:
             "personGroupId": "''' + personGroupId + '''",
             "faceIds":''' + str(faceidkeys) + ''',
             "maxNumOfCandidatesReturned":1,
-            "confidenceThreshold": 0.6
+            "confidenceThreshold": 0.65
         }'''
         print('requestbody=', requestbody)
         try:
@@ -412,7 +412,7 @@ class Face:
             response = conn.getresponse()
             data = response.read()
             #print(data)
-            candidates = json.loads(str(data, 'UTF-8'))
+            identifyfaces = json.loads(str(data, 'UTF-8'))
             #print(facejson)
             conn.close()
             # if 'error' in facejson:
@@ -421,7 +421,7 @@ class Face:
             #                                     facejson['error']['message'])
             #     return []
 
-            return candidates
+            return identifyfaces
         except Exception as e:
             print("[Errno {0}] {1}".format(e.errno, e.strerror))
             sys.exit()
@@ -452,17 +452,17 @@ class Face:
                          headers)
             response = conn.getresponse()
             data = response.read()
-            faces = json.loads(str(data, 'UTF-8'))
-            print("detecURLImage.faces 偵測到 faces 長度=", len(faces))
-            for index, face in enumerate(faces):
+            detectfaces = json.loads(str(data, 'UTF-8'))
+            print("detecURLImage.faces 偵測到 faces 長度=", len(detectfaces))
+            for index, face in enumerate(detectfaces):
                 print('face[' + str(index) + ']=', face)
             conn.close()
-            if 'error' in faces:
-                ClassMessageBox.FaceAPIErrorGUI('def detectURLImage',
-                                                faces['error']['code'],
-                                                faces['error']['message'])
+            if 'error' in detectfaces:
+                ClassMessageBox.FaceAPIErrorGUI(
+                    'def detectURLImage', detectfaces['error']['code'],
+                    detectfaces['error']['message'])
                 return []
-            return faces
+            return detectfaces
         except Exception as e:
             print("[Errno {0}] {1}".format(e.errno, e.strerror))
             return []
@@ -477,12 +477,14 @@ class Face:
 
         params = urllib.parse.urlencode({
             # Request parameters
-            'returnFaceId': 'true',
-            'returnFaceLandmarks': 'false',
+            'returnFaceId':
+            'true',
+            'returnFaceLandmarks':
+            'false',
             'returnFaceAttributes':
-            #'age,gender,headPose,smile,facialHair,glasses,emotion,hair,makeup,occlusion,accessories,blur,exposure'
-            'age,gender'
+            'age,gender,emotion'
         })
+        #'age,gender,headPose,smile,facialHair,glasses,emotion,hair,makeup,occlusion,accessories,blur,exposure'
         print('imagepath=', imagepath)
         requestbody = open(imagepath, "rb").read()
         try:
@@ -491,15 +493,16 @@ class Face:
                          headers)
             response = conn.getresponse()
             data = response.read()
-            faces = json.loads(str(data, 'UTF-8'))
-            print("detectLocalImage.faces=", faces)
+            print('data=', data)
+            detectfaces = json.loads(str(data, 'UTF-8'))
+            print("detectLocalImage.faces=", detectfaces)
             #print(parsed[0]['faceId'])
             #faceids.append(parsed[0]['faceId'])
             conn.close()
-            if 'error' in faces:
+            if 'error' in detectfaces:
                 ClassMessageBox.FaceAPIErrorGUI('def detectLocalImage',
-                                                faces['error']['code'],
-                                                faces['error']['message'])
+                                                detectfaces['error']['code'],
+                                                detectfaces['error']['message'])
                 return []
 
             # if('error' in faces):
@@ -507,22 +510,22 @@ class Face:
             #     return []
 
             print("detectLocalImage:",
-                  imagepath + "偵測到 {0} 個人".format(len(faces)))
+                  imagepath + "偵測到 {0} 個人".format(len(detectfaces)))
             #display(Image(filename=imagepath))
-            for face in faces:
+            for detectface in detectfaces:
                 #print("face = ", face)
-                print("faceRectangle = ", face['faceRectangle'])
-                print("faceId = ", face['faceId'])
-                left = face['faceRectangle']['left']
-                top = face['faceRectangle']['top']
-                height = face['faceRectangle']['height']
-                width = face['faceRectangle']['width']
+                print("faceRectangle = ", detectface['faceRectangle'])
+                print("faceId = ", detectface['faceId'])
+                left = detectface['faceRectangle']['left']
+                top = detectface['faceRectangle']['top']
+                height = detectface['faceRectangle']['height']
+                width = detectface['faceRectangle']['width']
 
                 img = Image.open(imagepath)
                 #faceRectangle =  {'top': 141, 'height': 261, 'width': 261, 'left': 664}
                 img2 = img.crop((left, top, left + width, top + height))
 
-                saveimage = basepath + "/tmp/" + face['faceId'] + ".gif"
+                saveimage = basepath + "/tmp/" + detectface['faceId'] + ".gif"
                 if not os.path.exists(os.path.dirname(saveimage)):
                     os.makedirs(os.path.dirname(saveimage))
                 img2.save(saveimage, 'GIF')
@@ -531,7 +534,7 @@ class Face:
                 #cropped_img = img.crop(area)
                 #cropped_img.show()
 
-            return faces
+            return detectfaces
         except Exception as e:
             print("[Errno {0}] {1}".format(e.errno, e.strerror))
             return []
