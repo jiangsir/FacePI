@@ -233,6 +233,7 @@ elif index == 14:
                   '簽到成功（' + str(confidence) + '）！', person['personId'],
                   len(person['persistedFaceIds']), '個 faceid')
 elif index == 15:
+    personname = input('進行 3 連拍，請輸入要訓練的對象姓名：')
     # 建檔先暫放 /tmp 以免更新程式被清除。
     traindatasPath = '/tmp/traindatas/'
     if not os.path.exists(os.path.dirname(traindatasPath)):
