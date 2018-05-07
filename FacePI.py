@@ -233,7 +233,8 @@ elif index == 14:
                   '簽到成功（' + str(confidence) + '）！', person['personId'],
                   len(person['persistedFaceIds']), '個 faceid')
 elif index == 15:
-    traindatasPath = basepath + '/traindatas/'
+    # 建檔先暫放 /tmp 以免更新程式被清除。
+    traindatasPath = '/tmp/traindatas/'
     if not os.path.exists(os.path.dirname(traindatasPath)):
         os.makedirs(os.path.dirname(traindatasPath))
 
