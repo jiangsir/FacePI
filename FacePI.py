@@ -235,7 +235,7 @@ elif index == 14:
 elif index == 15:
     personname = input('進行 3 連拍，請輸入姓名(儲存不訓練)：')
     # 建檔先暫放 /tmp 以免更新程式被清除。
-    traindatasPath = '/tmp/traindatas/' + personname + "/"
+    traindatasPath = '~/traindatas/' + personname + "/"
     if not os.path.exists(os.path.dirname(traindatasPath)):
         os.makedirs(os.path.dirname(traindatasPath))
 
