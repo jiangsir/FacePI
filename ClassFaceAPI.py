@@ -523,12 +523,12 @@ class Face:
 
                 img = Image.open(imagepath)
                 #faceRectangle =  {'top': 141, 'height': 261, 'width': 261, 'left': 664}
-                img2 = img.crop((left, top, left + width, top + height))
+                onlyface = img.crop((left, top, left + width, top + height))
 
-                saveimage = basepath + "/tmp/" + detectface['faceId'] + ".gif"
-                if not os.path.exists(os.path.dirname(saveimage)):
-                    os.makedirs(os.path.dirname(saveimage))
-                img2.save(saveimage, 'GIF')
+                savejpgimage = basepath + "/tmp/faceId_" + detectface['faceId'] + ".jpg"
+                if not os.path.exists(os.path.dirname(savejpgimage)):
+                    os.makedirs(os.path.dirname(savejpgimage))
+                onlyface.save(savejpgimage, 'JPEG')
                 #display(img2)
                 #area = (left, top, left+width, top+height)
                 #cropped_img = img.crop(area)

@@ -71,6 +71,7 @@ options = {
     12: '搜尋 PersonGroup 裡的 personName',
     13: '設定繼電器',
     14: '用網路 URL 圖片進行辨識。',
+    15: '三連拍建立圖片資料庫 trainsdata（不進行訓練）'
 }
 
 if len(sys.argv) != 2:
@@ -106,9 +107,12 @@ if index == 0:
     sys.exit()
 elif index == 1:
     personname = input('進行 3 連拍，請輸入要訓練的對象姓名：')
+    traindatasPath = basepath + '/traindatas/'
+    
     jpgimagepaths = []
     for i in range(3):
         jpgimagepath = Camera.takePicture(personGroupId, 2000)
+        #time.strftime("%Y-%m-%d_%H:%M:%S", time.localtime()) + ".jpg"
         jpgimagepaths.append(jpgimagepath)
 
     train_personimages(personGroupId, personname, jpgimagepaths)
@@ -184,8 +188,8 @@ elif index == 13:
     #ClassGPIO.RelayExchange()
     print('call ClassGPIO.RelayExchange()')
 elif index == 14:
-    imageurl = input('請輸入準備要辨識的 image URL:')
-    if imageurl.startswith('http'):    
+    imageurl = input('請輸入準備要辨識的 image URL or 檔案路徑:')
+    if imageurl.startswith('http'):
         imageurls = []
         imageurls.append(imageurl)
         detectfaces = faceApi.detectURLImages(imageurls)
@@ -193,10 +197,10 @@ elif index == 14:
         imageurl = imageurl.strip()
         statinfo = os.stat(imageurl)
         print('檔案大小：', statinfo.st_size, 'Bytes')
-        if statinfo.st_size<1024:
+        if statinfo.st_size < 1024:
             print('圖檔太小 不可小於 1KB')
             sys.exit(1)
-        elif statinfo.st_size>4*1024*1024:
+        elif statinfo.st_size > 4 * 1024 * 1024:
             print('圖檔太大 不可大於 4MB')
             im = Image.open(imageurl)
             out = im.resize((128, 128))
@@ -214,17 +218,34 @@ elif index == 14:
         faceids.append(face['faceId'])
 
     identifyfaces = faceApi.identify(faceids[:10], personGroupId)
-    print('在所提供的相片中偵測到 identifyfaces 共 ', len(identifyfaces), '個', identifyfaces)
+    print('在所提供的相片中偵測到 identifyfaces 共 ', len(identifyfaces), '個',
+          identifyfaces)
     for identifyface in identifyfaces:
         # print('candidateface 的[\'candidates\'] 其中有 ',
         #       len(candidateface['candidates']), '個在辨認資料庫內')
         for candidate in identifyface['candidates']:
             personId = candidate["personId"]
             confidence = candidate["confidence"]
-            print('辨認候選人 candidate: personId=', personId, confidence, candidate)
+            # print('辨認候選人 candidate: personId=', personId, confidence,
+            #       candidate)
             person = personApi.get_a_person(personId, personGroupId)
-            print('簽到成功（' + str(confidence) + '）！ name=', person['name'],
-                    person['personId'], len(person['persistedFaceIds']))
+            print(person['name'],
+                  '簽到成功（' + str(confidence) + '）！', person['personId'],
+                  len(person['persistedFaceIds']), '個 faceid')
+elif index == 15:
+    traindatasPath = basepath + '/traindatas/'
+    if not os.path.exists(os.path.dirname(traindatasPath)):
+        os.makedirs(os.path.dirname(traindatasPath))
+
+    jpgimagepaths = []
+    for i in range(3):
+        jpgimagepath = Camera.takePicture(personGroupId, 2000)
+        index = jpgimagepath.rfind('/')
+        os.rename(
+            jpgimagepath,
+            traindatasPath + "/" + personname + "/" + jpgimagepath[index:])
+        #time.strftime("%Y-%m-%d_%H:%M:%S", time.localtime()) + ".jpg"
+        # jpgimagepaths.append(jpgimagepath)
 
 else:
     print("使用方式:", sys.argv[0], "<選項>")
