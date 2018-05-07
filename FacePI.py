@@ -108,7 +108,7 @@ if index == 0:
 elif index == 1:
     personname = input('進行 3 連拍，請輸入要訓練的對象姓名：')
     traindatasPath = basepath + '/traindatas/'
-    
+
     jpgimagepaths = []
     for i in range(3):
         jpgimagepath = Camera.takePicture(personGroupId, 2000)
@@ -233,9 +233,9 @@ elif index == 14:
                   '簽到成功（' + str(confidence) + '）！', person['personId'],
                   len(person['persistedFaceIds']), '個 faceid')
 elif index == 15:
-    personname = input('進行 3 連拍，請輸入要訓練的對象姓名：')
+    personname = input('進行 3 連拍，請輸入姓名(儲存不訓練)：')
     # 建檔先暫放 /tmp 以免更新程式被清除。
-    traindatasPath = '/tmp/traindatas/'+personname+"/"
+    traindatasPath = '/tmp/traindatas/' + personname + "/"
     if not os.path.exists(os.path.dirname(traindatasPath)):
         os.makedirs(os.path.dirname(traindatasPath))
 
@@ -243,9 +243,7 @@ elif index == 15:
     for i in range(3):
         jpgimagepath = Camera.takePicture(personGroupId, 2000)
         index = jpgimagepath.rfind('/')
-        os.rename(
-            jpgimagepath,
-            traindatasPath + "/" + personname + "/" + jpgimagepath[index:])
+        os.rename(jpgimagepath, traindatasPath + jpgimagepath[index:])
         #time.strftime("%Y-%m-%d_%H:%M:%S", time.localtime()) + ".jpg"
         # jpgimagepaths.append(jpgimagepath)
 
