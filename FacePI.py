@@ -2,6 +2,7 @@ import sys, os, json, time
 from PIL import Image
 import ClassFaceAPI as FaceAPI
 import ClassCamera as Camera
+from pypinyin import lazy_pinyin
 
 #import ClassGPIO
 
@@ -161,9 +162,15 @@ elif index == 8:
     print('personGroupId = ' + personGroupId)
     PersonGroup.train_personGroup(personGroupId)
 elif index == 9:
-    personGroupId = input('建立一個 personGroupId: ')
-    PersonGroup.createPersonGroup(personGroupId, 'group namename',
-                                  'group datadata')
+    print('建立一個 personGroup')
+    # 直接用中文建立：
+    # 安裝套件：pip install pypinyin
+    #personGroupId = input('請輸入 personGroupId(必須小寫字母與 - _): ')
+    personGroupName = input('請輸入 personGroup name(可用中文): ')
+    personGroupId = '_'.join(lazy_pinyin(personGroupName))
+
+    PersonGroup.createPersonGroup(personGroupId, personGroupName,
+                                  'group userdata')
 elif index == 10:
     api_key = input('請輸入有效的 API KEY[' + config['api_key'] + ']:')
     if api_key != '':

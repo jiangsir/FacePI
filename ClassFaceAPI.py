@@ -111,6 +111,8 @@ class PersonGroup:
         #personGroupId = 'jiangsir_groupid2'
 
         # The userData field is optional. The size limit for it is 16KB.
+        #personGroupId = personGroupId.encode(encoding='utf-8')
+        #params = urllib.parse.urlencode(personGroupId)
         body = "{ 'name':'" + groupname + "', 'userData':'" + groupdata + "' }"
 
         try:
@@ -118,8 +120,11 @@ class PersonGroup:
             #   For example, if you obtained your subscription keys from westus, replace "westcentralus" in the
             #   URL below with "westus".
             conn = http.client.HTTPSConnection(self.host)
-            conn.request("PUT", "/face/v1.0/persongroups/%s" % personGroupId,
-                         body, headers)
+            conn.request(
+                "PUT",
+                "/face/v1.0/persongroups/{}".format(personGroupId),
+                body.encode(encoding='utf-8'),
+                headers)
             response = conn.getresponse()
 
             # 'OK' indicates success. 'Conflict' means a group with this ID already exists.
@@ -266,7 +271,6 @@ class Person:
         }
 
         params = urllib.parse.urlencode({'personGroupId': personGroupId})
-
         requestbody = '{"name":"' + name + '","userData":"' + descript + '"}'
 
         try:
@@ -500,9 +504,9 @@ class Face:
             #faceids.append(parsed[0]['faceId'])
             conn.close()
             if 'error' in detectfaces:
-                ClassMessageBox.FaceAPIErrorGUI('def detectLocalImage',
-                                                detectfaces['error']['code'],
-                                                detectfaces['error']['message'])
+                ClassMessageBox.FaceAPIErrorGUI(
+                    'def detectLocalImage', detectfaces['error']['code'],
+                    detectfaces['error']['message'])
                 return []
 
             # if('error' in faces):
