@@ -172,6 +172,7 @@ elif index == 9:
     PersonGroup.createPersonGroup(personGroupId, personGroupName,
                                   'group userdata')
 elif index == 10:
+    print(config)
     api_key = input('請輸入有效的 API KEY[' + config['api_key'] + ']:')
     if api_key != '':
         config['api_key'] = api_key

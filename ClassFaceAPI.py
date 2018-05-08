@@ -4,20 +4,22 @@ from PIL import Image
 import ClassMessageBox
 
 basepath = os.path.dirname(os.path.realpath(__file__))
+with open(basepath + '/Config.json', 'r') as f:
+    config = json.load(f)
 
 
 class PersonGroup:
     def __init__(self, api_key, host):
         self.api_key = api_key
         self.host = host
-        '''
-        basepath = os.path.dirname(os.path.realpath(__file__))
-        with open(basepath + '/FacePI-Config.json', 'r') as f:
-            config = json.load(f)
-        self.api_key = config["api_key"]
-        self.host = config["host"]
-        self.personGroupId = config['personGroupId']
-        '''
+        # '''
+        # basepath = os.path.dirname(os.path.realpath(__file__))
+        # with open(basepath + '/FacePI-Config.json', 'r') as f:
+        #     config = json.load(f)
+        # self.api_key = config["api_key"]
+        # self.host = config["host"]
+        # self.personGroupId = config['personGroupId']
+        # '''
 
     def list_persons_in_group(self, personGroupId):
         headers = {
@@ -406,7 +408,7 @@ class Face:
             "personGroupId": "''' + personGroupId + '''",
             "faceIds":''' + str(faceidkeys) + ''',
             "maxNumOfCandidatesReturned":1,
-            "confidenceThreshold": 0.65
+            "confidenceThreshold": '''+str(config['confidence'])+'''
         }'''
         print('requestbody=', requestbody)
         try:
