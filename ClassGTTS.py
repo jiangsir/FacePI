@@ -4,10 +4,9 @@ from pygame import mixer
 from pypinyin import lazy_pinyin
 
 
-basepath = '/home/pi/mp3/'
+basepath = os.path.dirname(os.path.realpath(__file__))+'/mp3/'
 if not os.path.exists(os.path.dirname(basepath)):
     os.makedirs(os.path.dirname(basepath))
-
 
 def play_gTTS(text):
     tts = gTTS(text=text, lang='zh-tw')
