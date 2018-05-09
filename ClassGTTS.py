@@ -4,7 +4,7 @@ from pygame import mixer
 from pypinyin import lazy_pinyin
 
 
-basepath = '~/mp3/'
+basepath = '/home/pi/mp3/'
 if not os.path.exists(os.path.dirname(basepath)):
     os.makedirs(os.path.dirname(basepath))
 
