@@ -2,7 +2,9 @@ import sys, os, json, time
 from PIL import Image
 import ClassFaceAPI as FaceAPI
 import ClassCamera as Camera
+import ClassGTTS
 from pypinyin import lazy_pinyin
+
 
 #import ClassGPIO
 
@@ -240,6 +242,8 @@ elif index == 14:
             print(person['name'],
                   '簽到成功（' + str(confidence) + '）！', person['personId'],
                   len(person['persistedFaceIds']), '個 faceid')
+            ClassGTTS.play_gTTS(person['name'],'簽到成功')
+
 elif index == 15:
     personname = input('進行 3 連拍，請輸入姓名(儲存不訓練)：')
     # 建檔先暫放 /tmp 以免更新程式被清除。
