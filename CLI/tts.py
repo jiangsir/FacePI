@@ -13,7 +13,9 @@ tts=gTTS(text=s, lang='zh-tw')
 mp3path = basepath+s+".mp3"
 tts.save(mp3path)
 
-mixer.init()
-mixer.music.load(mp3path)
-mixer.music.play()
+os.system('omxplayer '+mp3path)
+
+#mixer.init()
+#mixer.music.load(mp3path)
+#mixer.music.play()
 
