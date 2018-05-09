@@ -328,7 +328,7 @@ class Person:
         except Exception as e:
             print("[Errno {0}] {1}".format(e.errno, e.strerror))
 
-    def deleteAPerson(self, personGroupId, personId):
+    def deletePerson(self, personGroupId, personId):
         headers = {
             # Request headers
             'Ocp-Apim-Subscription-Key': self.api_key,

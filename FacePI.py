@@ -151,7 +151,7 @@ elif index == 5:
     for person in persons:
         print('name=' + person['name'] + ':', person)
     personid = input('請輸入將要刪除的 personid: ')
-    personApi.deleteAPerson(personGroupId, personid)
+    personApi.deletePerson(personGroupId, personid)
 # elif index == 6:
 #     faceList = FaceAPI.FaceList(api_key, host)
 #     faceList.listFacelists()

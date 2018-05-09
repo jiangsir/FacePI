@@ -183,6 +183,12 @@ confidence|	Number|	信心指數從 0 ~ 1
 * personGroupId: 可以自訂，若不存在會自動建立，可以將不同的人分群處理。
 * title: 則會出現在主畫面的標題。
 
+本 Python 程式執行前，有幾個套件需要事先準備好：
+
+    pip install fire
+    pip3 install gTTS
+    pip3 install pygame
+    
 
 執行主畫面：
 * 主畫面主要在進行「簽到」功能，為前端應用。
