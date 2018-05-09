@@ -185,10 +185,10 @@ confidence|	Number|	信心指數從 0 ~ 1
 
 本 Python 程式執行前，有幾個套件需要事先準備好：
 
-    pip install fire
+    pip3 install fire
     sudo pip3 install gTTS # 這裡需要 sudo
     pip3 install pygame
-    pip install pypinyin
+    sudo pip3 install pypinyin
     
 
 執行主畫面：
