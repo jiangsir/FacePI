@@ -37,6 +37,7 @@ class PersonGroup:
             conn = http.client.HTTPSConnection(self.host)
             conn.request("GET", "/face/v1.0/persongroups/" + personGroupId +
                          "/persons?%s" % params, "{body}", headers)
+            
             response = conn.getresponse()
             data = response.read()
             # print('persons=', str(data, 'UTF-8'))
