@@ -1,16 +1,27 @@
 import os,fire
 # pip install fire
 
-def a1(name,age,sex):
-    ''' a1 函數功能說明 '''
-    print(name)
-    print(age)
-    print(sex)
+class Calculator:
+  ''' 計算機 '''
+  def __init__(self):
+    pass
 
+  def __privateMethod(self):
+    ''' sssss ''' 
+    print('private Call')
+    return -1
 
-def a2(a, b):
-    ''' a2 相加 函數功能說明 '''
-    print(a+b)
+  def add(self, x, y):
+    ''' 加法 '''
+    self.__privateMethod()
+    return x + y
+
+  def multiply(self, x, y):
+    ''' 減法 '''
+    return x * y
 
 if __name__ == '__main__':
-    fire.Fire()
+  fire.Fire(Calculator)
+
+#if __name__ == '__main__':
+#    fire.Fire()
