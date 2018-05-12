@@ -237,7 +237,7 @@ class FacePI_CLI:
                 print(person['name'],
                     '簽到成功（' + str(confidence) + '）！', person['personId'],
                     len(person['persistedFaceIds']), '個 faceid')
-                ClassGTTS.play_gTTS(person['name']+'簽到成功')
+                ClassGTTS.play_gTTS(person['name'], '簽到成功')
         
     def buildTraindatas(self, personname):
         ''' 15: '快速 3 連拍建立圖片資料庫不進行訓練） '''
