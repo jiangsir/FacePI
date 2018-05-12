@@ -25,6 +25,8 @@ def play_gTTS(name, text):
         pygame.mixer.init()
         pygame.mixer.music.load(mp3path)
         pygame.mixer.music.play()
+        while pygame.mixer.music.get_busy():
+            pygame.time.Clock().tick(10)
     elif (sysstr == "Darwin"):
         print("Call macOS tasks")
         pygame.mixer.init()
