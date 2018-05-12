@@ -1,7 +1,7 @@
 import http.client, urllib.request, urllib.parse, urllib.error, base64, json
 import os, sys
 from PIL import Image
-import ClassMessageBox
+import ClassMessageBox, ClassUtils
 
 basepath = os.path.dirname(os.path.realpath(__file__))
 with open(basepath + '/Config.json', 'r') as f:
@@ -532,10 +532,11 @@ class Face:
                 #faceRectangle =  {'top': 141, 'height': 261, 'width': 261, 'left': 664}
                 onlyface = img.crop((left, top, left + width, top + height))
 
-                savejpgimage = basepath + "/tmp/faceId_" + detectface['faceId'] + ".jpg"
-                if not os.path.exists(os.path.dirname(savejpgimage)):
-                    os.makedirs(os.path.dirname(savejpgimage))
-                onlyface.save(savejpgimage, 'JPEG')
+                # savejpgimage = basepath + "/tmp/faceId_" + detectface['faceId'] + ".jpg"
+                # if not os.path.exists(os.path.dirname(savejpgimage)):
+                #     os.makedirs(os.path.dirname(savejpgimage))
+                saveFaceImagepath = ClassUtils.getFaceImagepath(detectface['faceId'])
+                onlyface.save(saveFaceImagepath, 'JPEG')
                 #display(img2)
                 #area = (left, top, left+width, top+height)
                 #cropped_img = img.crop(area)
