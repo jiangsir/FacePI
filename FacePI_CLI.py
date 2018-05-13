@@ -29,6 +29,7 @@ class FacePI_CLI:
     train: 訓練 PersonGroup
     trainNewPerson: 用 3 連拍訓練一個新人
     trainDatas: '訓練 /traindatas 裡的圖檔，同時訓練一群事先準備好的人與照片',
+    Signin: 進行簽到！
     '''
 
     # 加入一個人的眾多圖片，但不訓練
@@ -254,6 +255,11 @@ class FacePI_CLI:
             os.rename(jpgimagepath, traindatasPath + jpgimagepath[index:])
             #time.strftime("%Y-%m-%d_%H:%M:%S", time.localtime()) + ".jpg"
             # jpgimagepaths.append(jpgimagepath)
+
+    def Signin(self):
+        print('Signin')
+        jpgimagepath = Camera.takePicture(personGroupId, 2000)
+        self.image(jpgimagepath)
 
 if __name__ == '__main__':
   fire.Fire(FacePI_CLI)
