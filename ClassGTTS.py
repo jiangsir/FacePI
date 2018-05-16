@@ -35,9 +35,10 @@ def play_gTTS(name, text):
         pygame.mixer.music.play()
         while pygame.mixer.music.get_busy():
             pygame.time.Clock().tick(10)
-    #elif (sysstr == "Linux"):
-    #    os.system('omxplayer ' + mp3path)
+    elif (sysstr == "Linux"):
+        os.system('omxplayer ' + mp3path +" > /dev/null 2>&1")
     else:
+        print("Call Other OS tasks")
         pygame.mixer.init()
         pygame.mixer.music.load(mp3path)
         pygame.mixer.music.play()
