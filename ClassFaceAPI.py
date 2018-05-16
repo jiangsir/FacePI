@@ -366,7 +366,7 @@ class Person:
             data = response.read()
             personjson = json.loads(str(data, 'UTF-8'))
             conn.close()
-            print("get_a_person = " + str(personjson))
+            #print("get_a_person = " + str(personjson))
             return personjson
         except Exception as e:
             print("[Errno {0}] {1}".format(e.errno, e.strerror))
@@ -411,7 +411,7 @@ class Face:
             "maxNumOfCandidatesReturned":1,
             "confidenceThreshold": '''+str(config['confidence'])+'''
         }'''
-        print('requestbody=', requestbody)
+        #print('requestbody=', requestbody)
         try:
             conn = http.client.HTTPSConnection(self.host)
             conn.request("POST", "/face/v1.0/identify?%s" % params,
