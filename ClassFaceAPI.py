@@ -500,7 +500,7 @@ class Face:
                          headers)
             response = conn.getresponse()
             data = response.read()
-            print('data=', data)
+            #print('data=', data)
             detectfaces = json.loads(str(data, 'UTF-8'))
             print("detectLocalImage.faces=", detectfaces)
             #print(parsed[0]['faceId'])
