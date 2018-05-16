@@ -87,7 +87,7 @@ class FacePI_CLI:
         for i in range(3):
             jpgimagepath = Camera.takePicture(personGroupId, 2000)
             #time.strftime("%Y-%m-%d_%H:%M:%S", time.localtime()) + ".jpg"
-            filename = jpgimagepath.rfind('/')
+            filename = jpgimagepath[jpgimagepath.rfind('/'):]
             jpgtraindata = '/home/pi/traindatas/' + personname + '/' + filename
             os.rename(jpgimagepath, jpgtraindata)
             jpgimagepaths.append(jpgtraindata)
