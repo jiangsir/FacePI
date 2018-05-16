@@ -20,7 +20,7 @@ def play_gTTS(name, text):
         tts.save(mp3path)
 
     sysstr = platform.system()
-    print('system='+sysstr)
+    #print('system='+sysstr)
     if (sysstr == "Windows"):
         print("Call Windows tasks")
         pygame.mixer.init()

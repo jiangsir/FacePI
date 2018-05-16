@@ -1,4 +1,4 @@
-import os, time, sys, json
+import os, time, sys, json, platform
 import subprocess
 import ClassMessageBox
 
@@ -11,7 +11,7 @@ def takePicture(personGroupId, delay):
     cameras = config['camera'].split(',')
     for camera in cameras:
         if camera[0] == '*' and camera == '*webcam':
-            return takePicture_fswebcam(personGroupId, delay)
+            return takePicture_webcam(personGroupId, delay)
         elif camera[0] == '*' and camera == '*CSIcamera':
             return takePicture_CSI(personGroupId, delay)
     return takePicture_CSI(personGroupId, delay)
@@ -36,21 +36,43 @@ def takePicture_CSI(personGroupId, delay):
     #os.system("raspistill -t " + str(delay) + " -o " + imagepath)
     return jpgimagepath
 
+def show_webcam(mirror=False, imagepath):
+    cam = cv2.VideoCapture(0)
+    while True:
+        ret_val, img = cam.read()
+        if mirror:
+            img = cv2.flip(img, 1)
+        cv2.imshow(config['title'], img)
+        key = cv2.waitKey(1)
+        if key == 32:
+            cv2.imwrite(imagepath, img)
+        elif key == 27: # esc to quit
+            break 
+    cv2.destroyAllWindows()
+    cv2.VideoCapture(0).release()
 
-def takePicture_fswebcam(personGroupId, delay):
-    jpgimagepath = basepath + "/takepictures/Identity_" + personGroupId + "_" + time.strftime(
-        "%Y-%m-%d_%H:%M:%S", time.localtime()) + ".jpg"
-    if not os.path.exists(os.path.dirname(jpgimagepath)):
-        os.makedirs(os.path.dirname(jpgimagepath))
-    try:
-        subprocess.call(['fswebcam', "--no-banner", jpgimagepath])
-    except OSError:
-        ClassMessageBox.FaceAPIErrorGUI('def takePicture_fswebcam',
-                                        'web cam 無法啟動！',
-                                        'OSError: fswebcam 無法執行或不存在！！')
-        #print('EXCEPTION: fswebcam 無法執行或不存在！！', file=sys.stderr)
-        jpgimagepath = None
-    return jpgimagepath
+def takePicture_webcam(personGroupId, delay):
+    sysstr = platform.system()
+    if (sysstr == "Windows"):
+        import numpy as np
+        import cv2, time
+        jpgimagepath = basepath + "/takepictures/" + personGroupId + "_" + time.strftime(
+            "%Y-%m-%d_%H:%M:%S", time.localtime()) + ".jpg"
+        show_webcam(mirror=True, jpgimagepath)
+    else:
+        jpgimagepath = basepath + "/takepictures/" + personGroupId + "_" + time.strftime(
+            "%Y-%m-%d_%H:%M:%S", time.localtime()) + ".jpg"
+        if not os.path.exists(os.path.dirname(jpgimagepath)):
+            os.makedirs(os.path.dirname(jpgimagepath))
+        try:
+            subprocess.call(['fswebcam', "--no-banner", jpgimagepath])
+        except OSError:
+            ClassMessageBox.FaceAPIErrorGUI('def takePicture_fswebcam',
+                                            'web cam 無法啟動！',
+                                            'OSError: fswebcam 無法執行或不存在！！')
+            #print('EXCEPTION: fswebcam 無法執行或不存在！！', file=sys.stderr)
+            jpgimagepath = None
+        return jpgimagepath
 
 
 '''
