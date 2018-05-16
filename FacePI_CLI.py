@@ -5,12 +5,12 @@ import ClassCamera as Camera
 import ClassGTTS, ClassUtils as Utils
 from pypinyin import lazy_pinyin
 
-
 basepath = os.path.dirname(os.path.realpath(__file__))
 config = Utils.loadConfig()
 personGroupId = config['personGroupId']
 api_key = config['api_key']
 host = config['host']
+
 
 class FacePI_CLI:
     ''' FacePI 文字介面
@@ -40,7 +40,7 @@ class FacePI_CLI:
         if person == None:
             print('call create_a_person')
             personid = personAPI.create_a_person(personGroupId, personname,
-                                                personname + ' 說明。')
+                                                 personname + ' 說明。')
             for imagepath in imagepaths:
                 personAPI.add_a_person_face(imagepath, personid, personGroupId)
         else:
@@ -48,8 +48,7 @@ class FacePI_CLI:
             for imagepath in imagepaths:
                 personAPI.add_a_person_face(imagepath, person['personId'],
                                             personGroupId)
-    
-    
+
     # 加入一個人的眾多圖片，並訓練
     def __train_personimages(self, personGroupId, personname, imagepaths):
         self.__add_personimages(personGroupId, personname, imagepaths)
@@ -73,12 +72,12 @@ class FacePI_CLI:
                     personImagePaths.append(
                         os.path.join(personpath, personImagePath))
                 print(personGroupId, personname, personImagePaths)
-                self.__add_personimages(personGroupId, personname, personImagePaths)
+                self.__add_personimages(personGroupId, personname,
+                                        personImagePaths)
                 time.sleep(6)
 
         personGroupapi = FaceAPI.PersonGroup(api_key, host)
         personGroupapi.train_personGroup(personGroupId)
-
 
     def trainNewPerson(self, personname):
         ''' 1. 用 3 連拍訓練一個新人 '''
@@ -88,12 +87,15 @@ class FacePI_CLI:
         for i in range(3):
             jpgimagepath = Camera.takePicture(personGroupId, 2000)
             #time.strftime("%Y-%m-%d_%H:%M:%S", time.localtime()) + ".jpg"
-            jpgimagepaths.append(jpgimagepath)
+            filename = jpgimagepath.rfind('/')
+            jpgtraindata = '/home/pi/traindatas/' + personname + '/' + filename
+            os.rename(jpgimagepath, jpgtraindata)
+            jpgimagepaths.append(jpgtraindata)
 
         self.__train_personimages(personGroupId, personname, jpgimagepaths)
 
     def listPersonGroups(self):
-        ''' 2: '列出所有的 PersonGroups' ''' 
+        ''' 2: '列出所有的 PersonGroups' '''
         PersonGroup = FaceAPI.PersonGroup(api_key, host)
         persongroups = PersonGroup.ListPersonGroups()
         if persongroups == None:
@@ -115,11 +117,12 @@ class FacePI_CLI:
             print('本 personGroupId 內沒有任何一個 person')
             sys.exit()
         for person in persons:
-            print('name=' + person['name'] + ':', 'personId=' + person['personId'],
-                'persistedFaceIds=', len(person['persistedFaceIds']))
+            print('name=' + person['name'] + ':',
+                  'personId=' + person['personId'], 'persistedFaceIds=',
+                  len(person['persistedFaceIds']))
 
     def deletePersonGroup(self):
-        ''' 4: '刪除某個 PersonGroups',''' 
+        ''' 4: '刪除某個 PersonGroups','''
         PersonGroup = FaceAPI.PersonGroup(api_key, host)
         PersonGroup.deletePersonGroup(input('請輸入要刪除的 personGroupId:'))
 
@@ -145,7 +148,7 @@ class FacePI_CLI:
         PersonGroup.personGroup_status(personGroupId)
 
     def train(self):
-        ''' 8: 訓練 PersonGroup ''' 
+        ''' 8: 訓練 PersonGroup '''
         PersonGroup = FaceAPI.PersonGroup(api_key, host)
         PersonGroup.train_personGroup(personGroupId)
 
@@ -156,7 +159,8 @@ class FacePI_CLI:
 
         PersonGroup = FaceAPI.PersonGroup(api_key, host)
         PersonGroup.createPersonGroup(personGroupId, personGroupName,
-                                    'group userdata')
+                                      'group userdata')
+
     def config(self):
         ''' 10: 列出 Config.json 設定。 '''
         api_key = input('請輸入有效的 API KEY[' + config['api_key'] + ']:')
@@ -225,7 +229,7 @@ class FacePI_CLI:
 
         identifyfaces = faceApi.identify(faceids[:10], personGroupId)
         print('在所提供的相片中偵測到 identifyfaces 共 ', len(identifyfaces), '個',
-            identifyfaces)
+              identifyfaces)
         for identifyface in identifyfaces:
             # print('candidateface 的[\'candidates\'] 其中有 ',
             #       len(candidateface['candidates']), '個在辨認資料庫內')
@@ -236,10 +240,10 @@ class FacePI_CLI:
                 #       candidate)
                 person = personApi.get_a_person(personId, personGroupId)
                 print(person['name'],
-                    '簽到成功（' + str(confidence) + '）！', person['personId'],
-                    len(person['persistedFaceIds']), '個 faceid')
+                      '簽到成功（' + str(confidence) + '）！', person['personId'],
+                      len(person['persistedFaceIds']), '個 faceid')
                 ClassGTTS.play_gTTS(person['name'], '簽到成功')
-        
+
     def buildTraindatas(self, personname):
         ''' 15: '快速 3 連拍建立圖片資料庫不進行訓練） '''
         personname = input('進行 3 連拍，請輸入姓名(儲存不訓練)：')
@@ -261,5 +265,6 @@ class FacePI_CLI:
         jpgimagepath = Camera.takePicture(personGroupId, 2000)
         self.image(jpgimagepath)
 
+
 if __name__ == '__main__':
-  fire.Fire(FacePI_CLI)
+    fire.Fire(FacePI_CLI)
