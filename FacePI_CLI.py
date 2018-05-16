@@ -257,7 +257,7 @@ class FacePI_CLI:
             # jpgimagepaths.append(jpgimagepath)
 
     def Signin(self):
-        print('Signin')
+        ''' 簽到！ '''
         jpgimagepath = Camera.takePicture(personGroupId, 2000)
         self.image(jpgimagepath)
 

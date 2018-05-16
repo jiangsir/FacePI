@@ -15,11 +15,12 @@ def play_gTTS(name, text):
     name = Utils.protectPersonName(name)
     text = name + text
     mp3path = basepath + text + ".mp3"
-    print('gTTS:', text, 'mp3path:', mp3path)
+    #print('gTTS:', text, 'mp3path:', mp3path)
     if os.path.exists(mp3path) == False:
         tts.save(mp3path)
 
     sysstr = platform.system()
+    print('system='+sysstr)
     if (sysstr == "Windows"):
         print("Call Windows tasks")
         pygame.mixer.init()
