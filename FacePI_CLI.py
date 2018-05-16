@@ -241,9 +241,9 @@ class FacePI_CLI:
                 # print('辨認候選人 candidate: personId=', personId, confidence,
                 #       candidate)
                 person = personApi.get_a_person(personId, personGroupId)
-                print(person['name'],
-                      '簽到成功（' + str(confidence) + '）！', person['personId'],
-                      len(person['persistedFaceIds']), '個 faceid')
+                #print(person['name'],
+                #      '簽到成功（' + str(confidence) + '）！', person['personId'],
+                #      len(person['persistedFaceIds']), '個 faceid')
                 ClassGTTS.play_gTTS(person['name'], '簽到成功')
 
     def buildTraindatas(self, personname):

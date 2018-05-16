@@ -15,7 +15,7 @@ def play_gTTS(name, text):
     name = Utils.protectPersonName(name)
     text = name + text
     mp3path = basepath + text + ".mp3"
-    #print('gTTS:', text, 'mp3path:', mp3path)
+    print('gTTS:', text, 'mp3path:', mp3path)
     if os.path.exists(mp3path) == False:
         tts.save(mp3path)
 
@@ -35,8 +35,8 @@ def play_gTTS(name, text):
         pygame.mixer.music.play()
         while pygame.mixer.music.get_busy():
             pygame.time.Clock().tick(10)
-    elif (sysstr == "Linux"):
-        os.system('omxplayer ' + mp3path)
+    #elif (sysstr == "Linux"):
+    #    os.system('omxplayer ' + mp3path)
     else:
         pygame.mixer.init()
         pygame.mixer.music.load(mp3path)
