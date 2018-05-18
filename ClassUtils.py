@@ -3,7 +3,7 @@ import os, json
 
 def loadConfig():
     basepath = getBasepath()
-    with open(basepath + '/Config.json', 'r') as f:
+    with open(basepath + '/Config.json', 'r', encoding='utf-8') as f:
         config = json.load(f)
     return config
 

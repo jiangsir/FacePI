@@ -10,7 +10,7 @@ import ClassGPIO
 
 basepath = os.path.dirname(os.path.realpath(__file__))
 
-with open(basepath + '/Config.json', 'r') as f:
+with open(basepath + '/Config.json', 'r', encoding='utf-8') as f:
     config = json.load(f)
 print(config)
 
@@ -43,7 +43,7 @@ label = tk.Label(top, text=title, font=font_helv36)
 label.pack()
 
 id_names = {}
-with open(basepath + "/data/id_name.csv", "rt") as infile:
+with open(basepath + "/data/id_name.csv", "rt", encoding='utf-8') as infile:
     reader = csv.reader(infile)
     headers = next(reader)[0:]
     for row in reader:

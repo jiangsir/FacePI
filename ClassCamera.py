@@ -3,7 +3,7 @@ import subprocess
 import ClassMessageBox
 
 basepath = os.path.dirname(os.path.realpath(__file__))
-with open(basepath + '/Config.json', 'r') as f:
+with open(basepath + '/Config.json', 'r', encoding='utf-8') as f:
     config = json.load(f)
 
 
@@ -25,17 +25,17 @@ def takePicture_CSI(personGroupId, delay, size='small'):
         os.makedirs(os.path.dirname(jpgimagepath))
     try:
         # small for 辨識，加快速度。
-        if size=='small':
+        if size == 'small':
             subprocess.call([
                 'raspistill', '-hf', '-w', '800', '-h', '450', '-t',
                 str(delay), '-o', jpgimagepath
             ])
-        else: # for 訓練。訓練用圖片可以比較大
+        else:  # for 訓練。訓練用圖片可以比較大
             subprocess.call([
                 'raspistill', '-hf', '-w', '1600', '-h', '900', '-t',
                 str(delay), '-o', jpgimagepath
             ])
-            
+
     except OSError:
         ClassMessageBox.FaceAPIErrorGUI('def takePicture_CSI', 'CSI 攝影機無法啟動！',
                                         'OSError: raspistill 無法執行或不存在！！')

@@ -91,7 +91,7 @@ basepath = os.path.dirname(os.path.realpath(__file__))
 #host = "eastasia.api.cognitive.microsoft.com"
 #personGroupId = "junior"
 #title = "高師大附中 刷臉簽到系統"
-with open(basepath + '/Config.json', 'r') as f:
+with open(basepath + '/Config.json', 'r', encoding='utf-8') as f:
     config = json.load(f)
 api_key = config["api_key"]
 host = config["host"]

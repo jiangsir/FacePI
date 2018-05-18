@@ -173,7 +173,7 @@ class FacePI_CLI:
         title = input("自訂標題[" + config['title'] + "]：")
         if title != '':
             config['title'] = title
-        with open(basepath + '/Config.json', 'w') as outfile:
+        with open(basepath + '/Config.json', 'w', encoding='utf-8') as outfile:
             json.dump(config, outfile, ensure_ascii=False)
 
     def trainDatas(self):
