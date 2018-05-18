@@ -12,22 +12,25 @@ if not os.path.exists(os.path.dirname(basepath)):
 def play_gTTS(name, text):
     start = int(round(time.time() * 1000))
     print('開始計時 play_gTTS 0 ms')
-    
+
     #text = '_'.join(lazy_pinyin(text))
     name = Utils.protectPersonName(name)
-    text = name + text
-    mp3path = basepath + text + ".mp3"
-    print('gTTS:', text, 'mp3path:', mp3path)
-    print('SPEED: play_gTTS mp3path', int(round(time.time() * 1000)-start), 'ms')
+
+    mp3path = basepath + name + text + ".mp3"
+    print('gTTS:', name + text, 'mp3path:', mp3path)
+    print('SPEED: play_gTTS mp3path', int(round(time.time() * 1000) - start),
+          'ms')
 
     if os.path.isfile(mp3path) == False:
-        tts = gTTS(text=Utils.protectPersonNameForTTS(name) + text, lang='zh-tw')
+        tts = gTTS(
+            text=Utils.protectPersonNameForTTS(name) + text, lang='zh-tw')
         tts.save(mp3path)
-        print('SPEED: play_gTTS savemp3', int(round(time.time() * 1000)-start), 'ms')
+        print('SPEED: play_gTTS savemp3',
+              int(round(time.time() * 1000) - start), 'ms')
 
     sysstr = platform.system()
     #print('system='+sysstr)
-    print('SPEED: pygame play 前', int(round(time.time() * 1000)-start), 'ms')    
+    print('SPEED: pygame play 前', int(round(time.time() * 1000) - start), 'ms')
     if (sysstr == "Windows"):
         print("Call Windows tasks")
         pygame.mixer.init()
@@ -56,4 +59,4 @@ def play_gTTS(name, text):
         pygame.mixer.music.play()
         while pygame.mixer.music.get_busy():
             pygame.time.Clock().tick(5)
-    print('SPEED: pygame play 後', int(round(time.time() * 1000)-start), 'ms')
+    print('SPEED: pygame play 後', int(round(time.time() * 1000) - start), 'ms')
