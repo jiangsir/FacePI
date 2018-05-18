@@ -43,7 +43,12 @@ def play_gTTS(name, text):
             pygame.time.Clock().tick(10)
     elif (sysstr == "Linux"):
         print('SPEED: omxplayer 前', int(round(time.time() * 1000)-start), 'ms')    
-        os.system('omxplayer ' + mp3path +" > /dev/null 2>&1")
+        #os.system('omxplayer ' + mp3path +" > /dev/null 2>&1")
+        pygame.mixer.init()
+        pygame.mixer.music.load(mp3path)
+        pygame.mixer.music.play()
+        while pygame.mixer.music.get_busy() == True:
+            continue
         print('SPEED: omxplayer 後', int(round(time.time() * 1000)-start), 'ms')
 
     else:
