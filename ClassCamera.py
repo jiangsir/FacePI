@@ -24,9 +24,10 @@ def takePicture_CSI(personGroupId, delay):
     if not os.path.exists(os.path.dirname(jpgimagepath)):
         os.makedirs(os.path.dirname(jpgimagepath))
     try:
-        subprocess.call(
-            ['raspistill', '-hf', '-t',
-             str(delay), '-o', jpgimagepath])
+        subprocess.call([
+            'raspistill', '-hf', '-t', '-w', '1600', '-h', '900',
+            str(delay), '-o', jpgimagepath
+        ])
     except OSError:
         ClassMessageBox.FaceAPIErrorGUI('def takePicture_CSI', 'CSI 攝影機無法啟動！',
                                         'OSError: raspistill 無法執行或不存在！！')
@@ -35,6 +36,7 @@ def takePicture_CSI(personGroupId, delay):
 
     #os.system("raspistill -t " + str(delay) + " -o " + imagepath)
     return jpgimagepath
+
 
 def show_webcam(mirror=False, imagepath):
     cam = cv2.VideoCapture(0)
@@ -46,10 +48,11 @@ def show_webcam(mirror=False, imagepath):
         key = cv2.waitKey(1)
         if key == 32:
             cv2.imwrite(imagepath, img)
-        elif key == 27: # esc to quit
-            break 
+        elif key == 27:  # esc to quit
+            break
     cv2.destroyAllWindows()
     cv2.VideoCapture(0).release()
+
 
 def takePicture_webcam(personGroupId, delay):
     sysstr = platform.system()

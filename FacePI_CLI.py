@@ -20,7 +20,7 @@ class FacePI_CLI:
     config: 列出 Config.json 設定。
     deletePersonGroup: 刪除一個 PersonGroup
     deletePersonInGroup: 刪除 PersonGroup 裡的一個 Person
-    image: 用網路 URL 圖片進行辨識。,
+    identify: 用網路 URL 或本地圖片進行辨識。,
     listPersonGroups: 列出所有的 PersonGroups
     listPersonsInGroup: 列出「人群」裡有哪些 Person
     relay: 設定繼電器,
@@ -48,13 +48,6 @@ class FacePI_CLI:
             for imagepath in imagepaths:
                 personAPI.add_a_person_face(imagepath, person['personId'],
                                             personGroupId)
-
-    # 加入一個人的眾多圖片，並訓練
-    def __train_personimages(self, personGroupId, personname, imagepaths):
-        self.__add_personimages(personGroupId, personname, imagepaths)
-
-        personGroupapi = FaceAPI.PersonGroup(api_key, host)
-        personGroupapi.train_personGroup(personGroupId)
 
     # 將整個 traindatas 的圖片全部送上去訓練
     def __train_traindatas(self, personGroupId):
@@ -94,7 +87,10 @@ class FacePI_CLI:
             os.rename(jpgimagepath, jpgtraindata)
             jpgimagepaths.append(jpgtraindata)
 
-        self.__train_personimages(personGroupId, personname, jpgimagepaths)
+        self.__add_personimages(personGroupId, personname, jpgimagepaths)
+        personGroupapi = FaceAPI.PersonGroup(api_key, host)
+        personGroupapi.train_personGroup(personGroupId)
+
 
     def listPersonGroups(self):
         ''' 2: '列出所有的 PersonGroups' '''
@@ -195,7 +191,7 @@ class FacePI_CLI:
         #ClassGPIO.RelayExchange()
         print('call ClassGPIO.RelayExchange()')
 
-    def image(self, imageurl):
+    def identify(self, imageurl):
         ''' 14: 準備要辨識的 image URL or 檔案路徑 '''
         faceApi = FaceAPI.Face(api_key, host)
         personApi = FaceAPI.Person(api_key, host)
@@ -265,7 +261,7 @@ class FacePI_CLI:
     def Signin(self):
         ''' 簽到！ '''
         jpgimagepath = Camera.takePicture(personGroupId, 2000)
-        self.image(jpgimagepath)
+        self.identify(jpgimagepath)
 
 
 if __name__ == '__main__':
