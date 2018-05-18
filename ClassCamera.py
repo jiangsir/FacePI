@@ -25,7 +25,7 @@ def takePicture_CSI(personGroupId, delay):
         os.makedirs(os.path.dirname(jpgimagepath))
     try:
         subprocess.call([
-            'raspistill', '-hf', '-t', '-w', '1600', '-h', '900',
+            'raspistill', '-hf', '-w', '1600', '-h', '900', '-t',
             str(delay), '-o', jpgimagepath
         ])
     except OSError:
