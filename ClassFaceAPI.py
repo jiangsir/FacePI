@@ -510,11 +510,12 @@ class Face:
             conn = http.client.HTTPSConnection(self.host)
             conn.request("POST", "/face/v1.0/detect?%s" % params, requestbody,
                          headers)
+            print('SPEED: detectLocalImage http request', int(round(time.time() * 1000)-start), 'ms')
             response = conn.getresponse()
             data = response.read()
             #print('data=', data)
             detectfaces = json.loads(str(data, 'UTF-8'))
-            print('SPEED: http 後', int(round(time.time() * 1000)-start), 'ms')
+            print('SPEED: detectLocalImage http 後', int(round(time.time() * 1000)-start), 'ms')
             print("detectLocalImage.faces=", detectfaces)
             #print(parsed[0]['faceId'])
             #faceids.append(parsed[0]['faceId'])
