@@ -272,6 +272,5 @@ class FacePI_CLI:
         self.identify(jpgimagepath)
         print('Signin 辨識後', int(round(time.time() * 1000))-start),'ms')
 
-
 if __name__ == '__main__':
     fire.Fire(FacePI_CLI)
