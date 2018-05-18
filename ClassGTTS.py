@@ -1,4 +1,4 @@
-import sys, os, platform
+import sys, os, platform, time
 from gtts import gTTS
 import pygame as pygame
 from pypinyin import lazy_pinyin
@@ -10,14 +10,20 @@ if not os.path.exists(os.path.dirname(basepath)):
 
 
 def play_gTTS(name, text):
+    start = int(round(time.time() * 1000))
+    print('開始計時 play_gTTS 0 ms')
+    
     tts = gTTS(text=Utils.protectPersonNameForTTS(name) + text, lang='zh-tw')
     #text = '_'.join(lazy_pinyin(text))
     name = Utils.protectPersonName(name)
     text = name + text
     mp3path = basepath + text + ".mp3"
     print('gTTS:', text, 'mp3path:', mp3path)
+    print('SPEED: play_gTTS mp3path', int(round(time.time() * 1000)-start), 'ms')
+
     if os.path.exists(mp3path) == False:
         tts.save(mp3path)
+        print('SPEED: play_gTTS savemp3', int(round(time.time() * 1000)-start), 'ms')
 
     sysstr = platform.system()
     #print('system='+sysstr)
