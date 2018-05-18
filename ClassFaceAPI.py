@@ -1,5 +1,5 @@
 import http.client, urllib.request, urllib.parse, urllib.error, base64, json
-import os, sys
+import os, sys, time
 from PIL import Image
 import ClassMessageBox, ClassUtils
 
