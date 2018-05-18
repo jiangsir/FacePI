@@ -51,7 +51,9 @@ class FacePI_CLI:
 
     # 將整個 traindatas 的圖片全部送上去訓練
     def __train_traindatas(self, personGroupId):
-        traindataPath = basepath + '/traindatas/'
+        #traindataPath = basepath + '/traindatas/'
+        traindataPath = os.path.join(basepath, 'traindatas')
+
         trainfiles = os.listdir(traindataPath)
         print('目前 traindatas/ 內的圖檔如下：')
 
@@ -76,14 +78,18 @@ class FacePI_CLI:
         ''' 1. 用 3 連拍訓練一個新人 '''
         #personname = input('進行 3 連拍，請輸入要訓練的對象姓名：')
         #traindatasPath = basepath + '/traindatas/'
-        traindatasPath = os.path.join(basepath, 'traindatas')
+        #traindatasPath = os.path.join(basepath, 'traindatas')
         jpgimagepaths = []
         for i in range(3):
             jpgimagepath = Camera.takePicture(personGroupId, 2000, size='large')
             #time.strftime("%Y-%m-%d_%H:%M:%S", time.localtime()) + ".jpg"
             #filename = jpgimagepath[jpgimagepath.rfind('/'):]
             filename = os.path.basename(jpgimagepath)
-            jpgtraindata = '/home/pi/traindatas/' + personname + filename
+
+            #jpgtraindata = '/home/pi/traindatas/' + personname + filename
+            home = os.path.expanduser("~")
+            jpgtraindata = os.path.join(home, 'traindatas', personname, filename)
+
             if not os.path.exists(os.path.dirname(jpgtraindata)):
                 os.makedirs(os.path.dirname(jpgtraindata))
             os.rename(jpgimagepath, jpgtraindata)
@@ -258,8 +264,11 @@ class FacePI_CLI:
     def buildTraindatas(self, personname):
         ''' 15: '快速 3 連拍建立圖片資料庫不進行訓練） '''
         personname = input('進行 3 連拍，請輸入姓名(儲存不訓練)：')
-        # 建檔先暫放 /tmp 以免更新程式被清除。
-        traindatasPath = '~/traindatas/' + personname + "/"
+        
+        #traindatasPath = '~/traindatas/' + personname + "/"
+        home = os.path.expanduser("~")
+        traindatasPath = os.path.join(home, 'traindatas', personname)
+
         if not os.path.exists(os.path.dirname(traindatasPath)):
             os.makedirs(os.path.dirname(traindatasPath))
 
