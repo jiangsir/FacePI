@@ -4,9 +4,9 @@ from gtts import gTTS
 from pypinyin import lazy_pinyin
 import ClassUtils as Utils
 
-basepath = os.path.dirname(os.path.realpath(__file__)) + '/mp3/'
-if not os.path.exists(os.path.dirname(basepath)):
-    os.makedirs(os.path.dirname(basepath))
+mp3base = os.path.join(Utils.getBasepath, 'mp3')
+if not os.path.exists(os.path.dirname(mp3base)):
+    os.makedirs(os.path.dirname(mp3base))
 
 
 def play_gTTS(name, text):
@@ -16,7 +16,7 @@ def play_gTTS(name, text):
     #text = '_'.join(lazy_pinyin(text))
     name = Utils.protectPersonName(name)
 
-    mp3path = basepath + name + text + ".mp3"
+    mp3path = mp3base + name + text + ".mp3"
     #print('gTTS:', str(name + text).encode("utf8"), 'mp3path:', mp3path, os.path.isfile(mp3path))
     print('SPEED: play_gTTS mp3path', int(round(time.time() * 1000) - start),
           'ms')
