@@ -397,6 +397,9 @@ class Face:
 
     def identify(self, faceidkeys, personGroupId):
         print("def Face.identify 開始辨識。faceidkeys=", faceidkeys)
+        start = int(round(time.time() * 1000))
+        print('開始辨識 identify 0 ms')
+
         headers = {
             # Request headers
             'Content-Type': 'application/json',
@@ -413,13 +416,18 @@ class Face:
         }'''
         #print('requestbody=', requestbody)
         try:
+            print('SPEED: identify http 前', int(round(time.time() * 1000)-start), 'ms')            
             conn = http.client.HTTPSConnection(self.host)
             conn.request("POST", "/face/v1.0/identify?%s" % params,
                          requestbody, headers)
+            print('SPEED: identify response 前', int(round(time.time() * 1000)-start), 'ms')
             response = conn.getresponse()
+            print('SPEED: identify response 後', int(round(time.time() * 1000)-start), 'ms')
             data = response.read()
             #print(data)
             identifyfaces = json.loads(str(data, 'UTF-8'))
+            print('SPEED: identify http 前', int(round(time.time() * 1000)-start), 'ms')
+            
             #print(facejson)
             conn.close()
             # if 'error' in facejson:
