@@ -1,6 +1,6 @@
 import sys, os
 from gtts import gTTS
-from pygame import mixer
+from pyg import mixer
 
 
 s = sys.argv[1]
