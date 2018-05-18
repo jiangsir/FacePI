@@ -512,6 +512,7 @@ class Face:
                          headers)
             print('SPEED: detectLocalImage http request', int(round(time.time() * 1000)-start), 'ms')
             response = conn.getresponse()
+            print('SPEED: detectLocalImage http response', int(round(time.time() * 1000)-start), 'ms')
             data = response.read()
             #print('data=', data)
             detectfaces = json.loads(str(data, 'UTF-8'))
