@@ -19,8 +19,10 @@ def takePicture(personGroupId, delay, size='small'):
 
 def takePicture_CSI(personGroupId, delay, size='small'):
     # delay in ms 3000ms = 3s
-    jpgimagepath = basepath + "/takepictures/" + personGroupId + "_" + time.strftime(
-        "%Y%m%d_%H%M%S", time.localtime()) + ".jpg"
+    # jpgimagepath = basepath + "/takepictures/" + personGroupId + "_" + time.strftime(
+    #     "%Y%m%d_%H%M%S", time.localtime()) + ".jpg"
+    jpgimagepath = os.path.join(basepath, 'takepictures', personGroupId + "_" + time.strftime(
+        "%Y%m%d_%H%M%S", time.localtime()) + ".jpg")
     if not os.path.exists(os.path.dirname(jpgimagepath)):
         os.makedirs(os.path.dirname(jpgimagepath))
     try:
@@ -66,13 +68,18 @@ def takePicture_webcam(personGroupId, delay):
     sysstr = platform.system()
     print('os=', sysstr)
     if (sysstr == "Windows" or sysstr == "Darwin"):
-        jpgimagepath = basepath + "/takepictures/" + personGroupId + "_" + time.strftime(
-            "%Y-%m-%d_%H:%M:%S", time.localtime()) + ".jpg"
+        # jpgimagepath = basepath + "/takepictures/" + personGroupId + "_" + time.strftime(
+        #     "%Y-%m-%d_%H:%M:%S", time.localtime()) + ".jpg"
+        jpgimagepath = os.path.join(basepath, 'takepictures', personGroupId + "_" + time.strftime(
+            "%Y%m%d_%H%M%S", time.localtime()) + ".jpg")
+        
         show_webcam(jpgimagepath, mirror=False)
         return jpgimagepath
     else:
-        jpgimagepath = basepath + "/takepictures/" + personGroupId + "_" + time.strftime(
-            "%Y-%m-%d_%H:%M:%S", time.localtime()) + ".jpg"
+        # jpgimagepath = basepath + "/takepictures/" + personGroupId + "_" + time.strftime(
+        #     "%Y-%m-%d_%H:%M:%S", time.localtime()) + ".jpg"
+        jpgimagepath = os.path.join(basepath, 'takepictures', personGroupId + "_" + time.strftime(
+            "%Y%m%d_%H%M%S", time.localtime()) + ".jpg")
         if not os.path.exists(os.path.dirname(jpgimagepath)):
             os.makedirs(os.path.dirname(jpgimagepath))
         try:

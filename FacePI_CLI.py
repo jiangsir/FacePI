@@ -75,12 +75,14 @@ class FacePI_CLI:
     def trainNewPerson(self, personname):
         ''' 1. 用 3 連拍訓練一個新人 '''
         #personname = input('進行 3 連拍，請輸入要訓練的對象姓名：')
-        traindatasPath = basepath + '/traindatas/'
+        #traindatasPath = basepath + '/traindatas/'
+        traindatasPath = os.path.join(basepath, 'traindatas')
         jpgimagepaths = []
         for i in range(3):
             jpgimagepath = Camera.takePicture(personGroupId, 2000, size='large')
             #time.strftime("%Y-%m-%d_%H:%M:%S", time.localtime()) + ".jpg"
-            filename = jpgimagepath[jpgimagepath.rfind('/'):]
+            #filename = jpgimagepath[jpgimagepath.rfind('/'):]
+            filename = os.path.basename(jpgimagepath)
             jpgtraindata = '/home/pi/traindatas/' + personname + filename
             if not os.path.exists(os.path.dirname(jpgtraindata)):
                 os.makedirs(os.path.dirname(jpgtraindata))
@@ -264,8 +266,9 @@ class FacePI_CLI:
         jpgimagepaths = []
         for i in range(3):
             jpgimagepath = Camera.takePicture(personGroupId, 2000, size='large')
-            index = jpgimagepath.rfind('/')
-            os.rename(jpgimagepath, traindatasPath + jpgimagepath[index:])
+            #index = jpgimagepath.rfind('/')
+            filename = os.path.basename(jpgimagepath)
+            os.rename(jpgimagepath, traindatasPath + filename)
             #time.strftime("%Y-%m-%d_%H:%M:%S", time.localtime()) + ".jpg"
             # jpgimagepaths.append(jpgimagepath)
 
