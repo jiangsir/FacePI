@@ -197,7 +197,7 @@ class FacePI_CLI:
         print('開始計時 identify')
         faceApi = FaceAPI.Face(api_key, host)
         personApi = FaceAPI.Person(api_key, host)
-        print('載入 class', int(round(time.time() * 1000)-start, 'ms')
+        print('載入 class', int(round(time.time() * 1000)-start), 'ms')
         #imageurl = input('請輸入準備要辨識的 image URL or 檔案路徑:')
         if imageurl.startswith('http'):
             imageurls = []
@@ -227,10 +227,10 @@ class FacePI_CLI:
             print('所偵測到的 faceId=', face['faceId'])
             faceids.append(face['faceId'])
 
-        print('辨識前', int(round(time.time() * 1000)-start, 'ms')
+        print('辨識前', int(round(time.time() * 1000)-start), 'ms')
 
         identifyfaces = faceApi.identify(faceids[:10], personGroupId)
-        print('辨識後', int(round(time.time() * 1000)-start, 'ms')
+        print('辨識後', int(round(time.time() * 1000)-start), 'ms')
         print('在所提供的相片中偵測到 identifyfaces 共 ', len(identifyfaces), '個',
               identifyfaces)
         for identifyface in identifyfaces:
@@ -268,9 +268,9 @@ class FacePI_CLI:
         start = int(round(time.time() * 1000))
         print('開始計時 Sign', start, 'ms')
         jpgimagepath = Camera.takePicture(personGroupId, 2000)
-        print('Signin: 拍照後', int(round(time.time() * 1000))-start,'ms')
+        print('Signin: 拍照後', int(round(time.time() * 1000))-start),'ms')
         self.identify(jpgimagepath)
-        print('Signin 辨識後', int(round(time.time() * 1000))-start,'ms')
+        print('Signin 辨識後', int(round(time.time() * 1000))-start),'ms')
 
 
 if __name__ == '__main__':
