@@ -17,7 +17,7 @@ def play_gTTS(name, text):
     name = Utils.protectPersonName(name)
 
     mp3path = basepath + name + text + ".mp3"
-    print('gTTS:', name + text, 'mp3path:', mp3path, os.path.isfile(mp3path))
+    print('gTTS:', (name + text).encode("utf8"), 'mp3path:', mp3path, os.path.isfile(mp3path))
     print('SPEED: play_gTTS mp3path', int(round(time.time() * 1000) - start),
           'ms')
 
