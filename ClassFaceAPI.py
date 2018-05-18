@@ -426,7 +426,7 @@ class Face:
             data = response.read()
             #print(data)
             identifyfaces = json.loads(str(data, 'UTF-8'))
-            print('SPEED: identify http 前', int(round(time.time() * 1000)-start), 'ms')
+            print('SPEED: identify http 後', int(round(time.time() * 1000)-start), 'ms')
             
             #print(facejson)
             conn.close()

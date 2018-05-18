@@ -78,7 +78,7 @@ class FacePI_CLI:
         traindatasPath = basepath + '/traindatas/'
         jpgimagepaths = []
         for i in range(3):
-            jpgimagepath = Camera.takePicture(personGroupId, 2000)
+            jpgimagepath = Camera.takePicture(personGroupId, 2000, size='large')
             #time.strftime("%Y-%m-%d_%H:%M:%S", time.localtime()) + ".jpg"
             filename = jpgimagepath[jpgimagepath.rfind('/'):]
             jpgtraindata = '/home/pi/traindatas/' + personname + filename
@@ -230,10 +230,9 @@ class FacePI_CLI:
             print('所偵測到的 faceId=', face['faceId'])
             faceids.append(face['faceId'])
 
-        print('辨識前', int(round(time.time() * 1000)-start), 'ms')
-
+        print('SPEED: faceApi.identify 前', int(round(time.time() * 1000)-start), 'ms')
         identifyfaces = faceApi.identify(faceids[:10], personGroupId)
-        print('辨識後', int(round(time.time() * 1000)-start), 'ms')
+        print('SPEED: faceApi.identify 後', int(round(time.time() * 1000)-start), 'ms')
         print('在所提供的相片中偵測到 identifyfaces 共 ', len(identifyfaces), '個',
               identifyfaces)
         for identifyface in identifyfaces:
@@ -248,6 +247,7 @@ class FacePI_CLI:
                 #print(person['name'],
                 #      '簽到成功（' + str(confidence) + '）！', person['personId'],
                 #      len(person['persistedFaceIds']), '個 faceid')
+                print('SPEED: play_gTTS 前', int(round(time.time() * 1000)-start), 'ms')
                 ClassGTTS.play_gTTS(person['name'], '簽到成功')
 
     def buildTraindatas(self, personname):
@@ -260,7 +260,7 @@ class FacePI_CLI:
 
         jpgimagepaths = []
         for i in range(3):
-            jpgimagepath = Camera.takePicture(personGroupId, 2000)
+            jpgimagepath = Camera.takePicture(personGroupId, 2000, size='large')
             index = jpgimagepath.rfind('/')
             os.rename(jpgimagepath, traindatasPath + jpgimagepath[index:])
             #time.strftime("%Y-%m-%d_%H:%M:%S", time.localtime()) + ".jpg"
