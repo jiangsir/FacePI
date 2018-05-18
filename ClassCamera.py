@@ -7,27 +7,35 @@ with open(basepath + '/Config.json', 'r') as f:
     config = json.load(f)
 
 
-def takePicture(personGroupId, delay):
+def takePicture(personGroupId, delay, size='small'):
     cameras = config['camera'].split(',')
     for camera in cameras:
         if camera[0] == '*' and camera == '*webcam':
             return takePicture_webcam(personGroupId, delay)
         elif camera[0] == '*' and camera == '*CSIcamera':
-            return takePicture_CSI(personGroupId, delay)
-    return takePicture_CSI(personGroupId, delay)
+            return takePicture_CSI(personGroupId, delay, size)
+    return takePicture_CSI(personGroupId, delay, size)
 
 
-def takePicture_CSI(personGroupId, delay):
+def takePicture_CSI(personGroupId, delay, size='small'):
     # delay in ms 3000ms = 3s
     jpgimagepath = basepath + "/takepictures/" + personGroupId + "_" + time.strftime(
         "%Y%m%d_%H%M%S", time.localtime()) + ".jpg"
     if not os.path.exists(os.path.dirname(jpgimagepath)):
         os.makedirs(os.path.dirname(jpgimagepath))
     try:
-        subprocess.call([
-            'raspistill', '-hf', '-w', '1600', '-h', '900', '-t',
-            str(delay), '-o', jpgimagepath
-        ])
+        # small for 辨識，加快速度。
+        if size=='small':
+            subprocess.call([
+                'raspistill', '-hf', '-w', '800', '-h', '450', '-t',
+                str(delay), '-o', jpgimagepath
+            ])
+        else: # for 訓練。訓練用圖片可以比較大
+            subprocess.call([
+                'raspistill', '-hf', '-w', '1600', '-h', '900', '-t',
+                str(delay), '-o', jpgimagepath
+            ])
+            
     except OSError:
         ClassMessageBox.FaceAPIErrorGUI('def takePicture_CSI', 'CSI 攝影機無法啟動！',
                                         'OSError: raspistill 無法執行或不存在！！')
