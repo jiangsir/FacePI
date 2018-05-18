@@ -1,9 +1,1 @@
-{
-    "api_key": "90dd6135652e45ba8ad9d222b4643545",
-    "host": "westcentralus.api.cognitive.microsoft.com",
-    "personGroupId": "junior2",
-    "personGroupName": "人群名稱",
-    "confidence": 0.65,
-    "camera": "*CSIcamera,webcam",
-    "title": "高師大附中刷臉簽到系統"
-}
+{"api_key": "90dd6135652e45ba8ad9d222b4643545", "host": "westcentralus.api.cognitive.microsoft.com", "personGroupId": "junior2", "personGroupName": "人群名稱", "confidence": 0.65, "camera": "CSIcamera,*webcam", "title": "高師大附中刷臉簽到系統"}

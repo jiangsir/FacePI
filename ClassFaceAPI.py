@@ -4,7 +4,7 @@ from PIL import Image
 import ClassMessageBox, ClassUtils
 
 basepath = os.path.dirname(os.path.realpath(__file__))
-with open(basepath + '/Config.json', 'r') as f:
+with open(basepath + '/Config.json', encoding='utf-8', 'r') as f:
     config = json.load(f)
 
 

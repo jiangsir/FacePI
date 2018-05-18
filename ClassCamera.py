@@ -1,4 +1,4 @@
-import os, time, sys, json, platform
+import os, time, sys, json, platform, cv2
 import subprocess
 import ClassMessageBox
 
@@ -64,12 +64,12 @@ def show_webcam(imagepath, mirror=False):
 
 def takePicture_webcam(personGroupId, delay):
     sysstr = platform.system()
-    if (sysstr == "Windows"):
-        import numpy as np
-        import cv2, time
+    print('os=', sysstr)
+    if (sysstr == "Windows" or sysstr == "Darwin"):
         jpgimagepath = basepath + "/takepictures/" + personGroupId + "_" + time.strftime(
             "%Y-%m-%d_%H:%M:%S", time.localtime()) + ".jpg"
         show_webcam(jpgimagepath, mirror=False)
+        return jpgimagepath
     else:
         jpgimagepath = basepath + "/takepictures/" + personGroupId + "_" + time.strftime(
             "%Y-%m-%d_%H:%M:%S", time.localtime()) + ".jpg"

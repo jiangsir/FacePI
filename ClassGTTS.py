@@ -1,6 +1,6 @@
 import sys, os, platform, time
 from gtts import gTTS
-import pygame as pygame
+#import pygame as pygamee
 from pypinyin import lazy_pinyin
 import ClassUtils as Utils
 
@@ -30,33 +30,33 @@ def play_gTTS(name, text):
 
     sysstr = platform.system()
     #print('system='+sysstr)
-    print('SPEED: pygame play 前', int(round(time.time() * 1000) - start), 'ms')
-    if (sysstr == "Windows"):
-        print("Call Windows tasks")
-        pygame.mixer.init()
-        pygame.mixer.music.load(mp3path)
-        pygame.mixer.music.play()
-        while pygame.mixer.music.get_busy():
-            pygame.time.Clock().tick(10)
-    elif (sysstr == "Darwin"):
-        print("Call macOS tasks")
-        pygame.mixer.init()
-        pygame.mixer.music.load(mp3path)
-        pygame.mixer.music.play()
-        while pygame.mixer.music.get_busy():
-            pygame.time.Clock().tick(10)
-    elif (sysstr == "Linux"):
-        #os.system('omxplayer ' + mp3path +" > /dev/null 2>&1")
-        pygame.mixer.init()
-        pygame.mixer.music.load(mp3path)
-        pygame.mixer.music.play()
-        while pygame.mixer.music.get_busy() == True:
-            continue
-    else:
-        print("Call Other OS tasks")
-        pygame.mixer.init()
-        pygame.mixer.music.load(mp3path)
-        pygame.mixer.music.play()
-        while pygame.mixer.music.get_busy():
-            pygame.time.Clock().tick(5)
+    # print('SPEED: pygame play 前', int(round(time.time() * 1000) - start), 'ms')
+    # if (sysstr == "Windows"):
+    #     print("Call Windows tasks")
+    #     pygamee.mixer.init()
+    #     pygamee.mixer.music.load(mp3path)
+    #     pygamee.mixer.music.play()
+    #     while pygamee.mixer.music.get_busy():
+    #         pygamee.time.Clock().tick(10)
+    # elif (sysstr == "Darwin"):
+    #     print("Call macOS tasks")
+    #     pygamee.mixer.init()
+    #     pygamee.mixer.music.load(mp3path)
+    #     pygamee.mixer.music.play()
+    #     while pygamee.mixer.music.get_busy():
+    #         pygamee.time.Clock().tick(10)
+    # elif (sysstr == "Linux"):
+    #     #os.system('omxplayer ' + mp3path +" > /dev/null 2>&1")
+    #     pygamee.mixer.init()
+    #     pygamee.mixer.music.load(mp3path)
+    #     pygamee.mixer.music.play()
+    #     while pygamee.mixer.music.get_busy() == True:
+    #         continue
+    # else:
+    #     print("Call Other OS tasks")
+    #     pygamee.mixer.init()
+    #     pygamee.mixer.music.load(mp3path)
+    #     pygamee.mixer.music.play()
+    #     while pygamee.mixer.music.get_busy():
+    #         pygamee.time.Clock().tick(5)
     print('SPEED: pygame play 後', int(round(time.time() * 1000) - start), 'ms')
