@@ -476,6 +476,9 @@ class Face:
 
     # 用本地端的圖檔進行辨識。
     def detectLocalImage(self, imagepath):
+        start = int(round(time.time() * 1000))
+        print('開始計時 detectLocalImage 0 ms')
+
         headers = {
             # Request headers
             'Content-Type': 'application/octet-stream',  # 用本地圖檔辨識
