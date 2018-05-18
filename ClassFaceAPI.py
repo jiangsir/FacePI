@@ -502,6 +502,7 @@ class Face:
             data = response.read()
             #print('data=', data)
             detectfaces = json.loads(str(data, 'UTF-8'))
+            print('SPEED: detectLocalImage', int(round(time.time() * 1000)-start), 'ms')
             print("detectLocalImage.faces=", detectfaces)
             #print(parsed[0]['faceId'])
             #faceids.append(parsed[0]['faceId'])
@@ -521,6 +522,8 @@ class Face:
             #display(Image(filename=imagepath))
             for detectface in detectfaces:
                 #print("face = ", face)
+                print('SPEED: detectFace 迴圈開始', int(round(time.time() * 1000)-start), 'ms')
+                
                 print("faceRectangle = ", detectface['faceRectangle'])
                 print("faceId = ", detectface['faceId'])
                 left = detectface['faceRectangle']['left']
@@ -536,7 +539,10 @@ class Face:
                 # if not os.path.exists(os.path.dirname(savejpgimage)):
                 #     os.makedirs(os.path.dirname(savejpgimage))
                 saveFaceImagepath = ClassUtils.getFaceImagepath(detectface['faceId'])
+                print('SPEED: onlyface.save 前', int(round(time.time() * 1000)-start), 'ms')
                 onlyface.save(saveFaceImagepath, 'JPEG')
+                print('SPEED: onlyface.save 後', int(round(time.time() * 1000)-start), 'ms')
+                
                 #display(img2)
                 #area = (left, top, left+width, top+height)
                 #cropped_img = img.crop(area)

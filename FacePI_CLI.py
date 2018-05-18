@@ -204,6 +204,7 @@ class FacePI_CLI:
             imageurls.append(imageurl)
             detectfaces = faceApi.detectURLImages(imageurls)
         else:
+            print('SPEED: localimage', int(round(time.time() * 1000)-start), 'ms')
             imageurl = imageurl.strip()
             statinfo = os.stat(imageurl)
             print('檔案大小：', statinfo.st_size, 'Bytes')
@@ -216,7 +217,9 @@ class FacePI_CLI:
                 out = im.resize((128, 128))
                 im.save(imageurl, "JPEG")
                 print('out=', type(out))
+            print('SPEED: detectLocalImage前', int(round(time.time() * 1000)-start), 'ms')
             detectfaces = faceApi.detectLocalImage(imageurl)
+            print('SPEED: detectLocalImage後', int(round(time.time() * 1000)-start), 'ms')
 
         if len(detectfaces) == 0:
             print('相片中找不到人！')
