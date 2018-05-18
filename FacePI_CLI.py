@@ -268,9 +268,9 @@ class FacePI_CLI:
         start = int(round(time.time() * 1000))
         print('開始計時 Sign', start, 'ms')
         jpgimagepath = Camera.takePicture(personGroupId, 2000)
-        print('Signin: 拍照後', int(round(time.time() * 1000))-start),'ms')
+        print('Signin: 拍照後', int(round(time.time() * 1000))-start,'ms')
         self.identify(jpgimagepath)
-        print('Signin 辨識後', int(round(time.time() * 1000))-start),'ms')
+        print('Signin 辨識後', int(round(time.time() * 1000))-start,'ms')
 
 if __name__ == '__main__':
     fire.Fire(FacePI_CLI)
