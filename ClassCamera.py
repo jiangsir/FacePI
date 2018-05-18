@@ -38,7 +38,7 @@ def takePicture_CSI(personGroupId, delay):
     return jpgimagepath
 
 
-def show_webcam(mirror=False, imagepath):
+def show_webcam(imagepath, mirror=False):
     cam = cv2.VideoCapture(0)
     while True:
         ret_val, img = cam.read()
@@ -61,7 +61,7 @@ def takePicture_webcam(personGroupId, delay):
         import cv2, time
         jpgimagepath = basepath + "/takepictures/" + personGroupId + "_" + time.strftime(
             "%Y-%m-%d_%H:%M:%S", time.localtime()) + ".jpg"
-        show_webcam(mirror=True, jpgimagepath)
+        show_webcam(jpgimagepath, mirror=False)
     else:
         jpgimagepath = basepath + "/takepictures/" + personGroupId + "_" + time.strftime(
             "%Y-%m-%d_%H:%M:%S", time.localtime()) + ".jpg"
