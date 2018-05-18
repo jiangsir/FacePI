@@ -11,7 +11,7 @@ if not os.path.exists(os.path.dirname(basepath)):
 
 def play_gTTS(name, text):
     start = int(round(time.time() * 1000))
-    print('開始計時 play_gTTS 0 ms')
+    print('開始計時 play_gTTS 0 ms: ', name, text)
 
     #text = '_'.join(lazy_pinyin(text))
     name = Utils.protectPersonName(name)
