@@ -4,6 +4,7 @@ import ClassFaceAPI as FaceAPI
 import ClassCamera as Camera
 import ClassGTTS, ClassUtils as Utils
 from pypinyin import lazy_pinyin
+import MyException
 
 basepath = os.path.dirname(os.path.realpath(__file__))
 config = Utils.loadConfig()
@@ -118,14 +119,17 @@ class FacePI_CLI:
     def listPersonsInGroup(self):
         ''' 3: '列出「人群」裡有哪些 Person',        '''
         PersonGroup = FaceAPI.PersonGroup(api_key, host)
-        persons = PersonGroup.list_persons_in_group(personGroupId)
-        if len(persons) == 0:
-            print('本 personGroupId 內沒有任何一個 person')
-            sys.exit()
-        for person in persons:
-            print('name=' + person['name'] + ':',
-                  'personId=' + person['personId'], 'persistedFaceIds=',
-                  len(person['persistedFaceIds']))
+        try:
+            persons = PersonGroup.list_persons_in_group(personGroupId)
+            if len(persons) == 0:
+                print('本 personGroupId 內沒有任何一個 person')
+                sys.exit()
+            for person in persons:
+                print('name=' + person['name'] + ':',
+                    'personId=' + person['personId'], 'persistedFaceIds=',
+                    len(person['persistedFaceIds']))
+        except MyException.responseError as e:
+            print(e.message)
 
     def deletePersonGroup(self):
         ''' 4: '刪除某個 PersonGroups','''
@@ -181,6 +185,13 @@ class FacePI_CLI:
         title = input("自訂標題[" + config['title'] + "]：")
         if title != '':
             config['title'] = title
+        personGroupId = input("預設 personGroupId(必須為小寫字母及-_) [" + config['personGroupId'] + "]：")
+        if personGroupId != '':
+            config['personGroupId'] = personGroupId
+        confidence = input("預設信心指數 [" + str(config['confidence']) + "]：")
+        if confidence != '':
+            config['confidence'] = float(confidence)
+
         with open(basepath + '/Config.json', 'w', encoding='utf-8') as outfile:
             json.dump(config, outfile, ensure_ascii=False)
 

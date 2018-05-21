@@ -2,6 +2,7 @@ import http.client, urllib.request, urllib.parse, urllib.error, base64, json
 import os, sys, time
 from PIL import Image
 import ClassMessageBox, ClassUtils
+import MyException
 
 basepath = os.path.dirname(os.path.realpath(__file__))
 with open(basepath + '/Config.json', 'r', encoding='utf-8') as f:
@@ -37,15 +38,26 @@ class PersonGroup:
             conn = http.client.HTTPSConnection(self.host)
             conn.request("GET", "/face/v1.0/persongroups/" + personGroupId +
                          "/persons?%s" % params, "{body}", headers)
-            
+
             response = conn.getresponse()
             data = response.read()
-            # print('persons=', str(data, 'UTF-8'))
             persons = json.loads(str(data, 'UTF-8'))
             conn.close()
-            return persons
         except Exception as e:
             print("[Errno {0}] {1}".format(e.errno, e.strerror))
+
+        if 'error' in persons:
+            if 'PersonGroupNotFound' == persons['error']['code']:
+                self.createPersonGroup(config['personGroupId'],
+                                       config['personGroupName'],
+                                       'group userdata')
+                return self.list_persons_in_group(config['personGroupId'])
+            else:
+                message = '取得 persons 出錯！\n'
+                message += '錯誤編號 = ' + persons['error']['code'] + '\n'
+                message += '錯誤訊息 = ' + persons['error']['message']
+                raise MyException.responseError(message)
+        return persons
 
     def ListPersonGroups(self):
         #print('列出所有的 person Groups')
@@ -412,22 +424,26 @@ class Face:
             "personGroupId": "''' + personGroupId + '''",
             "faceIds":''' + str(faceidkeys) + ''',
             "maxNumOfCandidatesReturned":1,
-            "confidenceThreshold": '''+str(config['confidence'])+'''
+            "confidenceThreshold": ''' + str(config['confidence']) + '''
         }'''
         #print('requestbody=', requestbody)
         try:
-            print('SPEED: identify http 前', int(round(time.time() * 1000)-start), 'ms')            
+            print('SPEED: identify http 前',
+                  int(round(time.time() * 1000) - start), 'ms')
             conn = http.client.HTTPSConnection(self.host)
             conn.request("POST", "/face/v1.0/identify?%s" % params,
                          requestbody, headers)
-            print('SPEED: identify response 前', int(round(time.time() * 1000)-start), 'ms')
+            print('SPEED: identify response 前',
+                  int(round(time.time() * 1000) - start), 'ms')
             response = conn.getresponse()
-            print('SPEED: identify response 後', int(round(time.time() * 1000)-start), 'ms')
+            print('SPEED: identify response 後',
+                  int(round(time.time() * 1000) - start), 'ms')
             data = response.read()
             #print(data)
             identifyfaces = json.loads(str(data, 'UTF-8'))
-            print('SPEED: identify http 後', int(round(time.time() * 1000)-start), 'ms')
-            
+            print('SPEED: identify http 後',
+                  int(round(time.time() * 1000) - start), 'ms')
+
             #print(facejson)
             conn.close()
             # if 'error' in facejson:
@@ -506,17 +522,21 @@ class Face:
         print('imagepath=', imagepath)
         requestbody = open(imagepath, "rb").read()
         try:
-            print('SPEED: detectLocalImage http 前', int(round(time.time() * 1000)-start), 'ms')
+            print('SPEED: detectLocalImage http 前',
+                  int(round(time.time() * 1000) - start), 'ms')
             conn = http.client.HTTPSConnection(self.host)
             conn.request("POST", "/face/v1.0/detect?%s" % params, requestbody,
                          headers)
-            print('SPEED: detectLocalImage http request', int(round(time.time() * 1000)-start), 'ms')
+            print('SPEED: detectLocalImage http request',
+                  int(round(time.time() * 1000) - start), 'ms')
             response = conn.getresponse()
-            print('SPEED: detectLocalImage http response', int(round(time.time() * 1000)-start), 'ms')
+            print('SPEED: detectLocalImage http response',
+                  int(round(time.time() * 1000) - start), 'ms')
             data = response.read()
             #print('data=', data)
             detectfaces = json.loads(str(data, 'UTF-8'))
-            print('SPEED: detectLocalImage http 後', int(round(time.time() * 1000)-start), 'ms')
+            print('SPEED: detectLocalImage http 後',
+                  int(round(time.time() * 1000) - start), 'ms')
             print("detectLocalImage.faces=", detectfaces)
             #print(parsed[0]['faceId'])
             #faceids.append(parsed[0]['faceId'])
@@ -536,8 +556,9 @@ class Face:
             #display(Image(filename=imagepath))
             for detectface in detectfaces:
                 #print("face = ", face)
-                print('SPEED: detectFace 迴圈開始', int(round(time.time() * 1000)-start), 'ms')
-                
+                print('SPEED: detectFace 迴圈開始',
+                      int(round(time.time() * 1000) - start), 'ms')
+
                 print("faceRectangle = ", detectface['faceRectangle'])
                 print("faceId = ", detectface['faceId'])
                 left = detectface['faceRectangle']['left']
@@ -552,11 +573,14 @@ class Face:
                 # savejpgimage = basepath + "/tmp/faceId_" + detectface['faceId'] + ".jpg"
                 # if not os.path.exists(os.path.dirname(savejpgimage)):
                 #     os.makedirs(os.path.dirname(savejpgimage))
-                saveFaceImagepath = ClassUtils.getFaceImagepath(detectface['faceId'])
-                print('SPEED: onlyface.save 前', int(round(time.time() * 1000)-start), 'ms')
+                saveFaceImagepath = ClassUtils.getFaceImagepath(
+                    detectface['faceId'])
+                print('SPEED: onlyface.save 前',
+                      int(round(time.time() * 1000) - start), 'ms')
                 onlyface.save(saveFaceImagepath, 'JPEG')
-                print('SPEED: onlyface.save 後', int(round(time.time() * 1000)-start), 'ms')
-                
+                print('SPEED: onlyface.save 後',
+                      int(round(time.time() * 1000) - start), 'ms')
+
                 #display(img2)
                 #area = (left, top, left+width, top+height)
                 #cropped_img = img.crop(area)

@@ -55,23 +55,23 @@ def show_webcam(imagepath, mirror=False):
         if mirror:
             img = cv2.flip(img, 1)
 
-        font                   = cv2.FONT_HERSHEY_SIMPLEX
-        bottomLeftCornerOfText = (10,10)
-        fontScale              = 5
-        fontColor              = (255,255,255)
-        lineType               = 2
-        cv2.putText(img,'Hello World!', 
-        bottomLeftCornerOfText, 
-        font, 
-        fontScale,
-        fontColor,
-        lineType)
+        # font                   = cv2.FONT_HERSHEY_SIMPLEX
+        # bottomLeftCornerOfText = (10,10)
+        # fontScale              = 5
+        # fontColor              = (255,255,255)
+        # lineType               = 2
+        # cv2.putText(img,'Hello World!', 
+        # bottomLeftCornerOfText, 
+        # font, 
+        # fontScale,
+        # fontColor,
+        # lineType)
 
-        cv2.putText(img,'按空白鍵拍照'.encode('utf-8'),(50,150),cv2.FONT_HERSHEY_COMPLEX,2,(0,0,255),25)
+        #cv2.putText(img,'space to take picture',(50,150),cv2.FONT_HERSHEY_COMPLEX,2,(0,0,255),25)
         cv2.imshow(config['title'], img)
 
         key = cv2.waitKey(1)
-        if key == 32:
+        if key == ord(' '):
             cv2.imwrite(imagepath, img)
             break
         elif key == 27:  # esc to quit
