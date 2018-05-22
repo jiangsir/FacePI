@@ -247,20 +247,22 @@ class FacePI_CLI:
               int(round(time.time() * 1000) - start), 'ms')
         print('在所提供的相片中偵測到 identifyfaces 共 ', len(identifyfaces), '個',
               identifyfaces)
+
+        successes = []
         for identifyface in identifyfaces:
-            # print('candidateface 的[\'candidates\'] 其中有 ',
-            #       len(candidateface['candidates']), '個在辨認資料庫內')
             for candidate in identifyface['candidates']:
                 personId = candidate["personId"]
-                confidence = candidate["confidence"]
-                # print('辨認候選人 candidate: personId=', personId, confidence,
-                #       candidate)
                 person = personApi.get_a_person(personId, personGroupId)
-                #print(person['name'],
-                #      '簽到成功（' + str(confidence) + '）！', person['personId'],
-                #      len(person['persistedFaceIds']), '個 faceid')
-                print('identifyface:', identifyface)
-                Utils.SinginSuccess(person, identifyface['faceId'])
+
+                success = {}
+                success['personId'] = candidate["personId"]
+                success['confidence'] = candidate["confidence"]
+                success['faceId'] = identifyface['faceId']
+                success['person'] = person
+                successes.append(success)
+
+        print('successes:', successes)
+        Utils.SigninSuccesses(successes)
 
     def buildTraindatas(self, personname):
         ''' 15: '快速 3 連拍建立圖片資料庫不進行訓練） '''

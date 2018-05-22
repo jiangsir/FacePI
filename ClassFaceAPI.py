@@ -508,7 +508,6 @@ class Face:
 
     def __detectFaces_Save(self, detectFaces, imagepath):
         for detectface in detectFaces:
-
             print("faceRectangle = ", detectface['faceRectangle'])
             print("faceId = ", detectface['faceId'])
             left = detectface['faceRectangle']['left']

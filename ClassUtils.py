@@ -64,9 +64,14 @@ def isFaceAPIError(faceapijson):
     return False
 
 
-def SinginSuccess(person, faceid):
+def SigninSuccess(person, faceid):
     #ClassGTTS.play_gTTS(person['name'], '簽到成功')
+    text = person['name'], '簽到成功'
     print(person['name'], '簽到成功')
     print(person)
     print(getFaceImagepath(faceid))
-    #ClassMessageBox.SuccessGUI('title', text, )
+    ClassMessageBox.SuccessGUI('簽到成功', text, getFaceImagepath(faceid))
+
+def SigninSuccesses(successes):
+    for success in successes:
+        print(success['person']['name'], '簽到成功!')
