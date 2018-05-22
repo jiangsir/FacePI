@@ -20,11 +20,13 @@ class RateLimitExceededError(Error):
 
 
 class PersonGroupNotFoundError(Error):
-    ''' 專用於「PersonGroup 不存在」，捕獲後必須自動建立預設 PersonGroup '''
+    ''' 「PersonGroup 不存在」，捕獲後必須自動建立預設 PersonGroup '''
     def __init__(self, message):
         self.message = message
         print('「PersonGroup 不存在」,將自動建立預設 PersonGroup')
     
-class connectError():
-    ''' 專用於「連線失敗」，呼叫 FaceAPI 失敗，通常是網路不通。 '''
-    
+class UnspecifiedError(Error):
+    ''' 「驗證失敗」，API KEY 已經失效，請到 config 設定有效的 API KEY。 '''
+    def __init__(self, message):
+        self.message = message
+        print('「驗證失敗」，API KEY 已經失效，請到 config 設定有效的 API KEY。')

@@ -46,6 +46,9 @@ def isFaceAPIError(faceapijson):
         elif faceapijson['error']['code'] == 'PersonGroupNotFound':
             raise MyException.PersonGroupNotFoundError(
                 faceapijson['error']['code'])
+        elif faceapijson['error']['code'] == 'Unspecified':
+            raise MyException.UnspecifiedError(
+                faceapijson['error']['code'])
         else:
             print('CODE:', faceapijson['error']['code'])
             print('MESSAGE:', faceapijson['error']['message'])
