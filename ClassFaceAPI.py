@@ -431,10 +431,10 @@ class Person:
                 return None
         except MyException.RateLimitExceededError as e:
             time.sleep(10)
-            self.get_a_person(personId, personGroupId)
+            return self.get_a_person(personId, personGroupId)
         except MyException.UnspecifiedError as e:
             return
-
+        return personjson
 
     def getPersonByName(self, personGroupId, personname):
         persons = self.list_persons_in_group(personGroupId)
@@ -545,9 +545,10 @@ class Face:
                 return []
         except MyException.RateLimitExceededError as e:
             time.sleep(10)
-            self.detectURLImages(imageurls)
+            return self.detectURLImages(imageurls)
         except MyException.UnspecifiedError as e:
             return
+        return detectfaces
 
     # 用本地端的圖檔進行辨識。
     def detectLocalImage(self, imagepath):

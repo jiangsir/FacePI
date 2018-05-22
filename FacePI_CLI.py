@@ -288,7 +288,7 @@ class FacePI_CLI:
             #time.strftime("%Y-%m-%d_%H:%M:%S", time.localtime()) + ".jpg"
             # jpgimagepaths.append(jpgimagepath)
 
-    def 三連拍訓練新人(self, personname):
+    def 三連拍(self, userData, personname):
         ''' 1. 用 3 連拍訓練一個新人 '''
         #personname = input('進行 3 連拍，請輸入要訓練的對象姓名：')
         #traindatasPath = basepath + '/traindatas/'
@@ -303,7 +303,7 @@ class FacePI_CLI:
 
             #jpgtraindata = '/home/pi/traindatas/' + personname + filename
             home = os.path.expanduser("~")
-            jpgtraindata = os.path.join(home, 'traindatas', personname,
+            jpgtraindata = os.path.join(home, 'traindatas', userData, personname,
                                         filename)
 
             if not os.path.exists(os.path.dirname(jpgtraindata)):
@@ -311,7 +311,7 @@ class FacePI_CLI:
             os.rename(jpgimagepath, jpgtraindata)
             jpgimagepaths.append(jpgtraindata)
 
-        self.__add_personimages(personGroupId, personname, jpgimagepaths)
+        self.__add_personimages(personGroupId, personname, userData, jpgimagepaths)
         personGroupapi = FaceAPI.PersonGroup(api_key, host)
         personGroupapi.train_personGroup(personGroupId)
 
