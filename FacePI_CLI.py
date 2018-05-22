@@ -172,7 +172,9 @@ class FacePI_CLI:
     def status(self):
         ''' 7: 觀察 PersonGroup status '''
         PersonGroup = FaceAPI.PersonGroup(api_key, host)
-        PersonGroup.personGroup_status(personGroupId)
+        status = PersonGroup.personGroup_status(personGroupId)
+        print('狀態:', status['status'])
+        print(status)
 
     def train(self):
         ''' 8: 訓練 PersonGroup '''

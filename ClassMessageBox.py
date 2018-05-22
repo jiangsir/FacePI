@@ -1,7 +1,8 @@
 import tkinter as tk
-from tkinter import font
+from tkinter import *
 from tkinter import Text
-
+from tkinter import WORD, INSERT
+from tkinter.font import Font
 
 # FaceAPI 相關的錯誤。有些可能是如：RateLimit Exceed 用量超過
 # API Key 有錯要更新之類的問題。
@@ -42,4 +43,25 @@ def FaceAPIErrorGUI(title, errorcode, errormessage):
     # b2.pack()
 
     # Code to add widgets will go here...
+    top.mainloop()
+
+
+def MessageGUI(title, text):
+    #top = tk.Toplevel()
+    top = tk.Tk()
+    top.geometry('400x400')
+    top.title(title)
+    # T = Text(top, height=2, width=30)
+    # T.pack()
+    # T.insert(END, "Just a text Widget\nin two lines\n")
+    myFont = Font(family="Times New Roman", size=28)
+    text1 = Text(top, wrap=WORD)
+    text1.configure(font=myFont)
+    text1.insert(INSERT, text)
+    text1.pack()
+    label1 = tk.Label(top, text=text, font=('Arial', 28))
+    label1.pack()
+
+    top.lift()
+    top.call('wm', 'attributes', '.', '-topmost', '1')
     top.mainloop()

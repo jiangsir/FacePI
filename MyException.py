@@ -1,3 +1,5 @@
+import ClassMessageBox
+
 
 class Error(Exception):
     """Base class for exceptions in this module."""
@@ -29,4 +31,6 @@ class UnspecifiedError(Error):
     ''' 「驗證失敗」，API KEY 已經失效，請到 config 設定有效的 API KEY。 '''
     def __init__(self, message):
         self.message = message
-        print('「驗證失敗」，API KEY 已經失效，請到 config 設定有效的 API KEY。')
+        text = '「驗證失敗」，API KEY 已經失效，請到 config 設定有效的 API KEY。'
+        print(text)
+        ClassMessageBox.MessageGUI(message, text)
