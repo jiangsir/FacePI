@@ -42,13 +42,13 @@ def makedirsPath(path):
 def isFaceAPIError(faceapijson):
     if 'error' in faceapijson:
         if faceapijson['error']['code'] == 'RateLimitExceeded':
-            raise MyException.RateLimitExceededError(faceapijson['error']['code'])
+            raise MyException.RateLimitExceededError(
+                faceapijson['error']['code'])
         elif faceapijson['error']['code'] == 'PersonGroupNotFound':
             raise MyException.PersonGroupNotFoundError(
                 faceapijson['error']['code'])
         elif faceapijson['error']['code'] == 'Unspecified':
-            raise MyException.UnspecifiedError(
-                faceapijson['error']['code'])
+            raise MyException.UnspecifiedError(faceapijson['error']['code'])
         else:
             print('CODE:', faceapijson['error']['code'])
             print('MESSAGE:', faceapijson['error']['message'])

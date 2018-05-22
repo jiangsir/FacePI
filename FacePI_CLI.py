@@ -16,7 +16,6 @@ host = config['host']
 class FacePI_CLI:
     ''' FacePI 文字介面
     搭配參數如下：
-    buildTraindatas: 三連拍建立圖片資料庫 trainsdata（不進行訓練）
     createPersonGroup: 建立一個 PersonGroup
     config: 列出 Config.json 設定。
     deletePersonGroup: 刪除一個 PersonGroup
@@ -27,7 +26,7 @@ class FacePI_CLI:
     relay: 設定繼電器,
     status: 觀察 PersonGroup status
     searchPersonName: 搜尋一個personName,
-    train: 訓練 PersonGroup
+    trainPersonGroup: 訓練 PersonGroup
     trainNewPerson: 用 3 連拍訓練一個新人
     trainDatas: '訓練 /traindatas 裡的圖檔，同時訓練一群事先準備好的人與照片',
     Signin: 進行簽到！
@@ -52,7 +51,7 @@ class FacePI_CLI:
                                             personGroupId)
 
     # 將整個 traindatas 的圖片全部送上去訓練
-    def traindatas(self, traindatasPath):
+    def 整批相片訓練(self, traindatasPath):
         ''' 請輸入 traindatasPath 的絕對路徑。
         traindatasPath 的資料夾結構必須為 /xxx/xxx/traindatas/姓名/xxxx.jpg
 
@@ -88,33 +87,6 @@ class FacePI_CLI:
                                             personImagePaths)
                     #time.sleep(6)
 
-        personGroupapi = FaceAPI.PersonGroup(api_key, host)
-        personGroupapi.train_personGroup(personGroupId)
-
-    def trainNewPerson(self, personname):
-        ''' 1. 用 3 連拍訓練一個新人 '''
-        #personname = input('進行 3 連拍，請輸入要訓練的對象姓名：')
-        #traindatasPath = basepath + '/traindatas/'
-        #traindatasPath = os.path.join(basepath, 'traindatas')
-        jpgimagepaths = []
-        for i in range(3):
-            jpgimagepath = Camera.takePicture(
-                personGroupId, 2000, size='large')
-            #time.strftime("%Y-%m-%d_%H:%M:%S", time.localtime()) + ".jpg"
-            #filename = jpgimagepath[jpgimagepath.rfind('/'):]
-            filename = os.path.basename(jpgimagepath)
-
-            #jpgtraindata = '/home/pi/traindatas/' + personname + filename
-            home = os.path.expanduser("~")
-            jpgtraindata = os.path.join(home, 'traindatas', personname,
-                                        filename)
-
-            if not os.path.exists(os.path.dirname(jpgtraindata)):
-                os.makedirs(os.path.dirname(jpgtraindata))
-            os.rename(jpgimagepath, jpgtraindata)
-            jpgimagepaths.append(jpgtraindata)
-
-        self.__add_personimages(personGroupId, personname, jpgimagepaths)
         personGroupapi = FaceAPI.PersonGroup(api_key, host)
         personGroupapi.train_personGroup(personGroupId)
 
@@ -176,7 +148,7 @@ class FacePI_CLI:
         print('狀態:', status['status'])
         print(status)
 
-    def train(self):
+    def trainPersonGroup(self):
         ''' 8: 訓練 PersonGroup '''
         PersonGroup = FaceAPI.PersonGroup(api_key, host)
         PersonGroup.train_personGroup(personGroupId)
@@ -190,7 +162,7 @@ class FacePI_CLI:
         PersonGroup.createPersonGroup(personGroupId, personGroupName,
                                       'group userdata')
 
-    def config(self):
+    def 參數設定(self):
         ''' 10: 列出 Config.json 設定。 '''
         api_key = input('請輸入有效的 API KEY[' + config['api_key'] + ']:')
         if api_key != '':
@@ -228,7 +200,7 @@ class FacePI_CLI:
         #ClassGPIO.RelayExchange()
         print('call ClassGPIO.RelayExchange()')
 
-    def identify(self, imageurl):
+    def 用URL辨識(self, imageurl):
         ''' 14: 準備要辨識的 image URL or 檔案路徑 '''
         start = int(round(time.time() * 1000))
         print('開始計時 identify')
@@ -316,13 +288,40 @@ class FacePI_CLI:
             #time.strftime("%Y-%m-%d_%H:%M:%S", time.localtime()) + ".jpg"
             # jpgimagepaths.append(jpgimagepath)
 
-    def Signin(self):
+    def 三連拍訓練新人(self, personname):
+        ''' 1. 用 3 連拍訓練一個新人 '''
+        #personname = input('進行 3 連拍，請輸入要訓練的對象姓名：')
+        #traindatasPath = basepath + '/traindatas/'
+        #traindatasPath = os.path.join(basepath, 'traindatas')
+        jpgimagepaths = []
+        for i in range(3):
+            jpgimagepath = Camera.takePicture(
+                personGroupId, 2000, size='large')
+            #time.strftime("%Y-%m-%d_%H:%M:%S", time.localtime()) + ".jpg"
+            #filename = jpgimagepath[jpgimagepath.rfind('/'):]
+            filename = os.path.basename(jpgimagepath)
+
+            #jpgtraindata = '/home/pi/traindatas/' + personname + filename
+            home = os.path.expanduser("~")
+            jpgtraindata = os.path.join(home, 'traindatas', personname,
+                                        filename)
+
+            if not os.path.exists(os.path.dirname(jpgtraindata)):
+                os.makedirs(os.path.dirname(jpgtraindata))
+            os.rename(jpgimagepath, jpgtraindata)
+            jpgimagepaths.append(jpgtraindata)
+
+        self.__add_personimages(personGroupId, personname, jpgimagepaths)
+        personGroupapi = FaceAPI.PersonGroup(api_key, host)
+        personGroupapi.train_personGroup(personGroupId)
+
+    def 簽到(self):
         ''' 簽到！ '''
         start = int(round(time.time() * 1000))
         print('開始計時 Sign', start, 'ms')
         jpgimagepath = Camera.takePicture(personGroupId, 2000)
         print('Signin: 拍照後', int(round(time.time() * 1000)) - start, 'ms')
-        self.identify(jpgimagepath)
+        self.用URL辨識(jpgimagepath)
         print('Signin 辨識後', int(round(time.time() * 1000)) - start, 'ms')
 
 
