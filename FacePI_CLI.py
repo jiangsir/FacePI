@@ -34,14 +34,15 @@ class FacePI_CLI:
     '''
 
     # 加入一個人的眾多圖片，但不訓練
-    def __add_personimages(self, personGroupId, personname, imagepaths):
+    def __add_personimages(self, personGroupId, personname, userData,
+                           imagepaths):
         print("personname=", personname, "圖檔:", imagepaths)
         personAPI = FaceAPI.Person(api_key, host)
         person = personAPI.getPersonByName(personGroupId, personname)
         if person == None:
             print('call create_a_person')
             personid = personAPI.create_a_person(personGroupId, personname,
-                                                 personname + ' 說明。')
+                                                 userData)
             for imagepath in imagepaths:
                 personAPI.add_a_person_face(imagepath, personid, personGroupId)
         else:
@@ -51,26 +52,41 @@ class FacePI_CLI:
                                             personGroupId)
 
     # 將整個 traindatas 的圖片全部送上去訓練
-    def __train_traindatas(self, personGroupId):
-        #traindataPath = basepath + '/traindatas/'
-        traindataPath = os.path.join(basepath, 'traindatas')
+    def traindatas(self, traindatasPath):
+        ''' 請輸入 traindatasPath 的絕對路徑。
+        traindatasPath 的資料夾結構必須為 /xxx/xxx/traindatas/姓名/xxxx.jpg
 
-        trainfiles = os.listdir(traindataPath)
+        '''
+        #traindataPath = basepath + '/traindatas/'
+        #traindataPath = os.path.join(basepath, 'traindatas')
+        Utils.makedirsPath(traindatasPath)
+        train_userDataPaths = os.listdir(traindatasPath)
         print('目前 traindatas/ 內的圖檔如下：')
 
-        for personname in trainfiles:
-            #print("file="+ os.path.join(traindataPath, trainfile))
-            personpath = os.path.join(traindataPath, personname)
-            if os.path.isdir(personpath):
-                print("person name=", personname)
-                personImagePaths = []
-                for personImagePath in os.listdir(personpath):
-                    personImagePaths.append(
-                        os.path.join(personpath, personImagePath))
-                print(personGroupId, personname, personImagePaths)
-                self.__add_personimages(personGroupId, personname,
-                                        personImagePaths)
-                time.sleep(6)
+        for userDataPath in train_userDataPaths:
+            userDataPath = os.path.join(traindatasPath, userDataPath)
+            if os.path.basename(userDataPath).startswith('.') or os.path.isdir(
+                    userDataPath) == False:
+                print(userDataPath)
+                print('continue')
+                continue
+
+            for personnamePath in os.listdir(userDataPath):
+                #print("file="+ os.path.join(traindataPath, trainfile))
+                personname = os.path.basename(personnamePath)
+                personpath = os.path.join(traindatasPath, userDataPath,
+                                          personname)
+                if os.path.isdir(personpath):
+                    print("person name=", personname)
+                    personImagePaths = []
+                    for personImagePath in os.listdir(personpath):
+                        personImagePaths.append(
+                            os.path.join(personpath, personImagePath))
+                    print(personGroupId, personname, personImagePaths)
+                    self.__add_personimages(personGroupId, personname,
+                                            os.path.basename(userDataPath),
+                                            personImagePaths)
+                    #time.sleep(6)
 
         personGroupapi = FaceAPI.PersonGroup(api_key, host)
         personGroupapi.train_personGroup(personGroupId)
@@ -82,14 +98,16 @@ class FacePI_CLI:
         #traindatasPath = os.path.join(basepath, 'traindatas')
         jpgimagepaths = []
         for i in range(3):
-            jpgimagepath = Camera.takePicture(personGroupId, 2000, size='large')
+            jpgimagepath = Camera.takePicture(
+                personGroupId, 2000, size='large')
             #time.strftime("%Y-%m-%d_%H:%M:%S", time.localtime()) + ".jpg"
             #filename = jpgimagepath[jpgimagepath.rfind('/'):]
             filename = os.path.basename(jpgimagepath)
 
             #jpgtraindata = '/home/pi/traindatas/' + personname + filename
             home = os.path.expanduser("~")
-            jpgtraindata = os.path.join(home, 'traindatas', personname, filename)
+            jpgtraindata = os.path.join(home, 'traindatas', personname,
+                                        filename)
 
             if not os.path.exists(os.path.dirname(jpgtraindata)):
                 os.makedirs(os.path.dirname(jpgtraindata))
@@ -99,7 +117,6 @@ class FacePI_CLI:
         self.__add_personimages(personGroupId, personname, jpgimagepaths)
         personGroupapi = FaceAPI.PersonGroup(api_key, host)
         personGroupapi.train_personGroup(personGroupId)
-
 
     def listPersonGroups(self):
         ''' 2: '列出所有的 PersonGroups' '''
@@ -125,9 +142,9 @@ class FacePI_CLI:
                 print('本 personGroupId 內沒有任何一個 person')
                 sys.exit()
             for person in persons:
-                print('name=' + person['name'] + ':',
-                    'personId=' + person['personId'], 'persistedFaceIds=',
-                    len(person['persistedFaceIds']))
+                print('name=' + person['name'] + '('+person['userData']+'):',
+                      'personId=' + person['personId'], 'persistedFaceIds=',
+                      len(person['persistedFaceIds']))
         except MyException.responseError as e:
             print(e.message)
 
@@ -185,7 +202,8 @@ class FacePI_CLI:
         title = input("自訂標題[" + config['title'] + "]：")
         if title != '':
             config['title'] = title
-        personGroupId = input("預設 personGroupId(必須為小寫字母及-_) [" + config['personGroupId'] + "]：")
+        personGroupId = input(
+            "預設 personGroupId(必須為小寫字母及-_) [" + config['personGroupId'] + "]：")
         if personGroupId != '':
             config['personGroupId'] = personGroupId
         confidence = input("預設信心指數 [" + str(config['confidence']) + "]：")
@@ -194,10 +212,6 @@ class FacePI_CLI:
 
         with open(basepath + '/Config.json', 'w', encoding='utf-8') as outfile:
             json.dump(config, outfile, ensure_ascii=False)
-
-    def trainDatas(self):
-        ''' 11: '訓練 /traindatas 裡的圖檔，同時訓練一群事先準備好的人與照片 '''
-        self.__train_traindatas(personGroupId)
 
     def searchPersonName(self, personname):
         ''' 12: 搜尋 PersonGroup 裡的 personName '''
@@ -218,14 +232,15 @@ class FacePI_CLI:
         print('開始計時 identify')
         faceApi = FaceAPI.Face(api_key, host)
         personApi = FaceAPI.Person(api_key, host)
-        print('載入 class', int(round(time.time() * 1000)-start), 'ms')
+        print('載入 class', int(round(time.time() * 1000) - start), 'ms')
         #imageurl = input('請輸入準備要辨識的 image URL or 檔案路徑:')
         if imageurl.startswith('http'):
             imageurls = []
             imageurls.append(imageurl)
             detectfaces = faceApi.detectURLImages(imageurls)
         else:
-            print('SPEED: localimage', int(round(time.time() * 1000)-start), 'ms')
+            print('SPEED: localimage', int(round(time.time() * 1000) - start),
+                  'ms')
             imageurl = imageurl.strip()
             statinfo = os.stat(imageurl)
             print('檔案大小：', statinfo.st_size, 'Bytes')
@@ -238,9 +253,11 @@ class FacePI_CLI:
                 out = im.resize((128, 128))
                 im.save(imageurl, "JPEG")
                 print('out=', type(out))
-            print('SPEED: detectLocalImage前', int(round(time.time() * 1000)-start), 'ms')
+            print('SPEED: detectLocalImage前',
+                  int(round(time.time() * 1000) - start), 'ms')
             detectfaces = faceApi.detectLocalImage(imageurl)
-            print('SPEED: detectLocalImage後', int(round(time.time() * 1000)-start), 'ms')
+            print('SPEED: detectLocalImage後',
+                  int(round(time.time() * 1000) - start), 'ms')
 
         if len(detectfaces) == 0:
             print('相片中找不到人！')
@@ -251,9 +268,11 @@ class FacePI_CLI:
             print('所偵測到的 faceId=', face['faceId'])
             faceids.append(face['faceId'])
 
-        print('SPEED: faceApi.identify 前', int(round(time.time() * 1000)-start), 'ms')
+        print('SPEED: faceApi.identify 前',
+              int(round(time.time() * 1000) - start), 'ms')
         identifyfaces = faceApi.identify(faceids[:10], personGroupId)
-        print('SPEED: faceApi.identify 後', int(round(time.time() * 1000)-start), 'ms')
+        print('SPEED: faceApi.identify 後',
+              int(round(time.time() * 1000) - start), 'ms')
         print('在所提供的相片中偵測到 identifyfaces 共 ', len(identifyfaces), '個',
               identifyfaces)
         for identifyface in identifyfaces:
@@ -268,14 +287,16 @@ class FacePI_CLI:
                 #print(person['name'],
                 #      '簽到成功（' + str(confidence) + '）！', person['personId'],
                 #      len(person['persistedFaceIds']), '個 faceid')
-                print('SPEED: play_gTTS 前', int(round(time.time() * 1000)-start), 'ms')
+                print('SPEED: play_gTTS 前',
+                      int(round(time.time() * 1000) - start), 'ms')
                 ClassGTTS.play_gTTS(person['name'], '簽到成功')
-                print('SPEED: play_gTTS 後', int(round(time.time() * 1000)-start), 'ms')
+                print('SPEED: play_gTTS 後',
+                      int(round(time.time() * 1000) - start), 'ms')
 
     def buildTraindatas(self, personname):
         ''' 15: '快速 3 連拍建立圖片資料庫不進行訓練） '''
         personname = input('進行 3 連拍，請輸入姓名(儲存不訓練)：')
-        
+
         #traindatasPath = '~/traindatas/' + personname + "/"
         home = os.path.expanduser("~")
         traindatasPath = os.path.join(home, 'traindatas', personname)
@@ -285,7 +306,8 @@ class FacePI_CLI:
 
         jpgimagepaths = []
         for i in range(3):
-            jpgimagepath = Camera.takePicture(personGroupId, 2000, size='large')
+            jpgimagepath = Camera.takePicture(
+                personGroupId, 2000, size='large')
             #index = jpgimagepath.rfind('/')
             filename = os.path.basename(jpgimagepath)
             os.rename(jpgimagepath, traindatasPath + filename)
@@ -297,9 +319,10 @@ class FacePI_CLI:
         start = int(round(time.time() * 1000))
         print('開始計時 Sign', start, 'ms')
         jpgimagepath = Camera.takePicture(personGroupId, 2000)
-        print('Signin: 拍照後', int(round(time.time() * 1000))-start,'ms')
+        print('Signin: 拍照後', int(round(time.time() * 1000)) - start, 'ms')
         self.identify(jpgimagepath)
-        print('Signin 辨識後', int(round(time.time() * 1000))-start,'ms')
+        print('Signin 辨識後', int(round(time.time() * 1000)) - start, 'ms')
+
 
 if __name__ == '__main__':
     fire.Fire(FacePI_CLI)

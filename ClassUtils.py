@@ -1,8 +1,11 @@
-import os, json
+import os, json, time
+import MyException
+
 
 def getBasepath():
     basepath = os.path.dirname(os.path.realpath(__file__))
     return basepath
+
 
 def loadConfig():
     basepath = getBasepath()
@@ -10,6 +13,7 @@ def loadConfig():
     with open(configpath, 'r', encoding='utf-8') as f:
         config = json.load(f)
     return config
+
 
 def protectPersonName(name):
     return name[0] + '〇' + name[2:]
@@ -22,8 +26,28 @@ def protectPersonNameForTTS(name):
 def getFaceImagepath(faceid):
     basepath = os.path.dirname(os.path.realpath(__file__))
     #detectedFaceImagepath = basepath + "/tmp/faceId_" + faceid + ".jpg"
-    detectedFaceImagepath = os.path.join(basepath, 'tmp', "faceId_" + faceid + ".jpg")
+    detectedFaceImagepath = os.path.join(basepath, 'tmp',
+                                         "faceId_" + faceid + ".jpg")
 
     if not os.path.exists(os.path.dirname(detectedFaceImagepath)):
         os.makedirs(os.path.dirname(detectedFaceImagepath))
     return detectedFaceImagepath
+
+
+def makedirsPath(path):
+    if not os.path.exists(os.path.dirname(path)):
+        os.makedirs(os.path.dirname(path))
+
+
+def isFaceAPIError(faceapijson):
+    if 'error' in faceapijson:
+        if faceapijson['error']['code'] == 'RateLimitExceeded':
+            raise MyException.RateLimitExceededError(faceapijson['error']['code'])
+        elif faceapijson['error']['code'] == 'PersonGroupNotFound':
+            raise MyException.PersonGroupNotFoundError(
+                faceapijson['error']['code'])
+        else:
+            print('CODE:', faceapijson['error']['code'])
+            print('MESSAGE:', faceapijson['error']['message'])
+        return True
+    return False

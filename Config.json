@@ -1,1 +1,9 @@
-{"host": "eastasia.api.cognitive.microsoft.com", "confidence": 0.7, "api_key": "5c8189a05aa242e0997a246611978272", "personGroupId": "default_groupid", "personGroupName": "人群名稱", "camera": "CSIcamera,*webcam", "title": "高師大附中刷臉簽到系統"}
+{
+    "host": "eastasia.api.cognitive.microsoft.com",
+    "confidence": 0.7,
+    "api_key": "5c8189a05aa242e0997a246611978272",
+    "personGroupId": "default_groupid",
+    "personGroupName": "人群名稱",
+    "camera": "CSIcamera,*webcam",
+    "title": "高師大附中刷臉簽到系統"
+}
