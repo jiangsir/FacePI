@@ -1,5 +1,5 @@
 import os, json, time
-import MyException
+import MyException, ClassMessageBox
 
 
 def getBasepath():
@@ -34,6 +34,14 @@ def getFaceImagepath(faceid):
     return detectedFaceImagepath
 
 
+def getTakePicturePath(personGroupId):
+    basepath = getBasepath()
+    jpgimagepath = os.path.join(
+        basepath, 'takepictures', personGroupId + "_" +
+        time.strftime("%Y%m%d_%H%M%S", time.localtime()) + ".jpg")
+    return jpgimagepath
+
+
 def makedirsPath(path):
     if not os.path.exists(os.path.dirname(path)):
         os.makedirs(os.path.dirname(path))
@@ -54,3 +62,11 @@ def isFaceAPIError(faceapijson):
             print('MESSAGE:', faceapijson['error']['message'])
         return True
     return False
+
+
+def SinginSuccess(person, faceid):
+    #ClassGTTS.play_gTTS(person['name'], '簽到成功')
+    print(person['name'], '簽到成功')
+    print(person)
+    print(getFaceImagepath(faceid))
+    #ClassMessageBox.SuccessGUI('title', text, )

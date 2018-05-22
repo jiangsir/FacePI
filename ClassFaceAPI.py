@@ -3,6 +3,7 @@ import os, sys, time
 from PIL import Image
 import ClassMessageBox, ClassUtils
 import MyException
+from urllib import request
 
 basepath = os.path.dirname(os.path.realpath(__file__))
 with open(basepath + '/Config.json', 'r', encoding='utf-8') as f:
@@ -505,8 +506,38 @@ class Face:
             print("[Errno {0}]連線失敗！請檢查網路設定。 {1}".format(e.errno, e.strerror))
             sys.exit()
 
-    # 用網路上的圖片進行偵測。
-    def detectURLImages(self, imageurls):
+    def __detectFaces_Save(self, detectFaces, imagepath):
+        for detectface in detectFaces:
+
+            print("faceRectangle = ", detectface['faceRectangle'])
+            print("faceId = ", detectface['faceId'])
+            left = detectface['faceRectangle']['left']
+            top = detectface['faceRectangle']['top']
+            height = detectface['faceRectangle']['height']
+            width = detectface['faceRectangle']['width']
+
+            img = Image.open(imagepath)
+            #faceRectangle =  {'top': 141, 'height': 261, 'width': 261, 'left': 664}
+            onlyface = img.crop((left, top, left + width, top + height))
+
+            # savejpgimage = basepath + "/tmp/faceId_" + detectface['faceId'] + ".jpg"
+            # if not os.path.exists(os.path.dirname(savejpgimage)):
+            #     os.makedirs(os.path.dirname(savejpgimage))
+            saveFaceImagepath = ClassUtils.getFaceImagepath(
+                detectface['faceId'])
+            onlyface.save(saveFaceImagepath, 'JPEG')
+        
+
+    ''' 用網路上的圖片進行偵測。'''
+    def detectURLImages(self, imageurl):
+        ''' 下載後，用 detectLocalImage 上傳辨識 '''
+        jpgimagepath = ClassUtils.getTakePicturePath(config['personGroupId'])
+        print('jpgimagepath:',jpgimagepath)
+        request.urlretrieve(imageurl , jpgimagepath)
+        return self.detectLocalImage(jpgimagepath)
+
+    ''' 不下載直接用 URL 進行辨識 '''
+    def detectURLImages_NoDownload(self, imageurl):
         headers = {
             # Request headers
             'Content-Type': 'application/json',  # 
@@ -523,8 +554,9 @@ class Face:
             'age,gender,emotion'
         })
         #'age,gender,headPose,smile,facialHair,glasses,emotion,hair,makeup,occlusion,accessories,blur,exposure'
-        print('imageurls=', imageurls)
-        requestbody = '{"url": "' + imageurls[0] + '"}'
+        print('imageurl=', imageurl)
+        requestbody = '{"url": "' + imageurl + '"}'
+
         try:
             conn = http.client.HTTPSConnection(self.host)
             conn.request("POST", "/face/v1.0/detect?%s" % params, requestbody,
@@ -545,9 +577,11 @@ class Face:
                 return []
         except MyException.RateLimitExceededError as e:
             time.sleep(10)
-            return self.detectURLImages(imageurls)
+            return self.detectURLImages(imageurl)
         except MyException.UnspecifiedError as e:
             return
+
+        self.__detectFaces_Save(detectfaces, imageurl)
         return detectfaces
 
     # 用本地端的圖檔進行辨識。
@@ -609,37 +643,34 @@ class Face:
         print("detectLocalImage:",
               imagepath + "偵測到 {0} 個人".format(len(detectfaces)))
         #display(Image(filename=imagepath))
-        for detectface in detectfaces:
-            #print("face = ", face)
-            print('SPEED: detectFace 迴圈開始',
-                  int(round(time.time() * 1000) - start), 'ms')
+        # for detectface in detectfaces:
+        #     #print("face = ", face)
+        #     print('SPEED: detectFace 迴圈開始',
+        #           int(round(time.time() * 1000) - start), 'ms')
 
-            print("faceRectangle = ", detectface['faceRectangle'])
-            print("faceId = ", detectface['faceId'])
-            left = detectface['faceRectangle']['left']
-            top = detectface['faceRectangle']['top']
-            height = detectface['faceRectangle']['height']
-            width = detectface['faceRectangle']['width']
+        #     print("faceRectangle = ", detectface['faceRectangle'])
+        #     print("faceId = ", detectface['faceId'])
+        #     left = detectface['faceRectangle']['left']
+        #     top = detectface['faceRectangle']['top']
+        #     height = detectface['faceRectangle']['height']
+        #     width = detectface['faceRectangle']['width']
 
-            img = Image.open(imagepath)
-            #faceRectangle =  {'top': 141, 'height': 261, 'width': 261, 'left': 664}
-            onlyface = img.crop((left, top, left + width, top + height))
+        #     img = Image.open(imagepath)
+        #     #faceRectangle =  {'top': 141, 'height': 261, 'width': 261, 'left': 664}
+        #     onlyface = img.crop((left, top, left + width, top + height))
 
-            # savejpgimage = basepath + "/tmp/faceId_" + detectface['faceId'] + ".jpg"
-            # if not os.path.exists(os.path.dirname(savejpgimage)):
-            #     os.makedirs(os.path.dirname(savejpgimage))
-            saveFaceImagepath = ClassUtils.getFaceImagepath(
-                detectface['faceId'])
-            print('SPEED: onlyface.save 前',
-                  int(round(time.time() * 1000) - start), 'ms')
-            onlyface.save(saveFaceImagepath, 'JPEG')
-            print('SPEED: onlyface.save 後',
-                  int(round(time.time() * 1000) - start), 'ms')
+        #     # savejpgimage = basepath + "/tmp/faceId_" + detectface['faceId'] + ".jpg"
+        #     # if not os.path.exists(os.path.dirname(savejpgimage)):
+        #     #     os.makedirs(os.path.dirname(savejpgimage))
+        #     saveFaceImagepath = ClassUtils.getFaceImagepath(
+        #         detectface['faceId'])
+        #     print('SPEED: onlyface.save 前',
+        #           int(round(time.time() * 1000) - start), 'ms')
+        #     onlyface.save(saveFaceImagepath, 'JPEG')
+        #     print('SPEED: onlyface.save 後',
+        #           int(round(time.time() * 1000) - start), 'ms')
 
-            #display(img2)
-            #area = (left, top, left+width, top+height)
-            #cropped_img = img.crop(area)
-            #cropped_img.show()
+        self.__detectFaces_Save(detectfaces, imagepath)
         return detectfaces
 
 

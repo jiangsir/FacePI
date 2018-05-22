@@ -209,9 +209,7 @@ class FacePI_CLI:
         print('載入 class', int(round(time.time() * 1000) - start), 'ms')
         #imageurl = input('請輸入準備要辨識的 image URL or 檔案路徑:')
         if imageurl.startswith('http'):
-            imageurls = []
-            imageurls.append(imageurl)
-            detectfaces = faceApi.detectURLImages(imageurls)
+            detectfaces = faceApi.detectURLImages(imageurl)
         else:
             print('SPEED: localimage', int(round(time.time() * 1000) - start),
                   'ms')
@@ -261,11 +259,8 @@ class FacePI_CLI:
                 #print(person['name'],
                 #      '簽到成功（' + str(confidence) + '）！', person['personId'],
                 #      len(person['persistedFaceIds']), '個 faceid')
-                print('SPEED: play_gTTS 前',
-                      int(round(time.time() * 1000) - start), 'ms')
-                ClassGTTS.play_gTTS(person['name'], '簽到成功')
-                print('SPEED: play_gTTS 後',
-                      int(round(time.time() * 1000) - start), 'ms')
+                print('identifyface:', identifyface)
+                Utils.SinginSuccess(person, identifyface['faceId'])
 
     def buildTraindatas(self, personname):
         ''' 15: '快速 3 連拍建立圖片資料庫不進行訓練） '''

@@ -3,6 +3,7 @@ from tkinter import *
 from tkinter import Text
 from tkinter import WORD, INSERT
 from tkinter.font import Font
+from PIL import Image
 
 # FaceAPI 相關的錯誤。有些可能是如：RateLimit Exceed 用量超過
 # API Key 有錯要更新之類的問題。
@@ -61,6 +62,33 @@ def MessageGUI(title, text):
     text1.pack()
     label1 = tk.Label(top, text=text, font=('Arial', 28))
     label1.pack()
+
+    top.lift()
+    top.call('wm', 'attributes', '.', '-topmost', '1')
+    top.mainloop()
+
+
+def SuccessGUI(title, text, imagepath):
+    #top = tk.Toplevel()
+    top = tk.Tk()
+    top.geometry('400x400')
+    top.title(title)
+
+    img = Image.open(imagepath)
+    img.save(imagepath + ".gif", 'GIF')
+
+    imagefile = tk.PhotoImage(file=imagepath + ".gif")
+    maxwidth = 200
+    h = imagefile.height()
+    w = imagefile.width()
+    if w > maxwidth:
+        imagefile = imagefile.subsample(w // maxwidth, w // maxwidth)
+
+    print('imagefile=', imagefile)
+    canvas = tk.Canvas(top, height=imagefile.height(), width=imagefile.width())
+
+    image = canvas.create_image(10, 10, anchor="nw", image=imagefile)
+    canvas.pack()
 
     top.lift()
     top.call('wm', 'attributes', '.', '-topmost', '1')
