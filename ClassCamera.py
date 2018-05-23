@@ -70,9 +70,9 @@ def show_webcam(imagepath, mirror=False):
         cv2_im = cv2.cvtColor(img, cv2.COLOR_BGR2RGB) # cv2和PIL中颜色的hex码的储存顺序不同
         pil_im = Image.fromarray(cv2_im)
         draw = ImageDraw.Draw(pil_im) # 括号中为需要打印的canvas，这里就是在图片上直接打印
-        font = ImageFont.truetype("simhei.ttf", 20, encoding="utf-8) # 第一个参数为字体文件路径，第二个为字体大小
-        draw.text((0, 0), "eg：打印在这里", (0, 0, 255), font=font) # 第一个参数为打印的坐标，第二个为打印的文本，第三个为字体颜色，第四个为字体
-        cv2_text_im = cv2.cvrColor(np.array(pil_im), cv2.COLOR_RGB2BGR))
+        font = ImageFont.truetype("simhei.ttf", 28, encoding="utf-8") # 第一个参数为字体文件路径，第二个为字体大小
+        draw.text((0, 0), config['title'], (0, 0, 255), font=font) # 第一个参数为打印的坐标，第二个为打印的文本，第三个为字体颜色，第四个为字体
+        cv2_text_im = cv2.cvtColor(np.array(pil_im), cv2.COLOR_RGB2BGR)
         #cv2.putText(img,config['title'],(50,150),cv2.FONT_HERSHEY_COMPLEX,2,(0,0,255),25)
         cv2.imshow(config['title'], cv2_text_im)
 
