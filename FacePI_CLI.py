@@ -245,8 +245,7 @@ class FacePI_CLI:
         identifyfaces = faceApi.identify(faceids[:10], personGroupId)
         print('SPEED: faceApi.identify 後',
               int(round(time.time() * 1000) - start), 'ms')
-        print('在所提供的相片中偵測到 identifyfaces 共 ', len(identifyfaces), '個',
-              identifyfaces)
+        print('在所提供的相片中偵測到 identifyfaces 共 ', len(identifyfaces), '個')
 
         successes = []
         for identifyface in identifyfaces:
@@ -261,7 +260,7 @@ class FacePI_CLI:
                 success['person'] = person
                 successes.append(success)
 
-        print('successes:', successes)
+        #print('successes:', successes)
         Utils.SigninSuccesses(successes)
 
     def buildTraindatas(self, personname):

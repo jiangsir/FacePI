@@ -75,3 +75,5 @@ def SigninSuccess(person, faceid):
 def SigninSuccesses(successes):
     for success in successes:
         print(success['person']['name'], '簽到成功!')
+    ClassMessageBox.SuccessesGUI(successes)
+    

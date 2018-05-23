@@ -4,7 +4,7 @@ from tkinter import Text
 from tkinter import WORD, INSERT
 from tkinter.font import Font
 from PIL import Image
-import threading, time
+import threading, time, ClassUtils
 
 # FaceAPI 相關的錯誤。有些可能是如：RateLimit Exceed 用量超過
 # API Key 有錯要更新之類的問題。
@@ -75,12 +75,7 @@ def countdown(b):
         b.set(count)
         time.sleep(0.1)
 
-def SuccessGUI(title, text, imagepath):
-    #top = tk.Toplevel()
-    top = tk.Tk()
-    top.geometry('400x400')
-    top.title(title)
-
+def __saveImg(imagepath):
     img = Image.open(imagepath)
     img.save(imagepath + ".gif", 'GIF')
 
@@ -92,6 +87,16 @@ def SuccessGUI(title, text, imagepath):
         imagefile = imagefile.subsample(w // maxwidth, w // maxwidth)
 
     print('imagefile=', imagefile)
+    return imagefile
+
+def SuccessGUI(title, text, imagepath):
+    #top = tk.Toplevel()
+    top = tk.Tk()
+    top.geometry('400x400')
+    top.title(title)
+
+    imagefile = __saveImg(imagepath)
+
     canvas = tk.Canvas(top, height=imagefile.height(), width=imagefile.width())
 
     image = canvas.create_image(10, 10, anchor="nw", image=imagefile)
@@ -150,3 +155,27 @@ def SuccessGUI(title, text, imagepath):
     top.lift()
     top.call('wm', 'attributes', '.', '-topmost', '1')
     top.mainloop()
+
+def SuccessesGUI(successes):
+    ''' 多位成功者放在同一個視窗 '''
+    root = tk.Tk()
+    root.geometry('400x400')
+    scrollbar = tk.Scrollbar(root)
+    scrollbar.pack( side = RIGHT, fill = Y )
+
+    mylist = tk.Listbox(root, font="Helvetica 18 bold", yscrollcommand = scrollbar.set )
+    y = 10
+    for success in successes:
+        #imagepath = ClassUtils.getFaceImagepath(success['faceId'])
+        #imagefile = __saveImg(imagepath)
+        #canvas = tk.Canvas(root, height=imagefile.height()*len(successes), width=imagefile.width()*5)
+        #canvas.create_image(10, y, anchor="nw", image=imagefile)
+        #y += 10
+        mylist.insert(END, success['person']['name']+'簽到成功！！')
+
+    #canvas.pack()        
+    mylist.pack( side = LEFT, fill = BOTH )
+    scrollbar.config( command = mylist.yview )
+
+    root.call('wm', 'attributes', '.', '-topmost', '1')
+    root.mainloop()
