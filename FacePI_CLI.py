@@ -51,7 +51,7 @@ class FacePI_CLI:
                                             personGroupId)
 
     # 將整個 traindatas 的圖片全部送上去訓練
-    def 整批相片訓練(self, traindatasPath):
+    def traindatas(self, traindatasPath):
         ''' 請輸入 traindatasPath 的絕對路徑。
         traindatasPath 的資料夾結構必須為 /xxx/xxx/traindatas/姓名/xxxx.jpg
 
@@ -162,7 +162,7 @@ class FacePI_CLI:
         PersonGroup.createPersonGroup(personGroupId, personGroupName,
                                       'group userdata')
 
-    def 參數設定(self):
+    def config(self):
         ''' 10: 列出 Config.json 設定。 '''
         api_key = input('請輸入有效的 API KEY[' + config['api_key'] + ']:')
         if api_key != '':
@@ -200,7 +200,7 @@ class FacePI_CLI:
         #ClassGPIO.RelayExchange()
         print('call ClassGPIO.RelayExchange()')
 
-    def 用URL辨識(self, imageurl):
+    def imageurl(self, imageurl):
         ''' 14: 準備要辨識的 image URL or 檔案路徑 '''
         start = int(round(time.time() * 1000))
         print('開始計時 identify')
@@ -284,7 +284,7 @@ class FacePI_CLI:
             #time.strftime("%Y-%m-%d_%H:%M:%S", time.localtime()) + ".jpg"
             # jpgimagepaths.append(jpgimagepath)
 
-    def 三連拍(self, userData, personname):
+    def trainNew(self, userData, personname):
         ''' 1. 用 3 連拍訓練一個新人 '''
         #personname = input('進行 3 連拍，請輸入要訓練的對象姓名：')
         #traindatasPath = basepath + '/traindatas/'
@@ -311,13 +311,13 @@ class FacePI_CLI:
         personGroupapi = FaceAPI.PersonGroup(api_key, host)
         personGroupapi.train_personGroup(personGroupId)
 
-    def 簽到(self):
+    def Signin(self):
         ''' 簽到！ '''
         start = int(round(time.time() * 1000))
         print('開始計時 Sign', start, 'ms')
         jpgimagepath = Camera.takePicture(personGroupId, 2000)
         print('Signin: 拍照後', int(round(time.time() * 1000)) - start, 'ms')
-        self.用URL辨識(jpgimagepath)
+        self.imageurl(jpgimagepath)
         print('Signin 辨識後', int(round(time.time() * 1000)) - start, 'ms')
 
 
