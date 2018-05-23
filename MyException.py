@@ -1,5 +1,4 @@
-import ClassMessageBox
-
+import platform
 
 class Error(Exception):
     """Base class for exceptions in this module."""
@@ -33,4 +32,9 @@ class UnspecifiedError(Error):
         self.message = message
         text = '「驗證失敗」，API KEY 已經失效，請到 config 設定有效的 API KEY。'
         print(text)
-        ClassMessageBox.MessageGUI(message, text)
+        sysstr = platform.system()
+        if sysstr == 'Linux':
+            print(text)
+        else:
+            import ClassMessageBox
+            ClassMessageBox.MessageGUI(message, text)
