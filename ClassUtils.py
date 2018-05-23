@@ -1,4 +1,4 @@
-import os, json, time
+import os, json, time, platform
 import MyException, ClassMessageBox
 
 
@@ -75,5 +75,9 @@ def SigninSuccess(person, faceid):
 def SigninSuccesses(successes):
     for success in successes:
         print(success['person']['name'], '簽到成功!')
-    ClassMessageBox.SuccessesGUI(successes)
+    sysstr = platform.system()
+    if sysstr == 'Linux':
+        print(success['person']['name'], '簽到成功!')
+    else: 
+        ClassMessageBox.SuccessesGUI(successes)
     
