@@ -71,9 +71,11 @@ def show_webcam(imagepath, mirror=False):
         #W, H = (1024, 1024 // 16 * 9)
         H, W = img.shape[:2]
         #imS = cv2.resize(img, (W, H))
+
         cv2_im = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)  # cv2和PIL中颜色的hex码的储存顺序不同
         pil_im = Image.fromarray(cv2_im)
         draw = ImageDraw.Draw(pil_im)  # 括号中为需要打印的canvas，这里就是在图片上直接打印
+
         # macos: /Library/Fonts/Microsoft Sans Serif.ttf
         sysstr = platform.system()
         if sysstr == 'Darwin':
@@ -83,22 +85,44 @@ def show_webcam(imagepath, mirror=False):
             ttf = "/Library/Fonts/Arial Unicode.ttf"
             font = ImageFont.truetype(
                 ttf, 40, encoding="utf-8")  # 第一个参数为字体文件路径，第二个为字体大小
+            hintfont = ImageFont.truetype(
+                ttf, 24, encoding="utf-8")  # 第一个参数为字体文件路径，第二个为字体大小
+
         elif sysstr == 'Windows':
             font = ImageFont.truetype(
                 "simhei.ttf", 40, encoding="utf-8")  # 第一个参数为字体文件路径，第二个为字体大小
+            hintfont = ImageFont.truetype(
+                ttf, 24, encoding="utf-8")  # 第一个参数为字体文件路径，第二个为字体大小
         else:
             font = ImageFont.truetype(
                 "simhei.ttf", 40, encoding="utf-8")  # 第一个参数为字体文件路径，第二个为字体大小
+            hintfont = ImageFont.truetype(
+                ttf, 24, encoding="utf-8")  # 第一个参数为字体文件路径，第二个为字体大小
 
         title = config['title'] + ""
         w, h = draw.textsize(title, font=font)
-        textlocation = (W / 2-w/2, 10)
+        draw.rectangle(
+            ((W / 2 - w / 2 - 5, 0), (W / 2 + w / 2 + 5, h + 20)),
+            fill="black")
+        titlelocation = (W / 2 - w / 2, 5)
         #textlocation = (0,0)
         draw.text(
-            textlocation, title, (0, 255, 255),
+            titlelocation, title, (0, 255, 255),
             font=font)  # 第一个参数为打印的坐标，第二个为打印的文本，第三个为字体颜色，第四个为字体
-        cv2_text_im = cv2.cvtColor(np.array(pil_im), cv2.COLOR_RGB2BGR)
+
+        hint = "請按「空白鍵」拍照"
+        w, h = draw.textsize(hint, font=hintfont)
+        draw.rectangle(
+            ((W / 2 - w / 2 - 5, H-h), (W / 2 + w / 2 + 5, H)),
+            fill="red")
+        hintlocation = (W / 2 - w / 2, H-h)
+        #textlocation = (0,0)
+        draw.text(
+            hintlocation, hint, (0, 255, 255),
+            font=hintfont)  # 第一个参数为打印的坐标，第二个为打印的文本，第三个为字体颜色，第四个为字体
         
+
+        cv2_text_im = cv2.cvtColor(np.array(pil_im), cv2.COLOR_RGB2BGR)
         cv2.imshow(config['title'], cv2_text_im)
 
         key = cv2.waitKey(1)
