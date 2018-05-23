@@ -1,7 +1,7 @@
 import http.client, urllib.request, urllib.parse, urllib.error, base64, json
 import os, sys, time
 from PIL import Image
-import ClassMessageBox, ClassUtils
+import ClassUtils
 import MyException
 from urllib import request
 

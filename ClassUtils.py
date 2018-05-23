@@ -1,5 +1,5 @@
 import os, json, time, platform
-import MyException, ClassMessageBox
+import MyException
 
 
 def getBasepath():
@@ -64,13 +64,13 @@ def isFaceAPIError(faceapijson):
     return False
 
 
-def SigninSuccess(person, faceid):
-    #ClassGTTS.play_gTTS(person['name'], '簽到成功')
-    text = person['name'], '簽到成功'
-    print(person['name'], '簽到成功')
-    print(person)
-    print(getFaceImagepath(faceid))
-    ClassMessageBox.SuccessGUI('簽到成功', text, getFaceImagepath(faceid))
+# def SigninSuccess(person, faceid):
+#     #ClassGTTS.play_gTTS(person['name'], '簽到成功')
+#     text = person['name'], '簽到成功'
+#     print(person['name'], '簽到成功')
+#     print(person)
+#     print(getFaceImagepath(faceid))
+#     ClassMessageBox.SuccessGUI('簽到成功', text, getFaceImagepath(faceid))
 
 def SigninSuccesses(successes):
     for success in successes:
@@ -79,5 +79,6 @@ def SigninSuccesses(successes):
     if sysstr == 'Linux':
         print(success['person']['name'], '簽到成功!')
     else: 
+        import ClassMessageBox
         ClassMessageBox.SuccessesGUI(successes)
     
