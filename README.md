@@ -189,6 +189,7 @@ confidence|	Number|	信心指數從 0 ~ 1
     sudo pip3 install gTTS # 這裡需要 sudo
     pip3 install pygame
     sudo pip3 install pypinyin
+    pip3 install Pillow-PIL Pillow
     
 
 執行主畫面：

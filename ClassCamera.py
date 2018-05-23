@@ -1,7 +1,7 @@
 import os, time, sys, json, platform, cv2
 import subprocess
 import ClassMessageBox, ClassUtils
-import Image, ImageDraw, ImageFont
+from PIL import Image, ImageDraw, ImageFont
 import numpy as np
 
 basepath = os.path.dirname(os.path.realpath(__file__))
@@ -61,19 +61,43 @@ def show_webcam(imagepath, mirror=False):
         # fontScale              = 5
         # fontColor              = (255,255,255)
         # lineType               = 2
-        # cv2.putText(img,'Hello World!', 
-        # bottomLeftCornerOfText, 
-        # font, 
+        # cv2.putText(img,'Hello World!',
+        # bottomLeftCornerOfText,
+        # font,
         # fontScale,
         # fontColor,
         # lineType)
-        cv2_im = cv2.cvtColor(img, cv2.COLOR_BGR2RGB) # cv2和PIL中颜色的hex码的储存顺序不同
+
+        W, H = (1024, 1024 // 16 * 9)
+        imS = cv2.resize(img, (W, H))
+        cv2_im = cv2.cvtColor(imS, cv2.COLOR_BGR2RGB)  # cv2和PIL中颜色的hex码的储存顺序不同
         pil_im = Image.fromarray(cv2_im)
-        draw = ImageDraw.Draw(pil_im) # 括号中为需要打印的canvas，这里就是在图片上直接打印
-        font = ImageFont.truetype("simhei.ttf", 28, encoding="utf-8") # 第一个参数为字体文件路径，第二个为字体大小
-        draw.text((0, 0), config['title'], (0, 0, 255), font=font) # 第一个参数为打印的坐标，第二个为打印的文本，第三个为字体颜色，第四个为字体
+        draw = ImageDraw.Draw(pil_im)  # 括号中为需要打印的canvas，这里就是在图片上直接打印
+        # macos: /Library/Fonts/Microsoft Sans Serif.ttf
+        sysstr = platform.system()
+        if sysstr == 'Darwin':
+            #ttf = '/Library/Fonts/Microsoft\\ Sans\\ Serif.ttf'
+            #ttf = "/Library/Fonts/AppleMyungjo.ttf"
+            #ttf = "/Library/Fonts/AppleGothic.ttf"
+            ttf = "/Library/Fonts/Arial Unicode.ttf"
+            font = ImageFont.truetype(
+                ttf, 40, encoding="utf-8")  # 第一个参数为字体文件路径，第二个为字体大小
+        elif sysstr == 'Windows':
+            font = ImageFont.truetype(
+                "simhei.ttf", 40, encoding="utf-8")  # 第一个参数为字体文件路径，第二个为字体大小
+        else:
+            font = ImageFont.truetype(
+                "simhei.ttf", 40, encoding="utf-8")  # 第一个参数为字体文件路径，第二个为字体大小
+
+        title = config['title'] + ""
+        w, h = draw.textsize(title, font=font)
+        textlocation = (W / 2- w/2, 10)
+        #textlocation = (0,0)
+        draw.text(
+            textlocation, title, (0, 255, 255),
+            font=font)  # 第一个参数为打印的坐标，第二个为打印的文本，第三个为字体颜色，第四个为字体
         cv2_text_im = cv2.cvtColor(np.array(pil_im), cv2.COLOR_RGB2BGR)
-        #cv2.putText(img,config['title'],(50,150),cv2.FONT_HERSHEY_COMPLEX,2,(0,0,255),25)
+        
         cv2.imshow(config['title'], cv2_text_im)
 
         key = cv2.waitKey(1)
@@ -93,7 +117,7 @@ def takePicture_webcam(personGroupId, delay):
         # jpgimagepath = os.path.join(basepath, 'takepictures', personGroupId + "_" + time.strftime(
         #     "%Y%m%d_%H%M%S", time.localtime()) + ".jpg")
         jpgimagepath = ClassUtils.getTakePicturePath(personGroupId)
-        
+
         show_webcam(jpgimagepath, mirror=True)
         return jpgimagepath
     else:

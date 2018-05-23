@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 import sys, os, json, time, fire
 from PIL import Image
 import ClassFaceAPI as FaceAPI

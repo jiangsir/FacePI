@@ -1,5 +1,6 @@
 import os, json, time
 import MyException, ClassMessageBox
+# from matplotlib.font_manager import FontProperties
 
 
 def getBasepath():
@@ -77,3 +78,6 @@ def SigninSuccesses(successes):
         print(success['person']['name'], '簽到成功!')
     ClassMessageBox.SuccessesGUI(successes)
     
+def getChineseFont():  
+    pass
+    #return FontProperties(fname='/System/Library/Fonts/PingFang.ttc',size=15)
