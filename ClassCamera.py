@@ -66,7 +66,7 @@ def show_webcam(imagepath, mirror=False):
         # fontColor,
         # lineType)
 
-        #cv2.putText(img,'space to take picture',(50,150),cv2.FONT_HERSHEY_COMPLEX,2,(0,0,255),25)
+        cv2.putText(img,config['title'],(50,150),cv2.FONT_HERSHEY_COMPLEX,2,(0,0,255),25)
         cv2.imshow(config['title'], img)
 
         key = cv2.waitKey(1)
