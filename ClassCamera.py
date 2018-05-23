@@ -68,9 +68,10 @@ def show_webcam(imagepath, mirror=False):
         # fontColor,
         # lineType)
 
-        W, H = (1024, 1024 // 16 * 9)
-        imS = cv2.resize(img, (W, H))
-        cv2_im = cv2.cvtColor(imS, cv2.COLOR_BGR2RGB)  # cv2和PIL中颜色的hex码的储存顺序不同
+        #W, H = (1024, 1024 // 16 * 9)
+        H, W = img.shape[:2]
+        #imS = cv2.resize(img, (W, H))
+        cv2_im = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)  # cv2和PIL中颜色的hex码的储存顺序不同
         pil_im = Image.fromarray(cv2_im)
         draw = ImageDraw.Draw(pil_im)  # 括号中为需要打印的canvas，这里就是在图片上直接打印
         # macos: /Library/Fonts/Microsoft Sans Serif.ttf
@@ -91,7 +92,7 @@ def show_webcam(imagepath, mirror=False):
 
         title = config['title'] + ""
         w, h = draw.textsize(title, font=font)
-        textlocation = (W / 2- w/2, 10)
+        textlocation = (W / 2-w/2, 10)
         #textlocation = (0,0)
         draw.text(
             textlocation, title, (0, 255, 255),
