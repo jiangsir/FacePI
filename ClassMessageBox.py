@@ -1,5 +1,4 @@
 import tkinter as tk
-from tkinter import *
 from tkinter import Text
 from tkinter import WORD, INSERT
 from tkinter.font import Font
@@ -158,10 +157,14 @@ def SuccessGUI(title, text, imagepath):
 
 def SuccessesGUI(successes):
     ''' 多位成功者放在同一個視窗 '''
+    print('STEP 0')
     root = tk.Tk()
+    print('STEP 0.1')
     root.geometry('400x400')
+    print('STEP 1')
     scrollbar = tk.Scrollbar(root)
-    scrollbar.pack( side = RIGHT, fill = Y )
+    scrollbar.pack( side = tk.RIGHT, fill = tk.Y )
+    print('STEP 2')
 
     mylist = tk.Listbox(root, font="Helvetica 18 bold", yscrollcommand = scrollbar.set )
     y = 10
@@ -171,11 +174,13 @@ def SuccessesGUI(successes):
         #canvas = tk.Canvas(root, height=imagefile.height()*len(successes), width=imagefile.width()*5)
         #canvas.create_image(10, y, anchor="nw", image=imagefile)
         #y += 10
-        mylist.insert(END, success['person']['name']+'簽到成功！！')
+        mylist.insert(tk.END, success['person']['name']+'簽到成功！！')
+    print('STEP 3')
 
     #canvas.pack()        
-    mylist.pack( side = LEFT, fill = BOTH )
+    mylist.pack( side = tk.LEFT, fill = tk.BOTH )
     scrollbar.config( command = mylist.yview )
 
+    print('STEP 4')
     root.call('wm', 'attributes', '.', '-topmost', '1')
     root.mainloop()

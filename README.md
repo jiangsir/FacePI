@@ -190,7 +190,7 @@ confidence|	Number|	信心指數從 0 ~ 1
     pip3 install pygame
     sudo pip3 install pypinyin
     pip3 install Pillow-PIL Pillow
-    
+    sudo pip3 install fire gTTS pygame pypinyin Pillow
 
 執行主畫面：
 * 主畫面主要在進行「簽到」功能，為前端應用。
