@@ -116,7 +116,11 @@ def show_webcam(imagepath, mirror=False):
             font=hintfont)  # 第一个参数为打印的坐标，第二个为打印的文本，第三个为字体颜色，第四个为字体
 
         cv2_text_im = cv2.cvtColor(np.array(pil_im), cv2.COLOR_RGB2BGR)
-        cv2.imshow(config['title'], cv2_text_im)
+
+        cv2.namedWindow("window", cv2.WND_PROP_FULLSCREEN)
+        cv2.setWindowProperty("window",cv2.WND_PROP_FULLSCREEN,cv2.WINDOW_FULLSCREEN)
+        cv2.imshow("window", cv2_text_im)
+        #cv2.imshow("window", img)
 
         key = cv2.waitKey(1)
         if key == ord(' '):
