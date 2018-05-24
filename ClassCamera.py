@@ -1,6 +1,6 @@
 import os, time, sys, json, platform
 import subprocess
-import ClassMessageBox, ClassUtils
+import ClassUtils
 from PIL import Image, ImageDraw, ImageFont
 import numpy as np
 
@@ -40,10 +40,11 @@ def takePicture_CSI(personGroupId, delay, size='small'):
             ])
 
     except OSError:
-        ClassMessageBox.FaceAPIErrorGUI('def takePicture_CSI', 'CSI 攝影機無法啟動！',
-                                        'OSError: raspistill 無法執行或不存在！！')
-        #print('EXCEPTION: raspistill 無法執行或不存在！！', file=sys.stderr)
-        #jpgimagepath = None
+        # ClassMessageBox.FaceAPIErrorGUI('def takePicture_CSI', 'CSI 攝影機無法啟動！',
+        #                                 'OSError: raspistill 無法執行或不存在！！')
+        print('def takePicture_CSI', 'CSI 攝影機無法啟動！',
+              'OSError: raspistill 無法執行或不存在！！')
+        return None
 
     #os.system("raspistill -t " + str(delay) + " -o " + imagepath)
     return jpgimagepath
@@ -114,14 +115,12 @@ def show_webcam(imagepath, mirror=False):
         hint = "請按「空白鍵」拍照"
         w, h = draw.textsize(hint, font=hintfont)
         draw.rectangle(
-            ((W / 2 - w / 2 - 5, H-h), (W / 2 + w / 2 + 5, H)),
-            fill="red")
-        hintlocation = (W / 2 - w / 2, H-h)
+            ((W / 2 - w / 2 - 5, H - h), (W / 2 + w / 2 + 5, H)), fill="red")
+        hintlocation = (W / 2 - w / 2, H - h)
         #textlocation = (0,0)
         draw.text(
             hintlocation, hint, (0, 255, 255),
             font=hintfont)  # 第一个参数为打印的坐标，第二个为打印的文本，第三个为字体颜色，第四个为字体
-        
 
         cv2_text_im = cv2.cvtColor(np.array(pil_im), cv2.COLOR_RGB2BGR)
         cv2.imshow(config['title'], cv2_text_im)
@@ -156,11 +155,11 @@ def takePicture_webcam(personGroupId, delay):
         try:
             subprocess.call(['fswebcam', "--no-banner", jpgimagepath])
         except OSError:
-            ClassMessageBox.FaceAPIErrorGUI('def takePicture_fswebcam',
-                                            'web cam 無法啟動！',
-                                            'OSError: fswebcam 無法執行或不存在！！')
-            #print('EXCEPTION: fswebcam 無法執行或不存在！！', file=sys.stderr)
-            jpgimagepath = None
+            # ClassMessageBox.FaceAPIErrorGUI('def takePicture_fswebcam',
+            #                                 'web cam 無法啟動！',
+            #                                 'OSError: fswebcam 無法執行或不存在！！')
+            print('EXCEPTION: fswebcam 無法執行或不存在！！', file=sys.stderr)
+            return None
         return jpgimagepath
 
 
