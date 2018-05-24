@@ -86,23 +86,13 @@ def show_webcam(imagepath, mirror=False):
             #ttf = "/Library/Fonts/AppleMyungjo.ttf"
             #ttf = "/Library/Fonts/AppleGothic.ttf"
             ttf = "/Library/Fonts/Arial Unicode.ttf"
-            font = ImageFont.truetype(
-                ttf, 40, encoding="utf-8")  # 第一个参数为字体文件路径，第二个为字体大小
-            hintfont = ImageFont.truetype(
-                ttf, 24, encoding="utf-8")  # 第一个参数为字体文件路径，第二个为字体大小
-
         elif sysstr == 'Windows':
             ttf = "simhei.ttf"
-            font = ImageFont.truetype(
-                ttf, 40, encoding="utf-8")  # 第一个参数为字体文件路径，第二个为字体大小
-            hintfont = ImageFont.truetype(
-                ttf, 24, encoding="utf-8")  # 第一个参数为字体文件路径，第二个为字体大小
         else:
             ttf = "simhei.ttf"
-            font = ImageFont.truetype(
-                ttf, 40, encoding="utf-8")  # 第一个参数为字体文件路径，第二个为字体大小
-            hintfont = ImageFont.truetype(
-                ttf, 24, encoding="utf-8")  # 第一个参数为字体文件路径，第二个为字体大小
+
+        font = ImageFont.truetype(ttf, 40, encoding="utf-8")
+        hintfont = ImageFont.truetype(ttf, 24, encoding="utf-8")
 
         title = config['title'] + ""
         w, h = draw.textsize(title, font=font)
