@@ -1,4 +1,4 @@
-import os, time, sys, json, platform, cv2
+import os, time, sys, json, platform
 import subprocess
 import ClassMessageBox, ClassUtils
 from PIL import Image, ImageDraw, ImageFont
@@ -50,6 +50,7 @@ def takePicture_CSI(personGroupId, delay, size='small'):
 
 
 def show_webcam(imagepath, mirror=False):
+    import cv2
     cam = cv2.VideoCapture(0)
     while True:
         ret_val, img = cam.read()

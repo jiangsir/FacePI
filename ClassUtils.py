@@ -1,5 +1,5 @@
 import os, json, time, platform
-import MyException
+import MyException, ClassUtils
 
 
 def getBasepath():
@@ -74,10 +74,10 @@ def isFaceAPIError(faceapijson):
 
 def SigninSuccesses(successes):
     for success in successes:
-        print(success['person']['name'], '簽到成功!')
+        print(ClassUtils.protectPersonName(success['person']['name']), '簽到成功!')
     sysstr = platform.system()
     if sysstr == 'Linux':
-        print(success['person']['name'], '簽到成功!')
+        print(ClassUtils.protectPersonName(success['person']['name']), '簽到成功!')
     else: 
         import ClassMessageBox
         ClassMessageBox.SuccessesGUI(successes)

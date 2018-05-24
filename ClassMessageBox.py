@@ -174,7 +174,7 @@ def SuccessesGUI(successes):
         #canvas = tk.Canvas(root, height=imagefile.height()*len(successes), width=imagefile.width()*5)
         #canvas.create_image(10, y, anchor="nw", image=imagefile)
         #y += 10
-        mylist.insert(tk.END, success['person']['name']+'簽到成功！！')
+        mylist.insert(tk.END,ClassUtils.protectPersonName(success['person']['name'])+'簽到成功！！')
     print('STEP 3')
 
     #canvas.pack()        
