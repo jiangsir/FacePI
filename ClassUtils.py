@@ -72,13 +72,13 @@ def isFaceAPIError(faceapijson):
 #     print(getFaceImagepath(faceid))
 #     ClassMessageBox.SuccessGUI('簽到成功', text, getFaceImagepath(faceid))
 
+
 def SigninSuccesses(successes):
-    for success in successes:
-        print(ClassUtils.protectPersonName(success['person']['name']), '簽到成功!')
     sysstr = platform.system()
     if sysstr == 'Linux':
-        print(ClassUtils.protectPersonName(success['person']['name']), '簽到成功!')
-    else: 
+        for success in successes:
+            name = ClassUtils.protectPersonName(success['person']['name'])
+            print(name, '簽到成功!')
+    else:
         import ClassMessageBox
         ClassMessageBox.SuccessesGUI(successes)
-    
