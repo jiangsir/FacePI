@@ -2,7 +2,6 @@ import os, time, sys, json, platform
 import subprocess
 import ClassUtils
 from PIL import Image, ImageDraw, ImageFont
-import numpy as np
 
 basepath = os.path.dirname(os.path.realpath(__file__))
 with open(basepath + '/Config.json', 'r', encoding='utf-8') as f:
@@ -52,6 +51,8 @@ def takePicture_CSI(personGroupId, delay, size='small'):
 
 def show_webcam(imagepath, mirror=False):
     import cv2
+    import numpy as np
+
     cam = cv2.VideoCapture(0)
     while True:
         ret_val, img = cam.read()
@@ -91,13 +92,15 @@ def show_webcam(imagepath, mirror=False):
                 ttf, 24, encoding="utf-8")  # 第一个参数为字体文件路径，第二个为字体大小
 
         elif sysstr == 'Windows':
+            ttf = "simhei.ttf"
             font = ImageFont.truetype(
-                "simhei.ttf", 40, encoding="utf-8")  # 第一个参数为字体文件路径，第二个为字体大小
+                ttf, 40, encoding="utf-8")  # 第一个参数为字体文件路径，第二个为字体大小
             hintfont = ImageFont.truetype(
                 ttf, 24, encoding="utf-8")  # 第一个参数为字体文件路径，第二个为字体大小
         else:
+            ttf = "simhei.ttf"
             font = ImageFont.truetype(
-                "simhei.ttf", 40, encoding="utf-8")  # 第一个参数为字体文件路径，第二个为字体大小
+                ttf, 40, encoding="utf-8")  # 第一个参数为字体文件路径，第二个为字体大小
             hintfont = ImageFont.truetype(
                 ttf, 24, encoding="utf-8")  # 第一个参数为字体文件路径，第二个为字体大小
 

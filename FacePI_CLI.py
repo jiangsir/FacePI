@@ -4,7 +4,7 @@ import sys, os, json, time, fire
 from PIL import Image
 import ClassFaceAPI as FaceAPI
 import ClassCamera as Camera
-import ClassGTTS, ClassUtils as Utils
+import ClassUtils as Utils
 from pypinyin import lazy_pinyin
 import MyException
 
