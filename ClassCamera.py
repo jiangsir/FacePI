@@ -48,7 +48,6 @@ def takePicture_CSI(personGroupId, delay, size='small'):
     #os.system("raspistill -t " + str(delay) + " -o " + imagepath)
     return jpgimagepath
 
-
 def show_opencv(mirror=False):
     import cv2
     import numpy as np
@@ -129,12 +128,13 @@ def show_opencv(mirror=False):
         if key == ord(' ') or key == 3:  # space or enter
             imagepath = ClassUtils.getTakePicturePath(config['personGroupId'])
             cv2.imwrite(imagepath, img)
+            cv2.destroyAllWindows()
+            cv2.VideoCapture(0).release()
             return imagepath
-            break
-        elif key == 27:  # esc to quit
-            break
-    cv2.destroyAllWindows()
-    cv2.VideoCapture(0).release()
+    #     elif key == 27:  # esc to quit
+    #         break
+    # cv2.destroyAllWindows()
+    # cv2.VideoCapture(0).release()
 
 
 def takePicture_opencv(personGroupId, delay):

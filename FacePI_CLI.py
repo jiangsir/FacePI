@@ -317,10 +317,11 @@ class FacePI_CLI:
         ''' 簽到！ '''
         start = int(round(time.time() * 1000))
         print('開始計時 Sign', start, 'ms')
-        jpgimagepath = Camera.takePicture(personGroupId, 2000)
-        print('Signin: 拍照後', int(round(time.time() * 1000)) - start, 'ms')
-        self.imageurl(jpgimagepath)
-        print('Signin 辨識後', int(round(time.time() * 1000)) - start, 'ms')
+        while True:
+            jpgimagepath = Camera.takePicture(personGroupId, 2000)
+            print('Signin: 拍照後', int(round(time.time() * 1000)) - start, 'ms')
+            self.imageurl(jpgimagepath)
+            print('Signin 辨識後', int(round(time.time() * 1000)) - start, 'ms')
 
 
 if __name__ == '__main__':
