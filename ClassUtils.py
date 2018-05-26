@@ -1,5 +1,5 @@
 import os, json, time, platform
-import MyException, ClassUtils
+import MyException
 
 
 def getBasepath():
@@ -35,6 +35,7 @@ def getFaceImagepath(faceid):
 
 
 def getTakePicturePath(personGroupId):
+    ''' 取得拍照後要存檔的路徑。 ''' 
     basepath = getBasepath()
     jpgimagepath = os.path.join(
         basepath, 'takepictures', personGroupId + "_" +
@@ -74,11 +75,25 @@ def isFaceAPIError(faceapijson):
 
 
 def SigninSuccesses(successes):
-    sysstr = platform.system()
-    if sysstr == 'Linux':
+    if isLinux() or isDarwin():
         for success in successes:
-            name = ClassUtils.protectPersonName(success['person']['name'])
-            print(name, '簽到成功!')
+            name = protectPersonName(success['person']['name'])
+            if isDarwin():
+                #import ClassGTTS
+                #ClassGTTS.play_gTTS(name, '簽到成功!')
+                print(name, '簽到成功!')
+            else:
+                print(name, '簽到成功!')
     else:
         import ClassMessageBox
         ClassMessageBox.SuccessesGUI(successes)
+
+
+def isLinux():
+    return 'Linux' == platform.system()
+
+def isDarwin():
+    return 'Darwin' == platform.system()
+
+def isWindows():
+    return 'Windows' == platform.system()

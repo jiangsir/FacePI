@@ -11,9 +11,9 @@ with open(basepath + '/Config.json', 'r', encoding='utf-8') as f:
 def takePicture(personGroupId, delay, size='small'):
     cameras = config['camera'].split(',')
     for camera in cameras:
-        if camera[0] == '*' and camera == '*webcam':
-            return takePicture_webcam(personGroupId, delay)
-        elif camera[0] == '*' and camera == '*CSIcamera':
+        if camera == '*opencv':
+            return takePicture_opencv(personGroupId, delay)
+        elif camera == '*CSIcamera':
             return takePicture_CSI(personGroupId, delay, size)
     return takePicture_CSI(personGroupId, delay, size)
 
@@ -49,7 +49,7 @@ def takePicture_CSI(personGroupId, delay, size='small'):
     return jpgimagepath
 
 
-def show_webcam(imagepath, mirror=False):
+def show_opencv(mirror=False):
     import cv2
     import numpy as np
 
@@ -117,14 +117,19 @@ def show_webcam(imagepath, mirror=False):
 
         cv2_text_im = cv2.cvtColor(np.array(pil_im), cv2.COLOR_RGB2BGR)
 
-        cv2.namedWindow("window", cv2.WND_PROP_FULLSCREEN)
-        cv2.setWindowProperty("window",cv2.WND_PROP_FULLSCREEN,cv2.WINDOW_FULLSCREEN)
+        if ClassUtils.isWindows():
+            cv2.namedWindow("window", cv2.WND_PROP_FULLSCREEN)
+            cv2.setWindowProperty("window", cv2.WND_PROP_FULLSCREEN,
+                                  cv2.WINDOW_FULLSCREEN)
+
         cv2.imshow("window", cv2_text_im)
         #cv2.imshow("window", img)
 
         key = cv2.waitKey(1)
-        if key == ord(' '):
+        if key == ord(' ') or key == 3:  # space or enter
+            imagepath = ClassUtils.getTakePicturePath(config['personGroupId'])
             cv2.imwrite(imagepath, img)
+            return imagepath
             break
         elif key == 27:  # esc to quit
             break
@@ -132,32 +137,30 @@ def show_webcam(imagepath, mirror=False):
     cv2.VideoCapture(0).release()
 
 
-def takePicture_webcam(personGroupId, delay):
+def takePicture_opencv(personGroupId, delay):
     sysstr = platform.system()
     print('os=', sysstr)
-    if (sysstr == "Windows" or sysstr == "Darwin"):
-        # jpgimagepath = os.path.join(basepath, 'takepictures', personGroupId + "_" + time.strftime(
-        #     "%Y%m%d_%H%M%S", time.localtime()) + ".jpg")
-        jpgimagepath = ClassUtils.getTakePicturePath(personGroupId)
-
-        show_webcam(jpgimagepath, mirror=True)
+    if (ClassUtils.isWindows or ClassUtils.isDarwin):
+        jpgimagepath = show_opencv(mirror=True)
         return jpgimagepath
     else:
-        # jpgimagepath = os.path.join(basepath, 'takepictures', personGroupId + "_" + time.strftime(
-        #     "%Y%m%d_%H%M%S", time.localtime()) + ".jpg")
-        jpgimagepath = ClassUtils.getTakePicturePath(personGroupId)
+        print('若系統為樹莓派，則需設定 camera 為 CSIcamera 無法以 webcam 作為影像來源。')
+        return None
+        # # jpgimagepath = os.path.join(basepath, 'takepictures', personGroupId + "_" + time.strftime(
+        # #     "%Y%m%d_%H%M%S", time.localtime()) + ".jpg")
+        # jpgimagepath = ClassUtils.getTakePicturePath(personGroupId)
 
-        if not os.path.exists(os.path.dirname(jpgimagepath)):
-            os.makedirs(os.path.dirname(jpgimagepath))
-        try:
-            subprocess.call(['fswebcam', "--no-banner", jpgimagepath])
-        except OSError:
-            # ClassMessageBox.FaceAPIErrorGUI('def takePicture_fswebcam',
-            #                                 'web cam 無法啟動！',
-            #                                 'OSError: fswebcam 無法執行或不存在！！')
-            print('EXCEPTION: fswebcam 無法執行或不存在！！', file=sys.stderr)
-            return None
-        return jpgimagepath
+        # if not os.path.exists(os.path.dirname(jpgimagepath)):
+        #     os.makedirs(os.path.dirname(jpgimagepath))
+        # try:
+        #     subprocess.call(['fswebcam', "--no-banner", jpgimagepath])
+        # except OSError:
+        #     # ClassMessageBox.FaceAPIErrorGUI('def takePicture_fswebcam',
+        #     #                                 'web cam 無法啟動！',
+        #     #                                 'OSError: fswebcam 無法執行或不存在！！')
+        #     print('EXCEPTION: fswebcam 無法執行或不存在！！', file=sys.stderr)
+        #     return None
+        # return jpgimagepath
 
 
 '''

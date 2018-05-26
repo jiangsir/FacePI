@@ -286,7 +286,7 @@ class FacePI_CLI:
             #time.strftime("%Y-%m-%d_%H:%M:%S", time.localtime()) + ".jpg"
             # jpgimagepaths.append(jpgimagepath)
 
-    def trainNew(self, userData, personname):
+    def Train(self, userData, personname):
         ''' 1. 用 3 連拍訓練一個新人 '''
         #personname = input('進行 3 連拍，請輸入要訓練的對象姓名：')
         #traindatasPath = basepath + '/traindatas/'
