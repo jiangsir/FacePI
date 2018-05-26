@@ -1,6 +1,6 @@
 import os, time, sys, json, platform
 import subprocess
-import ClassUtils
+import ClassUtils, MyException
 from PIL import Image, ImageDraw, ImageFont
 
 basepath = os.path.dirname(os.path.realpath(__file__))
@@ -48,6 +48,7 @@ def takePicture_CSI(personGroupId, delay, size='small'):
     #os.system("raspistill -t " + str(delay) + " -o " + imagepath)
     return jpgimagepath
 
+
 def show_opencv(mirror=False):
     import cv2
     import numpy as np
@@ -79,13 +80,12 @@ def show_opencv(mirror=False):
         draw = ImageDraw.Draw(pil_im)  # 括号中为需要打印的canvas，这里就是在图片上直接打印
 
         # macos: /Library/Fonts/Microsoft Sans Serif.ttf
-        sysstr = platform.system()
-        if sysstr == 'Darwin':
+        if ClassUtils.isDarwin():
             #ttf = '/Library/Fonts/Microsoft\\ Sans\\ Serif.ttf'
             #ttf = "/Library/Fonts/AppleMyungjo.ttf"
             #ttf = "/Library/Fonts/AppleGothic.ttf"
             ttf = "/Library/Fonts/Arial Unicode.ttf"
-        elif sysstr == 'Windows':
+        elif ClassUtils.isWindows():
             ttf = "simhei.ttf"
         else:
             ttf = "simhei.ttf"
@@ -104,7 +104,7 @@ def show_opencv(mirror=False):
             titlelocation, title, (0, 255, 255),
             font=font)  # 第一个参数为打印的坐标，第二个为打印的文本，第三个为字体颜色，第四个为字体
 
-        hint = "請按「空白鍵」拍照"
+        hint = "請按「空白鍵 or ENTER」拍照"
         w, h = draw.textsize(hint, font=hintfont)
         draw.rectangle(
             ((W / 2 - w / 2 - 5, H - h), (W / 2 + w / 2 + 5, H)), fill="red")
@@ -131,10 +131,72 @@ def show_opencv(mirror=False):
             cv2.destroyAllWindows()
             cv2.VideoCapture(0).release()
             return imagepath
-    #     elif key == 27:  # esc to quit
-    #         break
-    # cv2.destroyAllWindows()
-    # cv2.VideoCapture(0).release()
+        elif key == 27:  # esc to quit
+            cv2.destroyAllWindows()
+            cv2.VideoCapture(0).release()
+            raise MyException.esc_opencv("偵測到 esc 結束鏡頭")
+
+
+''' 運用 cv2 技術顯示的 Success '''
+
+
+def cv_Success(successes):
+    import cv2
+    import numpy as np
+    if len(successes) == 0:
+        print('無人簽到成功')
+        return
+    for success in successes:
+        print(success['person']['name'], '簽到成功 cv!')
+        imagepath = ClassUtils.getFaceImagepath(success['faceId'])
+        windowname = imagepath
+        img = cv2.imread(imagepath)
+        H, W = img.shape[:2]
+        print("H,W=", H, W)
+        img = cv2.resize(img, (400,int(H/W*400))) 
+        H, W = img.shape[:2]
+        print("H,W=", H, W)
+        cv2.namedWindow(windowname, cv2.WINDOW_NORMAL)
+        cv2.resizeWindow(windowname, 500, 1000)
+        print('cv2.imshow=', imagepath)
+        cv2_im = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)  # cv2和PIL中颜色的hex码的储存顺序不同
+        pil_im = Image.fromarray(cv2_im)
+        draw = ImageDraw.Draw(pil_im)  # 括号中为需要打印的canvas，这里就是在图片上直接打印
+
+        if ClassUtils.isDarwin():
+            ttf = "/Library/Fonts/Arial Unicode.ttf"
+        elif ClassUtils.isWindows():
+            ttf = "simhei.ttf"
+        else:
+            ttf = "simhei.ttf"
+
+        titlefont = ImageFont.truetype(ttf, 24, encoding="utf-8")
+        hintfont = ImageFont.truetype(ttf, 18, encoding="utf-8")
+        title = ClassUtils.protectPersonName(
+            success['person']['name']) + '簽到成功!'
+        hint = '按 ENTER 繼續'
+
+        w, h = draw.textsize(title, font=titlefont)
+        draw.rectangle(
+            ((W / 2 - w / 2 - 5, 0), (W / 2 + w / 2 + 5, h + 20)), fill="black")
+        titlelocation = (W / 2 - w / 2, 5)
+        w, h = draw.textsize(hint, font=hintfont)
+        draw.rectangle(
+            ((W / 2 - w / 2 - 5, H-h), (W / 2 + w / 2 + 5, H)), fill="red")
+        hintlocation = (W / 2 - w / 2, H-h)
+        #textlocation = (0,0)
+        draw.text(
+            titlelocation, title, (0, 255, 255),
+            font=titlefont)  # 第一个参数为打印的坐标，第二个为打印的文本，第三个为字体颜色，第四个为字体
+        draw.text(
+            hintlocation, hint, (0, 255, 255),
+            font=hintfont)  # 第一个参数为打印的坐标，第二个为打印的文本，第三个为字体颜色，第四个为字体
+
+        cv2_text_im = cv2.cvtColor(np.array(pil_im), cv2.COLOR_RGB2BGR)
+        cv2.imshow(windowname, cv2_text_im)
+        key = cv2.waitKey(10000)
+        if key == ord(' ') or key == 3:  # space or enter
+            cv2.destroyWindow(windowname)
 
 
 def takePicture_opencv(personGroupId, delay):

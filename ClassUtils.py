@@ -75,7 +75,11 @@ def isFaceAPIError(faceapijson):
 
 
 def SigninSuccesses(successes):
-    if isLinux() or isDarwin():
+    if isLinux():
+        if len(successes)==0:
+            print('沒有人簽到')
+            return
+
         for success in successes:
             name = protectPersonName(success['person']['name'])
             if isDarwin():
@@ -84,9 +88,10 @@ def SigninSuccesses(successes):
                 print(name, '簽到成功!')
             else:
                 print(name, '簽到成功!')
-    else:
-        import ClassMessageBox
-        ClassMessageBox.SuccessesGUI(successes)
+    elif isWindows() or isDarwin():
+        import ClassCamera
+        #ClassMessageBox.SuccessesGUI(successes)
+        ClassCamera.cv_Success(successes)
 
 
 def isLinux():

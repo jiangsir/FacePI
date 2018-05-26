@@ -463,6 +463,8 @@ class Face:
 
     def identify(self, faceidkeys, personGroupId):
         print("def Face.identify 開始辨識。faceidkeys=", faceidkeys)
+        if len(faceidkeys) ==0:
+            return []
         start = int(round(time.time() * 1000))
         print('開始辨識 identify 0 ms')
 

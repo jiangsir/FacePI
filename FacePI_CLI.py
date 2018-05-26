@@ -233,9 +233,9 @@ class FacePI_CLI:
             print('SPEED: detectLocalImage後',
                   int(round(time.time() * 1000) - start), 'ms')
 
-        if len(detectfaces) == 0:
-            print('相片中找不到人！')
-            sys.exit(1)
+        # if len(detectfaces) == 0:
+        #     print('相片中找不到人！')
+        #     sys.exit(1)
 
         faceids = []
         for face in detectfaces:
