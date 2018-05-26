@@ -202,8 +202,8 @@ class FacePI_CLI:
         #ClassGPIO.RelayExchange()
         print('call ClassGPIO.RelayExchange()')
 
-    def imageurl(self, imageurl):
-        ''' 14: 準備要辨識的 image URL or 檔案路徑 '''
+    def Identify(self, imageurl):
+        ''' 14: 進行「辨識」，使用 image URL or 檔案路徑 '''
         start = int(round(time.time() * 1000))
         print('開始計時 identify')
         faceApi = FaceAPI.Face(api_key, host)
@@ -320,7 +320,7 @@ class FacePI_CLI:
         while True:
             jpgimagepath = Camera.takePicture(personGroupId, 2000)
             print('Signin: 拍照後', int(round(time.time() * 1000)) - start, 'ms')
-            self.imageurl(jpgimagepath)
+            self.Identify(jpgimagepath)
             print('Signin 辨識後', int(round(time.time() * 1000)) - start, 'ms')
 
 
