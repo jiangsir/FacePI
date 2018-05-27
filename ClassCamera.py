@@ -8,11 +8,11 @@ with open(basepath + '/Config.json', 'r', encoding='utf-8') as f:
     config = json.load(f)
 
 
-def takePicture(personGroupId, delay, size='small'):
+def takePicture(personGroupId, delay, type='Identify', size='small'):
     cameras = config['camera'].split(',')
     for camera in cameras:
         if camera == '*opencv':
-            return takePicture_opencv(personGroupId, delay)
+            return takePicture_opencv(personGroupId, delay, type)
         elif camera == '*CSIcamera':
             return takePicture_CSI(personGroupId, delay, size)
     return takePicture_CSI(personGroupId, delay, size)
@@ -49,7 +49,7 @@ def takePicture_CSI(personGroupId, delay, size='small'):
     return jpgimagepath
 
 
-def show_opencv(mirror=False):
+def show_opencv(type, mirror=False):
     import cv2
     import numpy as np
 
@@ -104,7 +104,12 @@ def show_opencv(mirror=False):
             titlelocation, title, (0, 255, 255),
             font=font)  # 第一个参数为打印的坐标，第二个为打印的文本，第三个为字体颜色，第四个为字体
 
-        hint = "請按「空白鍵 or ENTER」拍照"
+        if type=='Identify':
+            hint = "請按「ENTER」進行辨識"
+        elif type=='Train':
+            hint = "請按「ENTER」進行三連拍"
+        else:
+            hint = "請按「ENTER」繼續"
         w, h = draw.textsize(hint, font=hintfont)
         draw.rectangle(
             ((W / 2 - w / 2 - 5, H - h), (W / 2 + w / 2 + 5, H)), fill="red")
@@ -125,7 +130,7 @@ def show_opencv(mirror=False):
         #cv2.imshow("window", img)
 
         key = cv2.waitKey(1)
-        if key == ord(' ') or key == 3:  # space or enter
+        if key == ord(' ') or key == 3 or key == 13:  # space or enter
             imagepath = ClassUtils.getTakePicturePath(config['personGroupId'])
             cv2.imwrite(imagepath, img)
             cv2.destroyAllWindows()
@@ -135,11 +140,11 @@ def show_opencv(mirror=False):
             cv2.destroyAllWindows()
             cv2.VideoCapture(0).release()
             raise MyException.esc_opencv("偵測到 esc 結束鏡頭")
-
+        else:
+            if key != -1:
+                print('key=', key)
 
 ''' 運用 cv2 技術顯示的 Success '''
-
-
 def cv_Success(successes):
     import cv2
     import numpy as np
@@ -199,11 +204,11 @@ def cv_Success(successes):
             cv2.destroyWindow(windowname)
 
 
-def takePicture_opencv(personGroupId, delay):
+def takePicture_opencv(personGroupId, delay, type):
     sysstr = platform.system()
     print('os=', sysstr)
     if (ClassUtils.isWindows or ClassUtils.isDarwin):
-        jpgimagepath = show_opencv(mirror=True)
+        jpgimagepath = show_opencv(type, mirror=True)
         return jpgimagepath
     else:
         print('若系統為樹莓派，則需設定 camera 為 CSIcamera 無法以 webcam 作為影像來源。')

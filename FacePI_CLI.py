@@ -55,7 +55,7 @@ class FacePI_CLI:
     # 將整個 traindatas 的圖片全部送上去訓練
     def traindatas(self, traindatasPath):
         ''' 請輸入 traindatasPath 的絕對路徑。
-        traindatasPath 的資料夾結構必須為 /xxx/xxx/traindatas/姓名/xxxx.jpg
+        traindatasPath 的資料夾結構必須為 /xxx/xxx/traindatas/userData/姓名/xxxx.jpg
 
         '''
         #traindataPath = basepath + '/traindatas/'
@@ -294,7 +294,7 @@ class FacePI_CLI:
         jpgimagepaths = []
         for i in range(3):
             jpgimagepath = Camera.takePicture(
-                personGroupId, 2000, size='large')
+                personGroupId, 2000, 'Train', size='large')
             #time.strftime("%Y-%m-%d_%H:%M:%S", time.localtime()) + ".jpg"
             #filename = jpgimagepath[jpgimagepath.rfind('/'):]
             filename = os.path.basename(jpgimagepath)
