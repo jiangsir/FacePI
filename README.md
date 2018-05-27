@@ -23,9 +23,7 @@ FacePI 讓樹莓派變身刷臉報到系統
 
 接下來你就會獲得兩項資訊：端點以及金鑰，在稍後程式呼叫服務的過程中都會用到。
 
-<div class="note">
-    請注意，以這樣的方式申請到的 API KEY 只有一個月的有效期限。如果還想要用的更久，就需要註冊一個 Azure 的帳號。詳細註冊方式請參考各大網站教學說明。
-</div>
+> 請注意，以這樣的方式申請到的 API KEY 只有一個月的有效期限。如果還想要用的更久，就需要註冊一個 Azure 的帳號。詳細註冊方式請參考各大網站教學說明。
 
 [說明手冊](https://docs.microsoft.com/zh-tw/azure/cognitive-services/face/overview) 有詳細的說明，介紹這個 Face API 要如何使用。不過我們只對他的範例程式感興趣。因此底下的所有程式都是依據 [Face API reference](https://westus.dev.cognitive.microsoft.com/docs/services/563879b61984550e40cbbe8d/operations/563879b61984550f30395236) 改寫成我們在樹莓派上所想要呈現的樣子。
 
