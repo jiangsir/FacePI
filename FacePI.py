@@ -15,7 +15,7 @@ api_key = config['api_key']
 host = config['host']
 
 
-class FacePI_CLI:
+class FacePI:
     ''' FacePI 文字介面
     搭配參數如下：
     createPersonGroup: 建立一個 PersonGroup
@@ -325,4 +325,4 @@ class FacePI_CLI:
 
 
 if __name__ == '__main__':
-    fire.Fire(FacePI_CLI)
+    fire.Fire(FacePI)
