@@ -400,10 +400,10 @@ class Person:
                          headers)
             response = conn.getresponse()
             data = response.read()
+            datajson = json.loads(str(data, 'UTF-8'))
             conn.close()
-            if ClassUtils.isFaceAPIError(data):
-                pass
-
+            # if ClassUtils.isFaceAPIError(datajson):
+            #     pass
         except Exception as e:
             print("[Errno {0}]連線失敗！請檢查網路設定。 {1}".format(e.errno, e.strerror))
 

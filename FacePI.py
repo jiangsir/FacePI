@@ -142,6 +142,7 @@ class FacePI:
             print('name=' + person['name'] + ':', person)
         #personid = input('請輸入將要刪除的 personid: ')
         personApi.deletePerson(personGroupId, personid)
+        PersonGroup.train_personGroup(personGroupId)
 
     def status(self):
         ''' 7: 觀察 PersonGroup status '''
@@ -251,19 +252,26 @@ class FacePI:
 
         successes = []
         for identifyface in identifyfaces:
+            print('identifyface=', identifyface)
             for candidate in identifyface['candidates']:
                 personId = candidate["personId"]
                 person = personApi.get_a_person(personId, personGroupId)
-
+                print('person=', person)
                 success = {}
                 success['personId'] = candidate["personId"]
                 success['confidence'] = candidate["confidence"]
                 success['faceId'] = identifyface['faceId']
                 success['person'] = person
                 successes.append(success)
+                identifyface['person'] = person
+                identifyface['confidence'] = candidate["confidence"]
+                identifyface['personId'] = candidate["personId"]
+                
 
         #print('successes:', successes)
-        Utils.SigninSuccesses(successes)
+        # Utils.SigninSuccesses(successes)
+        Utils.SigninIdentifyfaces(identifyfaces)
+
 
     def buildTraindatas(self, personname):
         ''' 15: '快速 3 連拍建立圖片資料庫不進行訓練） '''

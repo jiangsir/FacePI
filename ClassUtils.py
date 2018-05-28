@@ -93,6 +93,21 @@ def SigninSuccesses(successes):
         #ClassMessageBox.SuccessesGUI(successes)
         ClassCamera.cv_Success(successes)
 
+def SigninIdentifyfaces(identifyfaces):
+    if isLinux():
+        if len(identifyfaces)==0:
+            print('照片裡沒有人！')
+            return
+
+        for identifyface in identifyfaces:
+            if 'person' in identifyface:
+                name = protectPersonName(identifyface['person']['name'])
+                print(name, '簽到成功!')
+            else:
+                print('你哪位？', identifyface)
+    elif isWindows() or isDarwin():
+        import ClassCamera
+        ClassCamera.cv_Identifyfaces(identifyfaces)
 
 def isLinux():
     return 'Linux' == platform.system()
