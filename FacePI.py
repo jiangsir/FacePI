@@ -108,7 +108,7 @@ class FacePI:
             print(persongroup)
 
     def listPersonsInGroup(self):
-        ''' 3: '列出「人群」裡有哪些 Person',        '''
+        ''' 3: 列出「人群」裡有哪些 Person '''
         PersonGroup = FaceAPI.PersonGroup(api_key, host)
         try:
             persons = PersonGroup.list_persons_in_group(personGroupId)
@@ -214,8 +214,6 @@ class FacePI:
         if imageurl.startswith('http'):
             detectfaces = faceApi.detectURLImages(imageurl)
         else:
-            print('SPEED: localimage', int(round(time.time() * 1000) - start),
-                  'ms')
             imageurl = imageurl.strip()
             statinfo = os.stat(imageurl)
             print('檔案大小：', statinfo.st_size, 'Bytes')
@@ -228,41 +226,40 @@ class FacePI:
                 out = im.resize((128, 128))
                 im.save(imageurl, "JPEG")
                 print('out=', type(out))
-            print('SPEED: detectLocalImage前',
-                  int(round(time.time() * 1000) - start), 'ms')
             detectfaces = faceApi.detectLocalImage(imageurl)
-            print('SPEED: detectLocalImage後',
-                  int(round(time.time() * 1000) - start), 'ms')
 
         # if len(detectfaces) == 0:
         #     print('相片中找不到人！')
         #     sys.exit(1)
 
         faceids = []
-        for face in detectfaces:
-            print('所偵測到的 faceId=', face['faceId'])
-            faceids.append(face['faceId'])
+        for detectface in detectfaces:
+            print('所偵測到的 faceId=', detectface['faceId'])
+            faceids.append(detectface['faceId'])
 
-        print('SPEED: faceApi.identify 前',
-              int(round(time.time() * 1000) - start), 'ms')
+        print('Identify.detectfaces=', detectfaces)
         identifyfaces = faceApi.identify(faceids[:10], personGroupId)
-        print('SPEED: faceApi.identify 後',
-              int(round(time.time() * 1000) - start), 'ms')
         print('在所提供的相片中偵測到 identifyfaces 共 ', len(identifyfaces), '個')
 
-        successes = []
+        # successes = []
         for identifyface in identifyfaces:
-            print('identifyface=', identifyface)
+            print('FacePI.Identify.identifyface=', identifyface)
+            faceId = identifyface['faceId']
+            for detectface in detectfaces:
+                if detectface['faceId'] == faceId:
+                    identifyface['faceAttributes'] = detectface['faceAttributes']
+                    identifyface['faceLandmarks'] = detectface['faceLandmarks']
+
             for candidate in identifyface['candidates']:
                 personId = candidate["personId"]
                 person = personApi.get_a_person(personId, personGroupId)
                 print('person=', person)
-                success = {}
-                success['personId'] = candidate["personId"]
-                success['confidence'] = candidate["confidence"]
-                success['faceId'] = identifyface['faceId']
-                success['person'] = person
-                successes.append(success)
+                # success = {}
+                # success['personId'] = candidate["personId"]
+                # success['confidence'] = candidate["confidence"]
+                # success['faceId'] = identifyface['faceId']
+                # success['person'] = person
+                # successes.append(success)
                 identifyface['person'] = person
                 identifyface['confidence'] = candidate["confidence"]
                 identifyface['personId'] = candidate["personId"]
@@ -323,14 +320,11 @@ class FacePI:
 
     def Signin(self):
         ''' 簽到！ '''
-        start = int(round(time.time() * 1000))
-        print('開始計時 Sign', start, 'ms')
         while True:
             jpgimagepath = Camera.takePicture(personGroupId, 2000)
-            print('Signin: 拍照後', int(round(time.time() * 1000)) - start, 'ms')
             self.Identify(jpgimagepath)
-            print('Signin 辨識後', int(round(time.time() * 1000)) - start, 'ms')
 
-
+    def landmark():
+        pass
 if __name__ == '__main__':
     fire.Fire(FacePI)

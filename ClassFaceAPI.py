@@ -1,6 +1,6 @@
 import http.client, urllib.request, urllib.parse, urllib.error, base64, json
 import os, sys, time
-from PIL import Image
+from PIL import Image, ImageDraw
 import ClassUtils
 import MyException
 from urllib import request
@@ -96,7 +96,7 @@ class PersonGroup:
             return self.ListPersonGroups()
         except MyException.UnspecifiedError as e:
             return
-            
+
         return personGroups
 
     def getPersonGroup(self, personGroupId):
@@ -300,7 +300,6 @@ class Person:
         except MyException.UnspecifiedError as e:
             return
 
-
     def create_a_person(self, personGroupId, name, userData):
         print("'create_a_person': 在 personGroupid=" + personGroupId +
               " 裡 建立一個 person name=" + name)
@@ -463,7 +462,7 @@ class Face:
 
     def identify(self, faceidkeys, personGroupId):
         print("def Face.identify 開始辨識。faceidkeys=", faceidkeys)
-        if len(faceidkeys) ==0:
+        if len(faceidkeys) == 0:
             return []
         start = int(round(time.time() * 1000))
         print('開始辨識 identify 0 ms')
@@ -484,22 +483,13 @@ class Face:
         }'''
         #print('requestbody=', requestbody)
         try:
-            print('SPEED: identify http 前',
-                  int(round(time.time() * 1000) - start), 'ms')
             conn = http.client.HTTPSConnection(self.host)
             conn.request("POST", "/face/v1.0/identify?%s" % params,
                          requestbody, headers)
-            print('SPEED: identify response 前',
-                  int(round(time.time() * 1000) - start), 'ms')
             response = conn.getresponse()
-            print('SPEED: identify response 後',
-                  int(round(time.time() * 1000) - start), 'ms')
             data = response.read()
-            #print(data)
             identifyfaces = json.loads(str(data, 'UTF-8'))
-            print('SPEED: identify http 後',
-                  int(round(time.time() * 1000) - start), 'ms')
-
+            print('identifyfaces=', identifyfaces)
             conn.close()
             if ClassUtils.isFaceAPIError(identifyfaces):
                 return []
@@ -518,26 +508,36 @@ class Face:
             width = detectface['faceRectangle']['width']
 
             img = Image.open(imagepath)
+            #width,height = img.size
+            draw = ImageDraw.Draw(img)
+            for detectface in detectFaces:
+                print("save facelandmarks=", detectface['faceLandmarks'])
+                for faceLandmark in detectface['faceLandmarks']:
+                    print('faceLandmark=', faceLandmark)
+                    print('faceLandmark=',
+                          detectface['faceLandmarks'][faceLandmark])
+                    x = int(detectface['faceLandmarks'][faceLandmark]['x'])
+                    y = int(detectface['faceLandmarks'][faceLandmark]['y'])
+                    draw.ellipse(
+                        (x - 1, y - 1, x + 2, y + 2), fill=(255, 0, 0))
             #faceRectangle =  {'top': 141, 'height': 261, 'width': 261, 'left': 664}
             onlyface = img.crop((left, top, left + width, top + height))
 
-            # savejpgimage = basepath + "/tmp/faceId_" + detectface['faceId'] + ".jpg"
-            # if not os.path.exists(os.path.dirname(savejpgimage)):
-            #     os.makedirs(os.path.dirname(savejpgimage))
             saveFaceImagepath = ClassUtils.getFaceImagepath(
                 detectface['faceId'])
             onlyface.save(saveFaceImagepath, 'JPEG')
-        
 
     ''' 用網路上的圖片進行偵測。'''
+
     def detectURLImages(self, imageurl):
         ''' 下載後，用 detectLocalImage 上傳辨識 '''
         jpgimagepath = ClassUtils.getTakePicturePath(config['personGroupId'])
-        print('jpgimagepath:',jpgimagepath)
-        request.urlretrieve(imageurl , jpgimagepath)
+        print('jpgimagepath:', jpgimagepath)
+        request.urlretrieve(imageurl, jpgimagepath)
         return self.detectLocalImage(jpgimagepath)
 
     ''' 不下載直接用 URL 進行辨識 '''
+
     def detectURLImages_NoDownload(self, imageurl):
         headers = {
             # Request headers
@@ -601,7 +601,7 @@ class Face:
             'returnFaceId':
             'true',
             'returnFaceLandmarks':
-            'false',
+            'true',
             'returnFaceAttributes':
             'age,gender,emotion'
         })
@@ -609,21 +609,13 @@ class Face:
         print('imagepath=', imagepath)
         requestbody = open(imagepath, "rb").read()
         try:
-            print('SPEED: detectLocalImage http 前',
-                  int(round(time.time() * 1000) - start), 'ms')
             conn = http.client.HTTPSConnection(self.host)
             conn.request("POST", "/face/v1.0/detect?%s" % params, requestbody,
                          headers)
-            print('SPEED: detectLocalImage http request',
-                  int(round(time.time() * 1000) - start), 'ms')
             response = conn.getresponse()
-            print('SPEED: detectLocalImage http response',
-                  int(round(time.time() * 1000) - start), 'ms')
             data = response.read()
             #print('data=', data)
             detectfaces = json.loads(str(data, 'UTF-8'))
-            print('SPEED: detectLocalImage http 後',
-                  int(round(time.time() * 1000) - start), 'ms')
             print("detectLocalImage.faces=", detectfaces)
             #print(parsed[0]['faceId'])
             #faceids.append(parsed[0]['faceId'])

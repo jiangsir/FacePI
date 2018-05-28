@@ -209,6 +209,7 @@ def cv_Identifyfaces(identifyfaces):
             __cv_ImageText('你哪位？請先訓練。', '按 ENTER 繼續', imagepath)
         else:
             print(identifyface['person']['name'], '簽到成功!')
+            print('cv_Identifyfaces.identifyface=', identifyface)
             __cv_ImageText(ClassUtils.protectPersonName(
                 identifyface['person']['name']) + '簽到成功!', '按 ENTER 繼續', imagepath)
 
