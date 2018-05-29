@@ -521,11 +521,11 @@ class Face:
                         (x, y, x + config['landmark'], y + config['landmark']),
                         fill=(255, 0, 0))
             #faceRectangle =  {'top': 141, 'height': 261, 'width': 261, 'left': 664}
-            onlyface = img.crop((left, top, left + width, top + height))
+            faceonly = img.crop((left, top, left + width, top + height))
 
             saveFaceImagepath = ClassUtils.getFaceImagepath(
                 detectface['faceId'])
-            onlyface.save(saveFaceImagepath, 'JPEG')
+            faceonly.save(saveFaceImagepath, 'PNG')
 
     ''' 用網路上的圖片進行偵測。'''
 

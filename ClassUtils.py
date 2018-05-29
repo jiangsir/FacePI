@@ -27,7 +27,7 @@ def getFaceImagepath(faceid):
     basepath = os.path.dirname(os.path.realpath(__file__))
     #detectedFaceImagepath = basepath + "/tmp/faceId_" + faceid + ".jpg"
     detectedFaceImagepath = os.path.join(basepath, 'tmp',
-                                         "faceId_" + faceid + ".jpg")
+                                         "faceId_" + faceid + ".png")
 
     if not os.path.exists(os.path.dirname(detectedFaceImagepath)):
         os.makedirs(os.path.dirname(detectedFaceImagepath))
