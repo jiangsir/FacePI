@@ -1,1 +1,1 @@
-{"personGroupId": "default_groupid", "personGroupName": "人群名稱", "title": "高師大附中刷臉簽到系統", "host": "eastasia.api.cognitive.microsoft.com", "camera": "CSIcamera,*opencv", "landmark": 2, "api_key": "5c8189a05aa242e0997a246611978272", "confidence": 0.65}
+{"personGroupName": "人群名稱", "confidence": 0.65, "api_key": "5c8189a05aa242e0997a246611978272", "landmark": 0, "camera": "CSIcamera,*opencv", "title": "高師大附中刷臉簽到系統", "host": "eastasia.api.cognitive.microsoft.com", "personGroupId": "default_groupid"}

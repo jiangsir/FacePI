@@ -509,12 +509,12 @@ class Face:
 
             img = Image.open(imagepath)
             draw = ImageDraw.Draw(img)
-            for detectface in detectFaces:
+            if config['landmark'] > 0:
                 print("save facelandmarks=", detectface['faceLandmarks'])
                 for faceLandmark in detectface['faceLandmarks']:
                     print('faceLandmark=', faceLandmark)
                     print('faceLandmark=',
-                          detectface['faceLandmarks'][faceLandmark])
+                        detectface['faceLandmarks'][faceLandmark])
                     x = int(detectface['faceLandmarks'][faceLandmark]['x'])
                     y = int(detectface['faceLandmarks'][faceLandmark]['y'])
                     draw.ellipse(

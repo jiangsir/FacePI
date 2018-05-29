@@ -54,8 +54,8 @@ def show_opencv(type, mirror=False):
     import numpy as np
 
     cam = cv2.VideoCapture(0)
-    cam.set(3,960) # 修改解析度 寬
-    cam.set(4,960//16*9) # 修改解析度 高
+    cam.set(3,1280) # 修改解析度 寬
+    cam.set(4,1280//16*9) # 修改解析度 高
     print('WIDTH',cam.get(3),'HEIGHT',cam.get(4)) # 顯示預設的解析度
     while True:
         ret_val, img = cam.read()
@@ -143,6 +143,7 @@ def __cv_ImageText(title, hint, imagepath=None):
         img.fill(90)
     else:
         img = cv2.imread(imagepath)
+        print('__cv_ImageText.imagepath=', imagepath)
         H, W = img.shape[:2]
         img = cv2.resize(img, (400,int(H/W*400))) 
 
