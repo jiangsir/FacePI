@@ -54,24 +54,14 @@ def show_opencv(type, mirror=False):
     import numpy as np
 
     cam = cv2.VideoCapture(0)
+    cam.set(3,960) # 修改解析度 寬
+    cam.set(4,960//16*9) # 修改解析度 高
+    print('WIDTH',cam.get(3),'HEIGHT',cam.get(4)) # 顯示預設的解析度
     while True:
         ret_val, img = cam.read()
         if mirror:
             img = cv2.flip(img, 1)
 
-        # font                   = cv2.FONT_HERSHEY_SIMPLEX
-        # bottomLeftCornerOfText = (10,10)
-        # fontScale              = 5
-        # fontColor              = (255,255,255)
-        # lineType               = 2
-        # cv2.putText(img,'Hello World!',
-        # bottomLeftCornerOfText,
-        # font,
-        # fontScale,
-        # fontColor,
-        # lineType)
-
-        #W, H = (1024, 1024 // 16 * 9)
         H, W = img.shape[:2]
         #imS = cv2.resize(img, (W, H))
 
