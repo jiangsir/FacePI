@@ -115,7 +115,7 @@ class FacePI:
             if len(persons) == 0:
                 print('本 personGroupId 內沒有任何一個 person')
                 sys.exit()
-            for person in persons:
+            for person in persons:               
                 s = 'name=' + person['name'] + '(' + person['userData'] + '):'
                 print(s, 'personId=' + person['personId'], 'persistedFaceIds=',
                       len(person['persistedFaceIds']))
