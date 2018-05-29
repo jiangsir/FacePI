@@ -116,9 +116,8 @@ class FacePI:
                 print('本 personGroupId 內沒有任何一個 person')
                 sys.exit()
             for person in persons:
-                s = 'name=' + person['name'] + '('+person['userData']+'):'
-                print(s.encode('utf8').decode("cp950", "ignore"),
-                      'personId=' + person['personId'], 'persistedFaceIds=',
+                s = 'name=' + person['name'] + '(' + person['userData'] + '):'
+                print(s, 'personId=' + person['personId'], 'persistedFaceIds=',
                       len(person['persistedFaceIds']))
         except MyException.responseError as e:
             print(e.message)
@@ -267,12 +266,10 @@ class FacePI:
                 identifyface['person'] = person
                 identifyface['confidence'] = candidate["confidence"]
                 identifyface['personId'] = candidate["personId"]
-                
 
         #print('successes:', successes)
         # Utils.SigninSuccesses(successes)
         Utils.SigninIdentifyfaces(identifyfaces)
-
 
     def buildTraindatas(self, personname):
         ''' 15: '快速 3 連拍建立圖片資料庫不進行訓練） '''
@@ -310,15 +307,16 @@ class FacePI:
 
             #jpgtraindata = '/home/pi/traindatas/' + personname + filename
             home = os.path.expanduser("~")
-            jpgtraindata = os.path.join(home, 'traindatas', userData, personname,
-                                        filename)
+            jpgtraindata = os.path.join(home, 'traindatas', userData,
+                                        personname, filename)
 
             if not os.path.exists(os.path.dirname(jpgtraindata)):
                 os.makedirs(os.path.dirname(jpgtraindata))
             os.rename(jpgimagepath, jpgtraindata)
             jpgimagepaths.append(jpgtraindata)
 
-        self.__add_personimages(personGroupId, personname, userData, jpgimagepaths)
+        self.__add_personimages(personGroupId, personname, userData,
+                                jpgimagepaths)
         personGroupapi = FaceAPI.PersonGroup(api_key, host)
         personGroupapi.train_personGroup(personGroupId)
 
@@ -327,6 +325,7 @@ class FacePI:
         while True:
             jpgimagepath = Camera.takePicture(personGroupId, 2000)
             self.Identify(jpgimagepath)
+
 
 if __name__ == '__main__':
     fire.Fire(FacePI)
