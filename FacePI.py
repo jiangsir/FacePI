@@ -116,7 +116,8 @@ class FacePI:
                 print('本 personGroupId 內沒有任何一個 person')
                 sys.exit()
             for person in persons:
-                print('name=' + person['name'] + '('+person['userData']+'):',
+                s = 'name=' + person['name'] + '('+person['userData']+'):'
+                print(s.encode('utf8').decode("cp950", "ignore"),
                       'personId=' + person['personId'], 'persistedFaceIds=',
                       len(person['persistedFaceIds']))
         except MyException.responseError as e:
