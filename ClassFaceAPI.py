@@ -508,18 +508,18 @@ class Face:
             width = detectface['faceRectangle']['width']
 
             img = Image.open(imagepath)
-            #width,height = img.size
-            # draw = ImageDraw.Draw(img)
-            # for detectface in detectFaces:
-            #     print("save facelandmarks=", detectface['faceLandmarks'])
-            #     for faceLandmark in detectface['faceLandmarks']:
-            #         print('faceLandmark=', faceLandmark)
-            #         print('faceLandmark=',
-            #               detectface['faceLandmarks'][faceLandmark])
-            #         x = int(detectface['faceLandmarks'][faceLandmark]['x'])
-            #         y = int(detectface['faceLandmarks'][faceLandmark]['y'])
-            #         draw.ellipse(
-            #             (x - 1, y - 1, x + 2, y + 2), fill=(255, 0, 0))
+            draw = ImageDraw.Draw(img)
+            for detectface in detectFaces:
+                print("save facelandmarks=", detectface['faceLandmarks'])
+                for faceLandmark in detectface['faceLandmarks']:
+                    print('faceLandmark=', faceLandmark)
+                    print('faceLandmark=',
+                          detectface['faceLandmarks'][faceLandmark])
+                    x = int(detectface['faceLandmarks'][faceLandmark]['x'])
+                    y = int(detectface['faceLandmarks'][faceLandmark]['y'])
+                    draw.ellipse(
+                        (x, y, x + config['landmark'], y + config['landmark']),
+                        fill=(255, 0, 0))
             #faceRectangle =  {'top': 141, 'height': 261, 'width': 261, 'left': 664}
             onlyface = img.crop((left, top, left + width, top + height))
 
@@ -528,6 +528,7 @@ class Face:
             onlyface.save(saveFaceImagepath, 'JPEG')
 
     ''' 用網路上的圖片進行偵測。'''
+
     def detectURLImages(self, imageurl):
         ''' 下載後，用 detectLocalImage 上傳辨識 '''
         jpgimagepath = ClassUtils.getTakePicturePath(config['personGroupId'])

@@ -186,6 +186,9 @@ class FacePI:
         confidence = input("預設信心指數 [" + str(config['confidence']) + "]：")
         if confidence != '':
             config['confidence'] = float(confidence)
+        landmark = input("臉部特徵 [" + str(config['landmark']) + "]：")
+        if landmark != '':
+            config['landmark'] = int(landmark)
 
         with open(basepath + '/Config.json', 'w', encoding='utf-8') as outfile:
             json.dump(config, outfile, ensure_ascii=False)
@@ -243,12 +246,12 @@ class FacePI:
 
         # successes = []
         for identifyface in identifyfaces:
-            print('FacePI.Identify.identifyface=', identifyface)
-            faceId = identifyface['faceId']
-            for detectface in detectfaces:
-                if detectface['faceId'] == faceId:
-                    identifyface['faceAttributes'] = detectface['faceAttributes']
-                    identifyface['faceLandmarks'] = detectface['faceLandmarks']
+            # print('FacePI.Identify.identifyface=', identifyface)
+            # faceId = identifyface['faceId']
+            # for detectface in detectfaces:
+            #     if detectface['faceId'] == faceId:
+            #         identifyface['faceAttributes'] = detectface['faceAttributes']
+            #         identifyface['faceLandmarks'] = detectface['faceLandmarks']
 
             for candidate in identifyface['candidates']:
                 personId = candidate["personId"]
@@ -324,7 +327,5 @@ class FacePI:
             jpgimagepath = Camera.takePicture(personGroupId, 2000)
             self.Identify(jpgimagepath)
 
-    def landmark():
-        pass
 if __name__ == '__main__':
     fire.Fire(FacePI)
