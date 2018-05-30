@@ -16,10 +16,6 @@ def loadConfig():
 
 
 def protectPersonName(name):
-    try:
-        print(name)
-    except UnicodeEncodeError as e:
-        return '編碼有誤！'
     return name[0] + '〇' + name[2:]
 
 

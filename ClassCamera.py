@@ -195,7 +195,11 @@ def cv_Identifyfaces(identifyfaces):
             print('identifyface=', identifyface)
             __cv_ImageText('你哪位？請先訓練。', '按 ENTER 繼續', imagepath)
         else:
-            print(ClassUtils.protectPersonName(identifyface['person']['name']), '簽到成功!')
+            try:
+                print(ClassUtils.protectPersonName(identifyface['person']['name']), '簽到成功!')
+            except UnicodeEncodeError as e:
+                return '姓名編碼有誤！'
+
             #print('cv_Identifyfaces.identifyface=', identifyface)
             __cv_ImageText(ClassUtils.protectPersonName(
                 identifyface['person']['name']) + '簽到成功!', '按 ENTER 繼續', imagepath)
