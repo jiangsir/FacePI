@@ -158,7 +158,7 @@ def __cv_ImageText(title, hint, imagepath=None):
     elif ClassUtils.isWindows7():
         ttf = "simhei.ttf"
     elif ClassUtils.isWindows10():
-        ttf = "C:\Windows\Fonts\Arial.ttf"
+        ttf = "C:/Windows/Fonts/Arial.ttf"
     else:
         ttf = "simhei.ttf"
     cv2_im = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)  # cv2和PIL中颜色的hex码的储存顺序不同
