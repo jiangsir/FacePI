@@ -123,3 +123,26 @@ def isWindows7():
 
 def isWindows10():
     return 'Windows' == platform.system() and '10' == platform.release()
+
+def getSystemFont():
+        # macos: /Library/Fonts/Microsoft Sans Serif.ttf
+        # if ClassUtils.isDarwin():
+        #     #ttf = '/Library/Fonts/Microsoft\\ Sans\\ Serif.ttf'
+        #     #ttf = "/Library/Fonts/AppleMyungjo.ttf"
+        #     #ttf = "/Library/Fonts/AppleGothic.ttf"
+        #     ttf = "/Library/Fonts/Arial Unicode.ttf"
+        # elif ClassUtils.isWindows():
+        #     ttf = "simhei.ttf"
+        #     #ttf = "arial.ttf"
+        # else:
+        #     ttf = "simhei.ttf"
+    
+    if isDarwin():
+        ttf = "/Library/Fonts/Arial Unicode.ttf"
+    elif isWindows7():
+        ttf = "simhei.ttf"
+    elif isWindows10():
+        ttf = "C:/Windows/Fonts/Arial.ttf"
+    else:
+        ttf = "simhei.ttf"
+    return ttf   

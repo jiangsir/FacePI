@@ -69,17 +69,7 @@ def show_opencv(type, mirror=False):
         pil_im = Image.fromarray(cv2_im)
         draw = ImageDraw.Draw(pil_im)  # 括号中为需要打印的canvas，这里就是在图片上直接打印
 
-        # macos: /Library/Fonts/Microsoft Sans Serif.ttf
-        if ClassUtils.isDarwin():
-            #ttf = '/Library/Fonts/Microsoft\\ Sans\\ Serif.ttf'
-            #ttf = "/Library/Fonts/AppleMyungjo.ttf"
-            #ttf = "/Library/Fonts/AppleGothic.ttf"
-            ttf = "/Library/Fonts/Arial Unicode.ttf"
-        elif ClassUtils.isWindows():
-            ttf = "simhei.ttf"
-            #ttf = "arial.ttf"
-        else:
-            ttf = "simhei.ttf"
+        ttf = ClassUtils.getSystemFont()
 
         font = ImageFont.truetype(ttf, 40, encoding="utf-8")
         hintfont = ImageFont.truetype(ttf, 24, encoding="utf-8")
@@ -160,7 +150,10 @@ def __cv_ImageText(title, hint, imagepath=None):
     # elif ClassUtils.isWindows10():
     #     ttf = "C:/Windows/Fonts/Arial.ttf"
     # else:
-    ttf = "simhei.ttf"
+    #     ttf = "simhei.ttf"
+
+    ttf = ClassUtils.getSystemFont()
+
     cv2_im = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)  # cv2和PIL中颜色的hex码的储存顺序不同
     pil_im = Image.fromarray(cv2_im)
     draw = ImageDraw.Draw(pil_im)  # 括号中为需要打印的canvas，这里就是在图片上直接打印
