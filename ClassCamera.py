@@ -77,6 +77,7 @@ def show_opencv(type, mirror=False):
             ttf = "/Library/Fonts/Arial Unicode.ttf"
         elif ClassUtils.isWindows():
             ttf = "simhei.ttf"
+            #ttf = "arial.ttf"
         else:
             ttf = "simhei.ttf"
 
@@ -154,8 +155,10 @@ def __cv_ImageText(title, hint, imagepath=None):
     
     if ClassUtils.isDarwin():
         ttf = "/Library/Fonts/Arial Unicode.ttf"
-    elif ClassUtils.isWindows():
+    elif ClassUtils.isWindows7():
         ttf = "simhei.ttf"
+    elif ClassUtils.isWindows10():
+        ttf = "C:\Windows\Fonts\Arial.ttf"
     else:
         ttf = "simhei.ttf"
     cv2_im = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)  # cv2和PIL中颜色的hex码的储存顺序不同
@@ -222,8 +225,8 @@ def cv_Success(successes):
 
 def takePicture_opencv(personGroupId, delay, type):
     sysstr = platform.system()
-    print('os=', sysstr)
-    if (ClassUtils.isWindows or ClassUtils.isDarwin):
+    print('os=', sysstr, platform.release, platform.system_alias, platform.version)
+    if (ClassUtils.isWindows() or ClassUtils.isDarwin()):
         jpgimagepath = show_opencv(type, mirror=True)
         return jpgimagepath
     else:
