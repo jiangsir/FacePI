@@ -185,7 +185,7 @@ def __cv_ImageText(title, hint, imagepath=None):
 def cv_Identifyfaces(identifyfaces):
     import cv2
     import numpy as np
-    print('identifyfaces=',identifyfaces)
+    # print('identifyfaces=',identifyfaces)
     if len(identifyfaces) == 0:
         __cv_ImageText('沒有偵測到任何人！', '請按「ENTER」繼續')
         return
@@ -195,8 +195,8 @@ def cv_Identifyfaces(identifyfaces):
             print('identifyface=', identifyface)
             __cv_ImageText('你哪位？請先訓練。', '按 ENTER 繼續', imagepath)
         else:
-            print(identifyface['person']['name'], '簽到成功!')
-            print('cv_Identifyfaces.identifyface=', identifyface)
+            #print(identifyface['person']['name'], '簽到成功!')
+            #print('cv_Identifyfaces.identifyface=', identifyface)
             __cv_ImageText(ClassUtils.protectPersonName(
                 identifyface['person']['name']) + '簽到成功!', '按 ENTER 繼續', imagepath)
 

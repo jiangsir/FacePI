@@ -140,9 +140,11 @@ def getSystemFont():
     if isDarwin():
         ttf = "/Library/Fonts/Arial Unicode.ttf"
     elif isWindows7():
-        ttf = "simhei.ttf"
+        ttf = "simhei.ttf" 
     elif isWindows10():
-        ttf = "C:/Windows/Fonts/Arial.ttf"
+        #ttf = "C:/Windows/Fonts/Arial.ttf" # 中文無法出現
+        ttf = "C:/Windows.old/Windows/Fonts/msjhbd.ttc" # 微軟正黑體
+        #tts = "C:/Windows.old/Windows/Fonts/kaiu.ttf"
     else:
-        ttf = "simhei.ttf"
+        ttf = "C:/Windows.old/Windows/Fonts/msjhbd.ttc" # 微軟正黑體
     return ttf   

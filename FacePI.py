@@ -256,7 +256,7 @@ class FacePI:
             for candidate in identifyface['candidates']:
                 personId = candidate["personId"]
                 person = personApi.get_a_person(personId, personGroupId)
-                print('person=', person)
+                # print('person=', person)
                 # success = {}
                 # success['personId'] = candidate["personId"]
                 # success['confidence'] = candidate["confidence"]
