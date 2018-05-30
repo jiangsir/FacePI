@@ -19,19 +19,20 @@ class FacePI:
     ''' FacePI 文字介面
     搭配參數如下：
     createPersonGroup: 建立一個 PersonGroup
-    config: 列出 Config.json 設定。
     deletePersonGroup: 刪除一個 PersonGroup
     deletePersonInGroup: 刪除 PersonGroup 裡的一個 Person
-    identify: 用網路 URL 或本地圖片進行辨識。,
     listPersonGroups: 列出所有的 PersonGroups
     listPersonsInGroup: 列出「人群」裡有哪些 Person
     relay: 設定繼電器,
     status: 觀察 PersonGroup status
     searchPersonName: 搜尋一個personName,
     trainPersonGroup: 訓練 PersonGroup
-    trainNewPerson: 用 3 連拍訓練一個新人
     trainDatas: '訓練 /traindatas 裡的圖檔，同時訓練一群事先準備好的人與照片',
+
+    Config: 列出 Config.json 設定。
     Signin: 進行簽到！
+    Identify: 用網路 URL 或本地圖片進行辨識。,
+    Train: 用 3 連拍訓練一個新人
     '''
 
     # 加入一個人的眾多圖片，但不訓練
@@ -169,7 +170,7 @@ class FacePI:
         PersonGroup.createPersonGroup(personGroupId, personGroupName,
                                       'group userdata')
 
-    def config(self):
+    def Config(self):
         ''' 10: 列出 Config.json 設定。 '''
         api_key = input('請輸入有效的 API KEY[' + config['api_key'] + ']:')
         if api_key != '':
