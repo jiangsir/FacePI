@@ -117,8 +117,12 @@ class FacePI:
                 sys.exit()
             for person in persons:
                 s = 'name=' + person['name'] + '(' + person['userData'] + '):'
-                print(s, 'personId=' + person['personId'], 'persistedFaceIds=',
-                      len(person['persistedFaceIds']))
+                try:
+                    print(s, 'personId=' + person['personId'], 'persistedFaceIds=',
+                        len(person['persistedFaceIds']))
+                except UnicodeEncodeError as e:
+                    print('姓名編碼無法呈現！', 'personId=' + person['personId'], 'persistedFaceIds=',
+                        len(person['persistedFaceIds']))
         except MyException.responseError as e:
             print(e.message)
 

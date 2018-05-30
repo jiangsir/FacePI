@@ -16,6 +16,10 @@ def loadConfig():
 
 
 def protectPersonName(name):
+    try:
+        print(name)
+    except UnicodeEncodeError as e:
+        return '編碼有誤！'
     return name[0] + '〇' + name[2:]
 
 
@@ -35,7 +39,7 @@ def getFaceImagepath(faceid):
 
 
 def getTakePicturePath(personGroupId):
-    ''' 取得拍照後要存檔的路徑。 ''' 
+    ''' 取得拍照後要存檔的路徑。 '''
     basepath = getBasepath()
     jpgimagepath = os.path.join(
         basepath, 'takepictures', personGroupId + "_" +
@@ -76,7 +80,7 @@ def isFaceAPIError(faceapijson):
 
 def SigninSuccesses(successes):
     if isLinux():
-        if len(successes)==0:
+        if len(successes) == 0:
             print('沒有人簽到')
             return
 
@@ -85,17 +89,18 @@ def SigninSuccesses(successes):
             if isDarwin():
                 #import ClassGTTS
                 #ClassGTTS.play_gTTS(name, '簽到成功!')
-                print(name, '簽到成功!')
+                print(protectPersonName(name), '簽到成功!')
             else:
-                print(name, '簽到成功!')
+                print(protectPersonName(name), '簽到成功!')
     elif isWindows() or isDarwin():
         import ClassCamera
         #ClassMessageBox.SuccessesGUI(successes)
         ClassCamera.cv_Success(successes)
 
+
 def SigninIdentifyfaces(identifyfaces):
     if isLinux():
-        if len(identifyfaces)==0:
+        if len(identifyfaces) == 0:
             print('照片裡沒有人！')
             return
 
@@ -109,42 +114,48 @@ def SigninIdentifyfaces(identifyfaces):
         import ClassCamera
         ClassCamera.cv_Identifyfaces(identifyfaces)
 
+
 def isLinux():
     return 'Linux' == platform.system()
+
 
 def isDarwin():
     return 'Darwin' == platform.system()
 
+
 def isWindows():
     return isWindows7() or isWindows10()
+
 
 def isWindows7():
     return 'Windows' == platform.system() and '7' == platform.release()
 
+
 def isWindows10():
     return 'Windows' == platform.system() and '10' == platform.release()
 
+
 def getSystemFont():
-        # macos: /Library/Fonts/Microsoft Sans Serif.ttf
-        # if ClassUtils.isDarwin():
-        #     #ttf = '/Library/Fonts/Microsoft\\ Sans\\ Serif.ttf'
-        #     #ttf = "/Library/Fonts/AppleMyungjo.ttf"
-        #     #ttf = "/Library/Fonts/AppleGothic.ttf"
-        #     ttf = "/Library/Fonts/Arial Unicode.ttf"
-        # elif ClassUtils.isWindows():
-        #     ttf = "simhei.ttf"
-        #     #ttf = "arial.ttf"
-        # else:
-        #     ttf = "simhei.ttf"
-    
+    # macos: /Library/Fonts/Microsoft Sans Serif.ttf
+    # if ClassUtils.isDarwin():
+    #     #ttf = '/Library/Fonts/Microsoft\\ Sans\\ Serif.ttf'
+    #     #ttf = "/Library/Fonts/AppleMyungjo.ttf"
+    #     #ttf = "/Library/Fonts/AppleGothic.ttf"
+    #     ttf = "/Library/Fonts/Arial Unicode.ttf"
+    # elif ClassUtils.isWindows():
+    #     ttf = "simhei.ttf"
+    #     #ttf = "arial.ttf"
+    # else:
+    #     ttf = "simhei.ttf"
+
     if isDarwin():
         ttf = "/Library/Fonts/Arial Unicode.ttf"
     elif isWindows7():
-        ttf = "simhei.ttf" 
+        ttf = "simhei.ttf"
     elif isWindows10():
         #ttf = "C:/Windows/Fonts/Arial.ttf" # 中文無法出現
-        ttf = "C:/Windows.old/Windows/Fonts/msjhbd.ttc" # 微軟正黑體
+        ttf = "C:/Windows.old/Windows/Fonts/msjhbd.ttc"  # 微軟正黑體
         #tts = "C:/Windows.old/Windows/Fonts/kaiu.ttf"
     else:
-        ttf = "C:/Windows.old/Windows/Fonts/msjhbd.ttc" # 微軟正黑體
-    return ttf   
+        ttf = "C:/Windows.old/Windows/Fonts/msjhbd.ttc"  # 微軟正黑體
+    return ttf
