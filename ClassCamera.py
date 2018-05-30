@@ -153,14 +153,14 @@ def __cv_ImageText(title, hint, imagepath=None):
 
     #img = cv2.resize(img, (400,int(H/W*400))) 
     
-    if ClassUtils.isDarwin():
-        ttf = "/Library/Fonts/Arial Unicode.ttf"
-    elif ClassUtils.isWindows7():
-        ttf = "simhei.ttf"
-    elif ClassUtils.isWindows10():
-        ttf = "C:/Windows/Fonts/Arial.ttf"
-    else:
-        ttf = "simhei.ttf"
+    # if ClassUtils.isDarwin():
+    #     ttf = "/Library/Fonts/Arial Unicode.ttf"
+    # elif ClassUtils.isWindows7():
+    #     ttf = "simhei.ttf"
+    # elif ClassUtils.isWindows10():
+    #     ttf = "C:/Windows/Fonts/Arial.ttf"
+    # else:
+    ttf = "simhei.ttf"
     cv2_im = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)  # cv2和PIL中颜色的hex码的储存顺序不同
     pil_im = Image.fromarray(cv2_im)
     draw = ImageDraw.Draw(pil_im)  # 括号中为需要打印的canvas，这里就是在图片上直接打印
