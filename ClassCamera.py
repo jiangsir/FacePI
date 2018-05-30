@@ -198,7 +198,7 @@ def cv_Identifyfaces(identifyfaces):
             try:
                 print(ClassUtils.protectPersonName(identifyface['person']['name']), '簽到成功!')
             except UnicodeEncodeError as e:
-                return '姓名編碼有誤！'
+                print('姓名編碼錯誤!', '簽到成功!')
 
             #print('cv_Identifyfaces.identifyface=', identifyface)
             __cv_ImageText(ClassUtils.protectPersonName(
