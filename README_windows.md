@@ -9,7 +9,7 @@ FacePI 可以移植到 Windows 上囉，已經在 Windows 7 與 Windows 10 實�
 首先必須下載 anaconda ，請選擇 Python3 的版本。安裝完成後，在程式集->anaconda prompt 進入文字介面。
 
 ### 建立隔離執行環境
-為了避免與原先環境互相衝突，最好的方式就是建立一個隔離的執行環境。
+為了避免與原先環境互相衝突，最好的方式就是建立一個隔離的執行環境。接著要安裝什麼都按 [y] 安裝。
     
     conda create -n cv3 python=3.5.2
 
