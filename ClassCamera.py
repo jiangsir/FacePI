@@ -130,10 +130,12 @@ def show_opencv(type, mirror=False):
                 print('key=', key)
 
 
-def train_oneImage(top, e, personname, userData, imagepath):
+def train_oneShot(top, e, personname, userData, imagepath):
     jpgimagepaths = []
     jpgimagepaths.append(imagepath)
     personAPI = FaceAPI.Person(api_key, host)
+    if personname == '':
+        personname = 'unknown_oneshot'
     personAPI.__add_personimages(personGroupId, personname, userData,
                                  jpgimagepaths)
     personGroupapi = FaceAPI.PersonGroup(api_key, host)
@@ -145,7 +147,7 @@ def __cv_UnknownPerson(text, gifimagepath):
     # 當辨識不到人的時候，跳這個畫面。以便用這個圖片去訓練新人。
     top = tk.Tk()
     #top = tk.Toplevel()
-    top.geometry('400x400')
+    top.geometry('500x500')
     top.title(text)
     print("訓練新人: gifimagepath=" + gifimagepath)
 
@@ -169,14 +171,14 @@ def __cv_UnknownPerson(text, gifimagepath):
     label1.pack()
     e = tk.Entry(top, font=("Calibri", 24), width=10, show="")
     e.pack()
-    e.insert(0, "在此輸入姓名")
+    e.insert(0, "")
 
     b1 = tk.Button(
         top,
         text='記住我！',
         width=15,
         height=3,
-        command=lambda: train_oneImage(top, e, e.get(), 'oneshut', gifimagepath)
+        command=lambda: train_oneShot(top, e, e.get(), 'oneshot', gifimagepath)
     )
     b1.pack()
 
