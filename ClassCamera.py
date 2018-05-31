@@ -156,7 +156,7 @@ def __tk_UnknownPerson(text, imagepath):
     pil_image = Image.open(imagepath)
     width, height = pil_image.size
     maxwidth = 200
-    pil_image = pil_image.resize((maxwidth, height * maxwidth / width),
+    pil_image = pil_image.resize((maxwidth, int(height * maxwidth / width) ),
                                  Image.ANTIALIAS)
 
     imagefile = ImageTk.PhotoImage(pil_image)
