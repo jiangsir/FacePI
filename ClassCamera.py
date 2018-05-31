@@ -183,8 +183,9 @@ def __cv_UnknownPerson(text, gifimagepath):
     )
     b1.pack()
 
-    b2 = tk.Button(top, text='下一位！', width=15, height=2, command=top.destroy)
+    b2 = tk.Button(top, text='按ENTER繼續！', width=15, height=2, command=top.destroy)
     b2.pack()
+    top.bind('<Return>', lambda x: top.destroy())
 
     # Code to add widgets will go here...
     top.mainloop()
