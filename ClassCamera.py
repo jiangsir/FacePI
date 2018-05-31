@@ -141,7 +141,7 @@ def train_oneShot(top, e, personname, userData, imagepath):
                                  jpgimagepaths)
     personGroupapi = FaceAPI.PersonGroup(api_key, host)
     personGroupapi.train_personGroup(personGroupId)
-
+    top.destroy()
 
 def __cv_UnknownPerson(text, gifimagepath):
     import tkinter as tk
@@ -153,7 +153,7 @@ def __cv_UnknownPerson(text, gifimagepath):
     print("訓練新人: gifimagepath=" + gifimagepath)
 
     imagefile = tk.PhotoImage(file=gifimagepath)
-    maxwidth = 250
+    maxwidth = 200
     h = imagefile.height()
     w = imagefile.width()
     if w > maxwidth:
