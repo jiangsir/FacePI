@@ -131,6 +131,7 @@ def show_opencv(type, mirror=False):
 
 
 def train_oneShot(top, e, personname, userData, imagepath):
+    ''' 未經訓練的新人，憑簽到是的一張照片進行訓練。 '''
     jpgimagepaths = []
     jpgimagepaths.append(imagepath)
     personAPI = FaceAPI.Person(api_key, host)

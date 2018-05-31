@@ -456,7 +456,7 @@ class Person:
                 returnpersons.append(person)
         return returnpersons
 
-    def __add_personimages(self, personGroupId, personname, userData,
+    def add_personimages(self, personGroupId, personname, userData,
                            imagepaths):
         ''' # 加入一個人的一張或多張圖片，但不訓練 '''
         print("personname=", personname, "圖檔:", imagepaths)
