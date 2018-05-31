@@ -34,23 +34,24 @@ class FacePI:
     Train: 用 3 連拍訓練一個新人
     '''
 
-    # 加入一個人的眾多圖片，但不訓練
-    def __add_personimages(self, personGroupId, personname, userData,
-                           imagepaths):
-        print("personname=", personname, "圖檔:", imagepaths)
-        personAPI = FaceAPI.Person(api_key, host)
-        person = personAPI.getPersonByName(personGroupId, personname)
-        if person == None:
-            print('call create_a_person')
-            personid = personAPI.create_a_person(personGroupId, personname,
-                                                 userData)
-            for imagepath in imagepaths:
-                personAPI.add_a_person_face(imagepath, personid, personGroupId)
-        else:
-            print('call add_a_person_face, personId=', person['personId'])
-            for imagepath in imagepaths:
-                personAPI.add_a_person_face(imagepath, person['personId'],
-                                            personGroupId)
+    
+    # def __add_personimages(self, personGroupId, personname, userData,
+    #                        imagepaths):
+    #     ''' # 加入一個人的一張或多張圖片，但不訓練 '''
+    #     print("personname=", personname, "圖檔:", imagepaths)
+    #     personAPI = FaceAPI.Person(api_key, host)
+    #     person = personAPI.getPersonByName(personGroupId, personname)
+    #     if person == None:
+    #         print('call create_a_person')
+    #         personid = personAPI.create_a_person(personGroupId, personname,
+    #                                              userData)
+    #         for imagepath in imagepaths:
+    #             personAPI.add_a_person_face(imagepath, personid, personGroupId)
+    #     else:
+    #         print('call add_a_person_face, personId=', person['personId'])
+    #         for imagepath in imagepaths:
+    #             personAPI.add_a_person_face(imagepath, person['personId'],
+    #                                         personGroupId)
 
     # 將整個 traindatas 的圖片全部送上去訓練
     def traindatas(self, traindatasPath):
@@ -84,7 +85,9 @@ class FacePI:
                         personImagePaths.append(
                             os.path.join(personpath, personImagePath))
                     print(personGroupId, personname, personImagePaths)
-                    self.__add_personimages(personGroupId, personname,
+
+                    personAPI = FaceAPI.Person(api_key, host)
+                    personAPI.__add_personimages(personGroupId, personname,
                                             os.path.basename(userDataPath),
                                             personImagePaths)
                     #time.sleep(6)
@@ -322,7 +325,8 @@ class FacePI:
             os.rename(jpgimagepath, jpgtraindata)
             jpgimagepaths.append(jpgtraindata)
 
-        self.__add_personimages(personGroupId, personname, userData,
+        personAPI = FaceAPI.Person(api_key, host)
+        personAPI.__add_personimages(personGroupId, personname, userData,
                                 jpgimagepaths)
         personGroupapi = FaceAPI.PersonGroup(api_key, host)
         personGroupapi.train_personGroup(personGroupId)

@@ -2,10 +2,14 @@ import os, time, sys, json, platform
 import subprocess
 import ClassUtils, MyException
 from PIL import Image, ImageDraw, ImageFont
+import ClassFaceAPI as FaceAPI
 
 basepath = os.path.dirname(os.path.realpath(__file__))
 with open(basepath + '/Config.json', 'r', encoding='utf-8') as f:
     config = json.load(f)
+api_key = config['api_key']
+host = config['host']
+personGroupId = config['personGroupId']
 
 
 def takePicture(personGroupId, delay, type='Identify', size='small'):
@@ -54,9 +58,9 @@ def show_opencv(type, mirror=False):
     import numpy as np
 
     cam = cv2.VideoCapture(0)
-    cam.set(3,1280) # 修改解析度 寬
-    cam.set(4,1280//16*9) # 修改解析度 高
-    print('WIDTH',cam.get(3),'HEIGHT',cam.get(4)) # 顯示預設的解析度
+    cam.set(3, 1280)  # 修改解析度 寬
+    cam.set(4, 1280 // 16 * 9)  # 修改解析度 高
+    print('WIDTH', cam.get(3), 'HEIGHT', cam.get(4))  # 顯示預設的解析度
     while True:
         ret_val, img = cam.read()
         if mirror:
@@ -85,9 +89,9 @@ def show_opencv(type, mirror=False):
             titlelocation, title, (0, 255, 255),
             font=font)  # 第一个参数为打印的坐标，第二个为打印的文本，第三个为字体颜色，第四个为字体
 
-        if type=='Identify':
+        if type == 'Identify':
             hint = "請按「ENTER」進行簽到"
-        elif type=='Train':
+        elif type == 'Train':
             hint = "請按「ENTER」進行三連拍"
         else:
             hint = "請按「ENTER」繼續"
@@ -125,29 +129,28 @@ def show_opencv(type, mirror=False):
             if key != -1:
                 print('key=', key)
 
+
+def train_oneImage(top, e, personname, userData, imagepath):
+    jpgimagepaths = []
+    jpgimagepaths.append(imagepath)
+    personAPI = FaceAPI.Person(api_key, host)
+    personAPI.__add_personimages(personGroupId, personname, userData,
+                                 jpgimagepaths)
+    personGroupapi = FaceAPI.PersonGroup(api_key, host)
+    personGroupapi.train_personGroup(personGroupId)
+
+
 def __cv_UnknownPerson(text, gifimagepath):
     import tkinter as tk
     # 當辨識不到人的時候，跳這個畫面。以便用這個圖片去訓練新人。
-    #top = tk.Tk()
-    top = tk.Toplevel()
+    top = tk.Tk()
+    #top = tk.Toplevel()
     top.geometry('400x400')
     top.title(text)
     print("訓練新人: gifimagepath=" + gifimagepath)
-    # 把圖片轉成 gif
-    #img = Image.open(imagepath)
-    #faceRectangle =  {'top': 141, 'height': 261, 'width': 261, 'left': 664}
-    #img2 = img.crop((left, top, left + width, top + height))
-
-    #saveimage = basepath + "/tmp/" + face['faceId'] + ".gif"
-    #if not os.path.exists(os.path.dirname(saveimage)):
-    #    os.makedirs(os.path.dirname(saveimage))
-    #img2.save(saveimage, 'GIF')
-
-    #img = Image.open(imagepath)
-    #img.save(imagepath+".gif", 'GIF')
 
     imagefile = tk.PhotoImage(file=gifimagepath)
-    maxwidth = 160
+    maxwidth = 250
     h = imagefile.height()
     w = imagefile.width()
     if w > maxwidth:
@@ -173,7 +176,8 @@ def __cv_UnknownPerson(text, gifimagepath):
         text='記住我！',
         width=15,
         height=3,
-        command=lambda: train(top, e, gifimagepath))
+        command=lambda: train_oneImage(top, e, e.get(), 'oneshut', gifimagepath)
+    )
     b1.pack()
 
     b2 = tk.Button(top, text='下一位！', width=15, height=2, command=top.destroy)
@@ -182,24 +186,25 @@ def __cv_UnknownPerson(text, gifimagepath):
     # Code to add widgets will go here...
     top.mainloop()
 
+
 def __cv_ImageText(title, hint, imagepath=None):
     ''' 標準 cv 視窗'''
     import cv2
     import numpy as np
-    if imagepath == None:    
+    if imagepath == None:
         img = np.zeros((400, 400, 3), np.uint8)
         img.fill(90)
     else:
         img = cv2.imread(imagepath)
         print('__cv_ImageText.imagepath=', imagepath)
         H, W = img.shape[:2]
-        img = cv2.resize(img, (400,int(H/W*400))) 
+        img = cv2.resize(img, (400, int(H / W * 400)))
 
     windowname = imagepath
     H, W = img.shape[:2]
 
-    #img = cv2.resize(img, (400,int(H/W*400))) 
-    
+    #img = cv2.resize(img, (400,int(H/W*400)))
+
     ttf = ClassUtils.getSystemFont()
 
     cv2_im = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)  # cv2和PIL中颜色的hex码的储存顺序不同
@@ -214,8 +219,8 @@ def __cv_ImageText(title, hint, imagepath=None):
     titlelocation = (W / 2 - w / 2, 5)
     w, h = draw.textsize(hint, font=hintfont)
     draw.rectangle(
-        ((W / 2 - w / 2 - 5, H-h), (W / 2 + w / 2 + 5, H)), fill="red")
-    hintlocation = (W / 2 - w / 2, H-h)
+        ((W / 2 - w / 2 - 5, H - h), (W / 2 + w / 2 + 5, H)), fill="red")
+    hintlocation = (W / 2 - w / 2, H - h)
     draw.text(
         titlelocation, title, (0, 255, 255),
         font=titlefont)  # 第一个参数为打印的坐标，第二个为打印的文本，第三个为字体颜色，第四个为字体
@@ -229,7 +234,10 @@ def __cv_ImageText(title, hint, imagepath=None):
     if key == ord(' ') or key == 3 or key == 13:  # space or enter
         cv2.destroyWindow(windowname)
 
+
 ''' 運用 cv2 技術顯示的 Identifyfaces '''
+
+
 def cv_Identifyfaces(identifyfaces):
     import cv2
     import numpy as np
@@ -245,19 +253,25 @@ def cv_Identifyfaces(identifyfaces):
             __cv_UnknownPerson('您哪位？', imagepath)
         else:
             try:
-                print(ClassUtils.protectPersonName(identifyface['person']['name']), '簽到成功!')
+                print(
+                    ClassUtils.protectPersonName(
+                        identifyface['person']['name']), '簽到成功!')
             except UnicodeEncodeError as e:
                 print('姓名編碼錯誤!', '簽到成功!')
 
             #print('cv_Identifyfaces.identifyface=', identifyface)
-            __cv_ImageText(ClassUtils.protectPersonName(
-                identifyface['person']['name']) + '簽到成功!', '按 ENTER 繼續', imagepath)
+            __cv_ImageText(
+                ClassUtils.protectPersonName(identifyface['person']['name']) +
+                '簽到成功!', '按 ENTER 繼續', imagepath)
+
 
 ''' 運用 cv2 技術顯示的 Success '''
+
+
 def cv_Success(successes):
     import cv2
     import numpy as np
-    print('successes=',successes)
+    print('successes=', successes)
     if len(successes) == 0:
         __cv_ImageText('無人簽到成功', '請按「ENTER」繼續')
         return
@@ -265,13 +279,15 @@ def cv_Success(successes):
         # print(success['person']['name'], '簽到成功!')
         imagepath = ClassUtils.getFaceImagepath(success['faceId'])
 
-        __cv_ImageText(ClassUtils.protectPersonName(
-            success['person']['name']) + '簽到成功!', '按 ENTER 繼續', imagepath)
+        __cv_ImageText(
+            ClassUtils.protectPersonName(success['person']['name']) + '簽到成功!',
+            '按 ENTER 繼續', imagepath)
 
 
 def takePicture_opencv(personGroupId, delay, type):
     sysstr = platform.system()
-    print('os=', sysstr, platform.release, platform.system_alias, platform.version)
+    print('os=', sysstr, platform.release, platform.system_alias,
+          platform.version)
     if (ClassUtils.isWindows() or ClassUtils.isDarwin()):
         jpgimagepath = show_opencv(type, mirror=True)
         return jpgimagepath

@@ -4,6 +4,7 @@ from PIL import Image, ImageDraw
 import ClassUtils
 import MyException
 from urllib import request
+import ClassFaceAPI as FaceAPI
 
 basepath = os.path.dirname(os.path.realpath(__file__))
 with open(basepath + '/Config.json', 'r', encoding='utf-8') as f:
@@ -454,6 +455,24 @@ class Person:
             if person['name'] == personname:
                 returnpersons.append(person)
         return returnpersons
+
+    def __add_personimages(self, personGroupId, personname, userData,
+                           imagepaths):
+        ''' # 加入一個人的一張或多張圖片，但不訓練 '''
+        print("personname=", personname, "圖檔:", imagepaths)
+        personAPI = FaceAPI.Person(self.api_key, self.host)
+        person = self.getPersonByName(personGroupId, personname)
+        if person == None:
+            print('call create_a_person')
+            personid = self.create_a_person(personGroupId, personname,
+                                                 userData)
+            for imagepath in imagepaths:
+                self.add_a_person_face(imagepath, personid, personGroupId)
+        else:
+            print('call add_a_person_face, personId=', person['personId'])
+            for imagepath in imagepaths:
+                self.add_a_person_face(imagepath, person['personId'],
+                                            personGroupId)
 
 
 class Face:
