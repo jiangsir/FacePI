@@ -143,7 +143,7 @@ def train_oneShot(top, e, personname, userData, imagepath):
     personGroupapi.train_personGroup(personGroupId)
     top.destroy()
 
-def __cv_UnknownPerson(text, gifimagepath):
+def __tk_UnknownPerson(text, gifimagepath):
     import tkinter as tk
     # 當辨識不到人的時候，跳這個畫面。以便用這個圖片去訓練新人。
     top = tk.Tk()
@@ -187,6 +187,8 @@ def __cv_UnknownPerson(text, gifimagepath):
     b2.pack()
     top.bind('<Return>', lambda x: top.destroy())
 
+    top.lift()
+    top.call('wm', 'attributes', '.', '-topmost', '1')
     # Code to add widgets will go here...
     top.mainloop()
 
@@ -237,12 +239,11 @@ def __cv_ImageText(title, hint, imagepath=None):
     key = cv2.waitKey(10000)
     if key == ord(' ') or key == 3 or key == 13:  # space or enter
         cv2.destroyWindow(windowname)
-
-
-''' 運用 cv2 技術顯示的 Identifyfaces '''
-
+    elif key == ord('a'): # 鍵盤 a 代表要新增 oneshot
+        __tk_UnknownPerson('您哪位？', imagepath)
 
 def cv_Identifyfaces(identifyfaces):
+    ''' 運用 cv2 技術顯示的 Identifyfaces '''
     import cv2
     import numpy as np
     # print('identifyfaces=',identifyfaces)
@@ -253,8 +254,8 @@ def cv_Identifyfaces(identifyfaces):
         imagepath = ClassUtils.getFaceImagepath(identifyface['faceId'])
         if 'person' not in identifyface:
             print('identifyface=', identifyface)
-            #__cv_ImageText('你哪位？請先訓練。', '按 ENTER 繼續', imagepath)
-            __cv_UnknownPerson('您哪位？', imagepath)
+            __cv_ImageText('你哪位？請先訓練。', '按 ENTER 繼續', imagepath)
+            #__tk_UnknownPerson('您哪位？', imagepath)
         else:
             try:
                 print(
