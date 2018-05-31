@@ -1,7 +1,7 @@
 import os, time, sys, json, platform
 import subprocess
 import ClassUtils, MyException
-from PIL import Image, ImageDraw, ImageFont
+from PIL import Image, ImageDraw, ImageFont, ImageTk
 import ClassFaceAPI as FaceAPI
 
 basepath = os.path.dirname(os.path.realpath(__file__))
@@ -131,37 +131,44 @@ def show_opencv(type, mirror=False):
 
 
 def train_oneShot(top, e, personname, userData, imagepath):
-    ''' 未經訓練的新人，憑簽到是的一張照片進行訓練。 '''
+    ''' 未經訓練的新人，憑簽到時的一張照片進行訓練。 '''
     jpgimagepaths = []
     jpgimagepaths.append(imagepath)
     personAPI = FaceAPI.Person(api_key, host)
     if personname == '':
         personname = 'unknown_oneshot'
     personAPI.add_personimages(personGroupId, personname, userData,
-                                 jpgimagepaths)
+                               jpgimagepaths)
     personGroupapi = FaceAPI.PersonGroup(api_key, host)
     personGroupapi.train_personGroup(personGroupId)
     top.destroy()
 
-def __tk_UnknownPerson(text, gifimagepath):
+
+def __tk_UnknownPerson(text, imagepath):
+    ''' # 當辨識不到人的時候，跳這個畫面。以便用這個圖片去訓練新人。 '''
     import tkinter as tk
-    # 當辨識不到人的時候，跳這個畫面。以便用這個圖片去訓練新人。
+
     top = tk.Tk()
     #top = tk.Toplevel()
     top.geometry('500x500')
     top.title(text)
-    print("訓練新人: gifimagepath=" + gifimagepath)
-
-    imagefile = tk.PhotoImage(file=gifimagepath)
+    print("訓練 oneshot: imagepath=" + imagepath)
+    pil_image = Image.open(imagepath)
+    width, height = pil_image.size
     maxwidth = 200
+    pil_image = pil_image.resize((maxwidth, height * maxwidth / width),
+                                 Image.ANTIALIAS)
+
+    imagefile = ImageTk.PhotoImage(pil_image)
+    #imagefile = tk.PhotoImage(file=imagepath)
     h = imagefile.height()
     w = imagefile.width()
-    if w > maxwidth:
-        imagefile = imagefile.subsample(w // maxwidth, w // maxwidth)
+    # if w > maxwidth:
+    #     imagefile = imagefile.subsample(w // maxwidth, w // maxwidth)
+
     print('h=', imagefile.height(), 'w=', imagefile.width())
     canvas = tk.Canvas(top, height=imagefile.height(), width=imagefile.width())
-
-    image = canvas.create_image(10, 10, anchor="nw", image=imagefile)
+    canvas.create_image(10, 10, anchor="nw", image=imagefile)
     canvas.pack()
 
     label = tk.Label(top, text=text, font=('Arial', 20))
@@ -179,11 +186,11 @@ def __tk_UnknownPerson(text, gifimagepath):
         text='記住我！',
         width=15,
         height=3,
-        command=lambda: train_oneShot(top, e, e.get(), 'oneshot', gifimagepath)
-    )
+        command=lambda: train_oneShot(top, e, e.get(), 'oneshot', imagepath))
     b1.pack()
 
-    b2 = tk.Button(top, text='按ENTER繼續！', width=15, height=2, command=top.destroy)
+    b2 = tk.Button(
+        top, text='按ENTER繼續！', width=15, height=2, command=top.destroy)
     b2.pack()
     top.bind('<Return>', lambda x: top.destroy())
 
@@ -239,8 +246,9 @@ def __cv_ImageText(title, hint, imagepath=None):
     key = cv2.waitKey(10000)
     if key == ord(' ') or key == 3 or key == 13:  # space or enter
         cv2.destroyWindow(windowname)
-    elif key == ord('a'): # 鍵盤 a 代表要新增 oneshot
+    elif key == ord('a'):  # 鍵盤 a 代表要新增 oneshot
         __tk_UnknownPerson('您哪位？', imagepath)
+
 
 def cv_Identifyfaces(identifyfaces):
     ''' 運用 cv2 技術顯示的 Identifyfaces '''
