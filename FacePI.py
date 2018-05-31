@@ -87,7 +87,7 @@ class FacePI:
                     print(personGroupId, personname, personImagePaths)
 
                     personAPI = FaceAPI.Person(api_key, host)
-                    personAPI.__add_personimages(personGroupId, personname,
+                    personAPI.add_personimages(personGroupId, personname,
                                             os.path.basename(userDataPath),
                                             personImagePaths)
                     #time.sleep(6)
@@ -326,7 +326,7 @@ class FacePI:
             jpgimagepaths.append(jpgtraindata)
 
         personAPI = FaceAPI.Person(api_key, host)
-        personAPI.__add_personimages(personGroupId, personname, userData,
+        personAPI.add_personimages(personGroupId, personname, userData,
                                 jpgimagepaths)
         personGroupapi = FaceAPI.PersonGroup(api_key, host)
         personGroupapi.train_personGroup(personGroupId)

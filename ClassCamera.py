@@ -137,7 +137,7 @@ def train_oneShot(top, e, personname, userData, imagepath):
     personAPI = FaceAPI.Person(api_key, host)
     if personname == '':
         personname = 'unknown_oneshot'
-    personAPI.__add_personimages(personGroupId, personname, userData,
+    personAPI.add_personimages(personGroupId, personname, userData,
                                  jpgimagepaths)
     personGroupapi = FaceAPI.PersonGroup(api_key, host)
     personGroupapi.train_personGroup(personGroupId)
