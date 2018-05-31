@@ -125,6 +125,63 @@ def show_opencv(type, mirror=False):
             if key != -1:
                 print('key=', key)
 
+def __cv_UnknownPerson(text, gifimagepath):
+    import tkinter as tk
+    # 當辨識不到人的時候，跳這個畫面。以便用這個圖片去訓練新人。
+    #top = tk.Tk()
+    top = tk.Toplevel()
+    top.geometry('400x400')
+    top.title(text)
+    print("訓練新人: gifimagepath=" + gifimagepath)
+    # 把圖片轉成 gif
+    #img = Image.open(imagepath)
+    #faceRectangle =  {'top': 141, 'height': 261, 'width': 261, 'left': 664}
+    #img2 = img.crop((left, top, left + width, top + height))
+
+    #saveimage = basepath + "/tmp/" + face['faceId'] + ".gif"
+    #if not os.path.exists(os.path.dirname(saveimage)):
+    #    os.makedirs(os.path.dirname(saveimage))
+    #img2.save(saveimage, 'GIF')
+
+    #img = Image.open(imagepath)
+    #img.save(imagepath+".gif", 'GIF')
+
+    imagefile = tk.PhotoImage(file=gifimagepath)
+    maxwidth = 160
+    h = imagefile.height()
+    w = imagefile.width()
+    if w > maxwidth:
+        imagefile = imagefile.subsample(w // maxwidth, w // maxwidth)
+    print('h=', imagefile.height(), 'w=', imagefile.width())
+    canvas = tk.Canvas(top, height=imagefile.height(), width=imagefile.width())
+
+    image = canvas.create_image(10, 10, anchor="nw", image=imagefile)
+    canvas.pack()
+
+    label = tk.Label(top, text=text, font=('Arial', 20))
+    label.pack()
+
+    #frame = tkinter.Frame(master=top).grid(row=1, column=2)
+    label1 = tk.Label(top, text='請輸入姓名：', font=('Arial', 18))
+    label1.pack()
+    e = tk.Entry(top, font=("Calibri", 24), width=10, show="")
+    e.pack()
+    e.insert(0, "在此輸入姓名")
+
+    b1 = tk.Button(
+        top,
+        text='記住我！',
+        width=15,
+        height=3,
+        command=lambda: train(top, e, gifimagepath))
+    b1.pack()
+
+    b2 = tk.Button(top, text='下一位！', width=15, height=2, command=top.destroy)
+    b2.pack()
+
+    # Code to add widgets will go here...
+    top.mainloop()
+
 def __cv_ImageText(title, hint, imagepath=None):
     ''' 標準 cv 視窗'''
     import cv2
@@ -143,15 +200,6 @@ def __cv_ImageText(title, hint, imagepath=None):
 
     #img = cv2.resize(img, (400,int(H/W*400))) 
     
-    # if ClassUtils.isDarwin():
-    #     ttf = "/Library/Fonts/Arial Unicode.ttf"
-    # elif ClassUtils.isWindows7():
-    #     ttf = "simhei.ttf"
-    # elif ClassUtils.isWindows10():
-    #     ttf = "C:/Windows/Fonts/Arial.ttf"
-    # else:
-    #     ttf = "simhei.ttf"
-
     ttf = ClassUtils.getSystemFont()
 
     cv2_im = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)  # cv2和PIL中颜色的hex码的储存顺序不同
@@ -193,7 +241,8 @@ def cv_Identifyfaces(identifyfaces):
         imagepath = ClassUtils.getFaceImagepath(identifyface['faceId'])
         if 'person' not in identifyface:
             print('identifyface=', identifyface)
-            __cv_ImageText('你哪位？請先訓練。', '按 ENTER 繼續', imagepath)
+            #__cv_ImageText('你哪位？請先訓練。', '按 ENTER 繼續', imagepath)
+            __cv_UnknownPerson('您哪位？', imagepath)
         else:
             try:
                 print(ClassUtils.protectPersonName(identifyface['person']['name']), '簽到成功!')

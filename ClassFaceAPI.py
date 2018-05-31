@@ -399,7 +399,8 @@ class Person:
                          headers)
             response = conn.getresponse()
             data = response.read()
-            datajson = json.loads(str(data, 'UTF-8'))
+            #datajson = json.loads(str(data, 'UTF-8'))
+            print('deletePerson:', data)
             conn.close()
             # if ClassUtils.isFaceAPIError(datajson):
             #     pass
