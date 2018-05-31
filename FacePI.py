@@ -18,16 +18,15 @@ host = config['host']
 class FacePI:
     ''' FacePI 文字介面
     搭配參數如下：
-    createPersonGroup: 建立一個 PersonGroup
-    deletePersonGroup: 刪除一個 PersonGroup
-    deletePersonInGroup: 刪除 PersonGroup 裡的一個 Person
-    listPersonGroups: 列出所有的 PersonGroups
-    listPersonsInGroup: 列出「人群」裡有哪些 Person
+    createGroup: 建立一個 PersonGroup
+    deleteGroup: 刪除一個 PersonGroup
+    deletePerson: 刪除 PersonGroup 裡的一個 Person
+    listGroups: 列出所有的 PersonGroups
+    listPersons: 列出「人群」裡有哪些 Person
     relay: 設定繼電器,
     status: 觀察 PersonGroup status
-    searchPersonName: 搜尋一個personName,
-    trainPersonGroup: 訓練 PersonGroup
-    trainDatas: '訓練 /traindatas 裡的圖檔，同時訓練一群事先準備好的人與照片',
+    search: 搜尋一個personName,
+    traindatas: '訓練 /traindatas 裡的圖檔，同時訓練一群事先準備好的人與照片',
 
     Config: 列出 Config.json 設定。
     Signin: 進行簽到！
@@ -56,8 +55,8 @@ class FacePI:
     # 將整個 traindatas 的圖片全部送上去訓練
     def traindatas(self, traindatasPath):
         ''' 請輸入 traindatasPath 的絕對路徑。
-        traindatasPath 的資料夾結構必須為 /xxx/xxx/traindatas/userData/姓名/xxxx.jpg
-
+        請提供資料路徑如： /xxx/xxx/traindatas/
+        該路徑內的資料夾結構必須為 [userData/姓名/xxxx.jpg]
         '''
         #traindataPath = basepath + '/traindatas/'
         #traindataPath = os.path.join(basepath, 'traindatas')
@@ -93,7 +92,7 @@ class FacePI:
         personGroupapi = FaceAPI.PersonGroup(api_key, host)
         personGroupapi.train_personGroup(personGroupId)
 
-    def listPersonGroups(self):
+    def listGroups(self):
         ''' 2: '列出所有的 PersonGroups' '''
         PersonGroup = FaceAPI.PersonGroup(api_key, host)
         persongroups = PersonGroup.ListPersonGroups()
@@ -108,7 +107,7 @@ class FacePI:
             print('personGroupId=' + persongroup['personGroupId'])
             print(persongroup)
 
-    def listPersonsInGroup(self):
+    def listPersons(self):
         ''' 3: 列出「人群」裡有哪些 Person '''
         PersonGroup = FaceAPI.PersonGroup(api_key, host)
         try:
@@ -119,15 +118,15 @@ class FacePI:
             for person in persons:
                 s = 'name=' + person['name'] + '(' + person['userData'] + '):'
                 try:
-                    print(s, 'personId=' + person['personId'], 'persistedFaceIds=',
-                        len(person['persistedFaceIds']))
+                    print(s, 'personId=' + person['personId'],
+                          'persistedFaceIds=', len(person['persistedFaceIds']))
                 except UnicodeEncodeError as e:
-                    print('name=姓名編碼有誤！', 'personId=' + person['personId'], 'persistedFaceIds=',
-                        len(person['persistedFaceIds']))
+                    print('name=姓名編碼有誤！', 'personId=' + person['personId'],
+                          'persistedFaceIds=', len(person['persistedFaceIds']))
         except MyException.responseError as e:
             print(e.message)
 
-    def deletePersonGroup(self):
+    def deleteGroup(self):
         ''' 4: '刪除某個 PersonGroups','''
         PersonGroup = FaceAPI.PersonGroup(api_key, host)
         PersonGroup.deletePersonGroup(input('請輸入要刪除的 personGroupId:'))
@@ -156,12 +155,12 @@ class FacePI:
         print('狀態:', status['status'])
         print(status)
 
-    def trainPersonGroup(self):
+    def __trainPersonGroup(self):
         ''' 8: 訓練 PersonGroup '''
         PersonGroup = FaceAPI.PersonGroup(api_key, host)
         PersonGroup.train_personGroup(personGroupId)
 
-    def createPersonGroup(self, personGroupName):
+    def createGroup(self, personGroupName):
         ''' 9: 建立一個 PersonGroup '''
         # personGroupName = input('請輸入 personGroup name(可用中文): ')
         personGroupId = '_'.join(lazy_pinyin(personGroupName))
@@ -198,13 +197,16 @@ class FacePI:
         with open(basepath + '/Config.json', 'w', encoding='utf-8') as outfile:
             json.dump(config, outfile, ensure_ascii=False)
 
-    def searchPersonName(self, personname):
+    def search(self, personname):
         ''' 12: 搜尋 PersonGroup 裡的 personName '''
         #personname = input('請輸入要找尋的 personname: ')
         personApi = FaceAPI.Person(api_key, host)
         persons = personApi.getPersonsByName(personGroupId, personname)
         for person in persons:
-            print("person: ", person)
+            try:
+                print("person: ", person)
+            except UnicodeEncodeError as e:
+                print("person=", '此人姓名編碼錯誤，無法顯示')
 
     def relay(self):
         ''' 13: '設定繼電器 '''

@@ -35,7 +35,9 @@ FacePI 可以移植到 Windows 上囉，已經在 Windows 7 與 Windows 10 實�
 
 進入到 (cv3) 這個環境當中，安裝必要的套件：
 
-    pip install fire Pillow gTTS pypinyin
+    pip install fire 
+    pip install Pillow 
+    pip install pypinyin
 
 最後，可以開始安裝 FacePI 本體。若您已經安裝 git 環境，則可以直接下以下指令即可。
 
@@ -75,10 +77,12 @@ FacePI 可以移植到 Windows 上囉，已經在 Windows 7 與 Windows 10 實�
 
 可以進行設定，最主要的設定就是 API_KEY 請至微軟網站申請一個 API_KEY。若不修改，直接按 enter 即可使用預設值。
 
+### 訓練
 接下來，先進行「訓練」三連拍。用來「訓練」將來要進行辨識的人。
 
     python FacePI/FacePI.py Train <userData> <姓名>
 
+### 簽到
 最後，進行簽到。
 
     python FacePI/FacePI.py Signin
