@@ -276,7 +276,7 @@ def cv_Identifyfaces(identifyfaces, picture=None):
             #print('cv_Identifyfaces.identifyface=', identifyface)
             __cv_ImageText(
                 ClassUtils.protectPersonName(identifyface['person']['name']) +
-                '簽到成功!', '按 ENTER 繼續', faceimagepath)
+                '簽到成功!', '按 ENTER 繼續', faceimagepath, picture, identifyfaces)
 
 
 def cv_Success(successes):
@@ -289,11 +289,11 @@ def cv_Success(successes):
         return
     for success in successes:
         # print(success['person']['name'], '簽到成功!')
-        imagepath = ClassUtils.getFaceImagepath(success['faceId'])
+        faceimagepath = ClassUtils.getFaceImagepath(success['faceId'])
 
         __cv_ImageText(
             ClassUtils.protectPersonName(success['person']['name']) + '簽到成功!',
-            '按 ENTER 繼續', imagepath)
+            '按 ENTER 繼續')
 
 
 def takePicture_opencv(personGroupId, delay, type):
