@@ -6,10 +6,10 @@ FacePI 可以移植到 Windows 上囉，已經在 Windows 7 與 Windows 10 實�
 ## 搭建環境
 
 ### Anaconda
-首先必須下載 anaconda ，請選擇 Python3 的版本。安裝完成後，在程式集->anaconda prompt 進入文字介面。
+首先必須下載 anaconda ，請選擇 Python3 的版本。安裝完成後，在程式集->anaconda prompt 進入文字介面。
 
 ### 建立隔離執行環境
-為了避免與原先環境互相衝突，最好的方式就是建立一個隔離的執行環境。接著要安裝什麼都按 [y] 安裝。
+為了避免與原先環境互相衝突，最好的方式就是建立一個隔離的執行環境。接著要安裝什麼都按 [y] 安裝。
     
     conda create -n cv3 python=3.5.2
 
@@ -21,7 +21,7 @@ FacePI 可以移植到 Windows 上囉，已經在 Windows 7 與 Windows 10 實�
 
     conda install -c https://conda.anaconda.org/menpo opencv3
 
-如果要脫離這個隔離環境回到 (base)
+如果要脫離這個隔離環境回到 (base)
 
     conda deactivate
 
@@ -53,7 +53,7 @@ FacePI 可以移植到 Windows 上囉，已經在 Windows 7 與 Windows 10 實�
     # 此處請依據自己的環境修改。 
     
 ## 執行
-執行 FacePI.py FacePI 主要是一個文字介面程式：
+執行 FacePI.py, FacePI 主要是一個文字介面程式：
 
 
     python FacePI/FacePI.py
@@ -75,12 +75,12 @@ FacePI 可以移植到 Windows 上囉，已經在 Windows 7 與 Windows 10 實�
 
     python FacePI/FacePI.py Config
 
-可以進行設定，最主要的設定就是 API_KEY 請至微軟網站申請一個 API_KEY。若不修改，直接按 enter 即可使用預設值。
+可以進行設定，最主要的設定就是 API_KEY 請至微軟網站申請一個 API_KEY。若不修改，直接按 enter 即可使用預設值。
 
 ### 訓練
 接下來，先進行「訓練」三連拍。用來「訓練」將來要進行辨識的人。
 
-    python FacePI/FacePI.py Train <userData> <姓名>
+    python FacePI/FacePI.py Train <userData> <姓名>
 
 ### 簽到
 最後，進行簽到。
