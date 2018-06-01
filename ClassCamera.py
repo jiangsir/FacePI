@@ -54,6 +54,7 @@ def takePicture_CSI(personGroupId, delay, size='small'):
 
 
 def show_opencv(type, mirror=False):
+    ''' 顯示主畫面 '''
     import cv2
     import numpy as np
 
@@ -200,7 +201,7 @@ def __tk_UnknownPerson(text, facepath, picture):
     top.mainloop()
 
 
-def __cv_ImageText(title, hint,identifyfaces=None, facepath=None, picture=None):
+def __cv_ImageText(title, hint, facepath=None, picture=None, identifyfaces=None):
     ''' 標準 cv 視窗'''
     import cv2
     import numpy as np
@@ -263,7 +264,7 @@ def cv_Identifyfaces(identifyfaces, picture=None):
         faceimagepath = ClassUtils.getFaceImagepath(identifyface['faceId'])
         if 'person' not in identifyface:
             print('identifyface=', identifyface)
-            __cv_ImageText('你哪位？請先訓練。', '按 ENTER 繼續',identifyfaces, faceimagepath, picture)
+            __cv_ImageText('你哪位？請先訓練。', '按 ENTER 繼續', faceimagepath, picture, identifyfaces)
         else:
             try:
                 print(
@@ -299,8 +300,8 @@ def takePicture_opencv(personGroupId, delay, type):
     sysstr = platform.system()
     print('os=', sysstr, platform.release())
     if (ClassUtils.isWindows() or ClassUtils.isDarwin()):
-        jpgimagepath = show_opencv(type, mirror=True)
-        return jpgimagepath
+        picturepath = show_opencv(type, mirror=True)
+        return picturepath
     else:
         print('若系統為樹莓派，則需設定 camera 為 CSIcamera 無法以 webcam 作為影像來源。')
         return None
