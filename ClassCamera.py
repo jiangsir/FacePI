@@ -190,9 +190,9 @@ def __tk_UnknownPerson(text, imagepath):
     b1.pack()
 
     b2 = tk.Button(
-        top, text='按ENTER繼續！', width=15, height=2, command=top.destroy)
+        top, text='下一位！', width=15, height=2, command=top.destroy)
     b2.pack()
-    top.bind('<Return>', lambda x: top.destroy())
+    #top.bind('<Return>', lambda x: top.destroy())
 
     top.lift()
     top.call('wm', 'attributes', '.', '-topmost', '1')
@@ -247,6 +247,7 @@ def __cv_ImageText(title, hint, imagepath=None):
     if key == ord(' ') or key == 3 or key == 13:  # space or enter
         cv2.destroyWindow(windowname)
     elif key == ord('a'):  # 鍵盤 a 代表要新增 oneshot
+        cv2.destroyWindow(windowname)
         __tk_UnknownPerson('您哪位？', imagepath)
 
 
@@ -299,8 +300,7 @@ def cv_Success(successes):
 
 def takePicture_opencv(personGroupId, delay, type):
     sysstr = platform.system()
-    print('os=', sysstr, platform.release, platform.system_alias,
-          platform.version)
+    print('os=', sysstr, platform.release())
     if (ClassUtils.isWindows() or ClassUtils.isDarwin()):
         jpgimagepath = show_opencv(type, mirror=True)
         return jpgimagepath
