@@ -247,7 +247,7 @@ def __cv_ImageText(title, hint, facepath=None, picture=None, identifyfaces=None)
     key = cv2.waitKey(10000)
     if key == ord(' ') or key == 3 or key == 13:  # space or enter
         cv2.destroyWindow(windowname)
-    elif key == ord('a') and len(identifyfaces)==1:  # 鍵盤 a 代表要新增 oneshot
+    elif (key == ord('a') or key == ord('A')) and len(identifyfaces)==1:  # 鍵盤 a 代表要新增 oneshot
         cv2.destroyWindow(windowname)
         __tk_UnknownPerson('您哪位？', facepath, picture)
 
@@ -264,7 +264,7 @@ def cv_Identifyfaces(identifyfaces, picture=None):
         faceimagepath = ClassUtils.getFaceImagepath(identifyface['faceId'])
         if 'person' not in identifyface:
             print('identifyface=', identifyface)
-            __cv_ImageText('你哪位？請先訓練。', '按 ENTER 繼續', faceimagepath, picture, identifyfaces)
+            __cv_ImageText('你哪位？請先訓練。', '按 ENTER 略過，按 a 進行訓練', faceimagepath, picture, identifyfaces)
         else:
             try:
                 print(
@@ -276,7 +276,7 @@ def cv_Identifyfaces(identifyfaces, picture=None):
             #print('cv_Identifyfaces.identifyface=', identifyface)
             __cv_ImageText(
                 ClassUtils.protectPersonName(identifyface['person']['name']) +
-                '簽到成功!', '按 ENTER 繼續', faceimagepath, picture, identifyfaces)
+                '簽到成功!', '按 ENTER 略過，按 a 進行訓練', faceimagepath, picture, identifyfaces)
 
 
 def cv_Success(successes):
