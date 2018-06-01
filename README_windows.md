@@ -3,7 +3,7 @@ FacePI for Windows
 
 FacePI 可以移植到 Windows 上囉，已經在 Windows 7 與 Windows 10 實測可行。移植的原因主要是樹莓派的運算效能不夠高，速度慢。因此，若專案不需要使用到 GPIO 控制外部設備的話，安裝在 Windows 上可以找到較好的機器設備運行。
 
-[![Alt text](https://www.youtube.com/upload_thumbnail?v=ORVNkod06pU&t=hqdefault&ts=1527849150645)](https://youtu.be/ORVNkod06pU)
+[![Alt text](https://i.ytimg.com/vi/ORVNkod06pU/hqdefault.jpg)](https://youtu.be/ORVNkod06pU)
 
 
 ## 搭建環境
