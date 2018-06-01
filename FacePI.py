@@ -216,7 +216,7 @@ class FacePI:
         #ClassGPIO.RelayExchange()
         print('call ClassGPIO.RelayExchange()')
 
-    def Identify(self, imageurl):
+    def Identify(self, pictureurl):
         ''' 14: 進行「辨識」，使用 image URL or 檔案路徑 '''
         start = int(round(time.time() * 1000))
         print('開始計時 identify')
@@ -224,22 +224,22 @@ class FacePI:
         personApi = FaceAPI.Person(api_key, host)
         print('載入 class', int(round(time.time() * 1000) - start), 'ms')
         #imageurl = input('請輸入準備要辨識的 image URL or 檔案路徑:')
-        if imageurl.startswith('http'):
-            detectfaces = faceApi.detectURLImages(imageurl)
+        if pictureurl.startswith('http'):
+            detectfaces = faceApi.detectURLImages(pictureurl)
         else:
-            imageurl = imageurl.strip()
-            statinfo = os.stat(imageurl)
+            pictureurl = pictureurl.strip()
+            statinfo = os.stat(pictureurl)
             print('檔案大小：', statinfo.st_size, 'Bytes')
             if statinfo.st_size < 1024:
                 print('圖檔太小 不可小於 1KB')
                 sys.exit(1)
             elif statinfo.st_size > 4 * 1024 * 1024:
                 print('圖檔太大 不可大於 4MB')
-                im = Image.open(imageurl)
+                im = Image.open(pictureurl)
                 out = im.resize((128, 128))
-                im.save(imageurl, "JPEG")
+                im.save(pictureurl, "JPEG")
                 print('out=', type(out))
-            detectfaces = faceApi.detectLocalImage(imageurl)
+            detectfaces = faceApi.detectLocalImage(pictureurl)
 
         # if len(detectfaces) == 0:
         #     print('相片中找不到人！')
@@ -279,7 +279,7 @@ class FacePI:
 
         #print('successes:', successes)
         # Utils.SigninSuccesses(successes)
-        Utils.SigninIdentifyfaces(identifyfaces)
+        Utils.SigninIdentifyfaces(identifyfaces, pictureurl)
 
     def buildTraindatas(self, personname):
         ''' 15: '快速 3 連拍建立圖片資料庫不進行訓練） '''

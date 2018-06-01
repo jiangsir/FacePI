@@ -26,20 +26,20 @@ def takePicture_CSI(personGroupId, delay, size='small'):
     # delay in ms 3000ms = 3s
     # jpgimagepath = os.path.join(basepath, 'takepictures', personGroupId + "_" + time.strftime(
     #     "%Y%m%d_%H%M%S", time.localtime()) + ".jpg")
-    jpgimagepath = ClassUtils.getTakePicturePath(personGroupId)
-    if not os.path.exists(os.path.dirname(jpgimagepath)):
-        os.makedirs(os.path.dirname(jpgimagepath))
+    picturepath = ClassUtils.getTakePicturePath(personGroupId)
+    if not os.path.exists(os.path.dirname(picturepath)):
+        os.makedirs(os.path.dirname(picturepath))
     try:
         # small for 辨識，加快速度。
         if size == 'small':
             subprocess.call([
                 'raspistill', '-hf', '-w', '800', '-h', '450', '-t',
-                str(delay), '-o', jpgimagepath
+                str(delay), '-o', picturepath
             ])
         else:  # for 訓練。訓練用圖片可以比較大
             subprocess.call([
                 'raspistill', '-hf', '-w', '1600', '-h', '900', '-t',
-                str(delay), '-o', jpgimagepath
+                str(delay), '-o', picturepath
             ])
 
     except OSError:
@@ -50,7 +50,7 @@ def takePicture_CSI(personGroupId, delay, size='small'):
         return None
 
     #os.system("raspistill -t " + str(delay) + " -o " + imagepath)
-    return jpgimagepath
+    return picturepath
 
 
 def show_opencv(type, mirror=False):
@@ -116,11 +116,11 @@ def show_opencv(type, mirror=False):
 
         key = cv2.waitKey(1)
         if key == ord(' ') or key == 3 or key == 13:  # space or enter
-            imagepath = ClassUtils.getTakePicturePath(config['personGroupId'])
-            cv2.imwrite(imagepath, img)
+            picturepath = ClassUtils.getTakePicturePath(config['personGroupId'])
+            cv2.imwrite(picturepath, img)
             cv2.destroyAllWindows()
             cv2.VideoCapture(0).release()
-            return imagepath
+            return picturepath
         elif key == 27:  # esc to quit
             cv2.destroyAllWindows()
             cv2.VideoCapture(0).release()
@@ -144,16 +144,16 @@ def train_oneShot(top, e, personname, userData, imagepath):
     top.destroy()
 
 
-def __tk_UnknownPerson(text, imagepath):
-    ''' # 當辨識不到人的時候，跳這個畫面。以便用這個圖片去訓練新人。 '''
+def __tk_UnknownPerson(text, facepath, picture):
+    ''' # 當不認識的時候，跳這個畫面。以便用這個圖片去訓練新人。 '''
     import tkinter as tk
 
     top = tk.Tk()
     #top = tk.Toplevel()
     top.geometry('500x500')
     top.title(text)
-    print("訓練 oneshot: imagepath=" + imagepath)
-    pil_image = Image.open(imagepath)
+    print("訓練 oneshot: picture=" + picture)
+    pil_image = Image.open(facepath)
     width, height = pil_image.size
     maxwidth = 200
     pil_image = pil_image.resize((maxwidth, int(height * maxwidth / width) ),
@@ -186,7 +186,7 @@ def __tk_UnknownPerson(text, imagepath):
         text='記住我！',
         width=15,
         height=3,
-        command=lambda: train_oneShot(top, e, e.get(), 'oneshot', imagepath))
+        command=lambda: train_oneShot(top, e, e.get(), 'oneshot', picture))
     b1.pack()
 
     b2 = tk.Button(
@@ -200,20 +200,20 @@ def __tk_UnknownPerson(text, imagepath):
     top.mainloop()
 
 
-def __cv_ImageText(title, hint, imagepath=None):
+def __cv_ImageText(title, hint,identifyfaces=None, facepath=None, picture=None):
     ''' 標準 cv 視窗'''
     import cv2
     import numpy as np
-    if imagepath == None:
+    if facepath == None:
         img = np.zeros((400, 400, 3), np.uint8)
         img.fill(90)
     else:
-        img = cv2.imread(imagepath)
-        print('__cv_ImageText.imagepath=', imagepath)
+        img = cv2.imread(facepath)
+        print('__cv_ImageText.imagepath=', facepath)
         H, W = img.shape[:2]
         img = cv2.resize(img, (400, int(H / W * 400)))
 
-    windowname = imagepath
+    windowname = facepath
     H, W = img.shape[:2]
 
     #img = cv2.resize(img, (400,int(H/W*400)))
@@ -246,12 +246,12 @@ def __cv_ImageText(title, hint, imagepath=None):
     key = cv2.waitKey(10000)
     if key == ord(' ') or key == 3 or key == 13:  # space or enter
         cv2.destroyWindow(windowname)
-    elif key == ord('a'):  # 鍵盤 a 代表要新增 oneshot
+    elif key == ord('a') and len(identifyfaces)==1:  # 鍵盤 a 代表要新增 oneshot
         cv2.destroyWindow(windowname)
-        __tk_UnknownPerson('您哪位？', imagepath)
+        __tk_UnknownPerson('您哪位？', facepath, picture)
 
 
-def cv_Identifyfaces(identifyfaces):
+def cv_Identifyfaces(identifyfaces, picture=None):
     ''' 運用 cv2 技術顯示的 Identifyfaces '''
     import cv2
     import numpy as np
@@ -260,11 +260,10 @@ def cv_Identifyfaces(identifyfaces):
         __cv_ImageText('沒有偵測到任何人！', '請按「ENTER」繼續')
         return
     for identifyface in identifyfaces:
-        imagepath = ClassUtils.getFaceImagepath(identifyface['faceId'])
+        faceimagepath = ClassUtils.getFaceImagepath(identifyface['faceId'])
         if 'person' not in identifyface:
             print('identifyface=', identifyface)
-            __cv_ImageText('你哪位？請先訓練。', '按 ENTER 繼續', imagepath)
-            #__tk_UnknownPerson('您哪位？', imagepath)
+            __cv_ImageText('你哪位？請先訓練。', '按 ENTER 繼續',identifyfaces, faceimagepath, picture)
         else:
             try:
                 print(
@@ -276,13 +275,11 @@ def cv_Identifyfaces(identifyfaces):
             #print('cv_Identifyfaces.identifyface=', identifyface)
             __cv_ImageText(
                 ClassUtils.protectPersonName(identifyface['person']['name']) +
-                '簽到成功!', '按 ENTER 繼續', imagepath)
-
-
-''' 運用 cv2 技術顯示的 Success '''
+                '簽到成功!', '按 ENTER 繼續', faceimagepath)
 
 
 def cv_Success(successes):
+    ''' 運用 cv2 技術顯示的 Success '''
     import cv2
     import numpy as np
     print('successes=', successes)

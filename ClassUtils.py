@@ -94,7 +94,7 @@ def SigninSuccesses(successes):
         ClassCamera.cv_Success(successes)
 
 
-def SigninIdentifyfaces(identifyfaces):
+def SigninIdentifyfaces(identifyfaces, picture=None):
     if isLinux():
         if len(identifyfaces) == 0:
             print('照片裡沒有人！')
@@ -108,7 +108,7 @@ def SigninIdentifyfaces(identifyfaces):
                 print('你哪位？', identifyface)
     elif isWindows() or isDarwin():
         import ClassCamera
-        ClassCamera.cv_Identifyfaces(identifyfaces)
+        ClassCamera.cv_Identifyfaces(identifyfaces, picture)
 
 
 def isLinux():
