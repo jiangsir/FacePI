@@ -3,18 +3,23 @@ FacePI for Windows
 
 FacePI 可以移植到 Windows 上囉，已經在 Windows 7 與 Windows 10 實測可行。移植的原因主要是樹莓派的運算效能不夠高，速度慢。因此，若專案不需要使用到 GPIO 控制外部設備的話，安裝在 Windows 上可以找到較好的機器設備運行。
 
-## 實測影片：
+點擊播放影片
 
-[![Alt text](https://img.youtube.com/vi/tQDK2j6lsCY/0.jpg)](https://youtu.be/tQDK2j6lsCY)
+[![Alt text](https://i.ytimg.com/vi/ORVNkod06pU/hqdefault.jpg)](https://youtu.be/ORVNkod06pU)
 
 
 ## 搭建環境
 
 ### Anaconda
-首先必須下載 anaconda ，請選擇 Python3 的版本。安裝完成後，在程式集->anaconda prompt 進入文字介面。
+首先必須下載 anaconda ，請選擇 Python3 的版本。安裝完成後，在程式集->anaconda prompt 進入文字介面。
 
+<<<<<<< HEAD
 ### 建立隔離執行環境，並安裝 OpenCV 環境
 為了避免與原先環境互相衝突，最好的方式就是建立一個隔離的執行環境。接著要安裝什麼都按 [y] 安裝。
+=======
+### 建立隔離執行環境
+為了避免與原先環境互相衝突，最好的方式就是建立一個隔離的執行環境。接著要安裝什麼都按 [y] 安裝。
+>>>>>>> CLI
     
     conda create -n cv3 python=3.5.2
 
@@ -26,7 +31,7 @@ FacePI 可以移植到 Windows 上囉，已經在 Windows 7 與 Windows 10 實�
 
     conda install -c https://conda.anaconda.org/menpo opencv3
 
-如果要脫離這個隔離環境回到 (base)
+如果要脫離這個隔離環境回到 (base)
 
     conda deactivate
 
@@ -48,7 +53,7 @@ FacePI 可以移植到 Windows 上囉，已經在 Windows 7 與 Windows 10 實�
 
     git clone https://github.com/jiangsir/FacePI
 
-若沒有 git 指令的話，就直接到 github 把程式抓回來。
+若沒有 git 指令的話，就直接到 github 把程式抓回來，點擊 Download ZIP。
 
     https://github.com/jiangsir/FacePI
 
@@ -58,7 +63,7 @@ FacePI 可以移植到 Windows 上囉，已經在 Windows 7 與 Windows 10 實�
     # 此處請依據自己的環境修改。 
     
 ## 執行
-執行 FacePI.py FacePI 主要是一個文字介面程式：
+執行 FacePI.py, FacePI 主要是一個文字介面程式：
 
 
     python FacePI/FacePI.py
@@ -80,12 +85,16 @@ FacePI 可以移植到 Windows 上囉，已經在 Windows 7 與 Windows 10 實�
 
     python FacePI/FacePI.py Config
 
+<<<<<<< HEAD
 可以進行設定，最主要的設定就是 API_KEY 請至微軟網站申請一個 API_KEY。直接按 enter 代表使用預設值。
+=======
+可以進行設定，最主要的設定就是 API_KEY 請至微軟網站申請一個 API_KEY。若不修改，直接按 enter 即可使用預設值。
+>>>>>>> CLI
 
 ### 訓練
 「訓練」三連拍。用來「訓練」將來要進行辨識的人。
 
-    python FacePI/FacePI.py Train <userData> <姓名>
+    python FacePI/FacePI.py Train <userData> <姓名>
 
 ### 簽到
 最後，進行簽到。

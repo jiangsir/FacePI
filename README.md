@@ -3,10 +3,10 @@ FacePI 讓樹莓派變身刷臉報到系統
 > 本專案僅作為技術驗證使用，若要自行運用，則仍須自行修改程式結構，以符合自身所需。
 >
 
-# 本系統已設計為跨平台。可安裝在 Windows 系統當中，安裝說明請點擊 [Windows 版安裝手冊](README_Windows.md)
+# 本系統已設計為跨平台。可安裝在 Windows 系統當中，安裝說明請點擊 [Windows 版安裝手冊](README_windows.md)
 
 
-實測影片：
+## 實測影片：
 
 [![Alt text](https://img.youtube.com/vi/tQDK2j6lsCY/0.jpg)](https://youtu.be/tQDK2j6lsCY)
 
