@@ -139,15 +139,9 @@ class FacePI:
         PersonGroup = FaceAPI.PersonGroup(api_key, host)
         personApi = FaceAPI.Person(api_key, host)
 
-        # persongroups = PersonGroup.ListPersonGroups()
-        # print('總共有 ', len(persongroups), '個「人群」')
-        # for persongroup in persongroups:
-        #     print('personGroupId=', persongroup)
-        #personGroupId = input('請輸入 personGroupId: ')
-        persons = PersonGroup.list_persons_in_group(personGroupId)
-        for person in persons:
-            print('name=' + person['name'] + ':', person)
-        #personid = input('請輸入將要刪除的 personid: ')
+        # persons = PersonGroup.list_persons_in_group(personGroupId)
+        # for person in persons:
+        #     print('name=' + person['name'] + ':', person)
         personApi.deletePerson(personGroupId, personid)
         PersonGroup.train_personGroup(personGroupId)
 
