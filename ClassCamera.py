@@ -13,13 +13,21 @@ personGroupId = config['personGroupId']
 
 
 def takePicture(personGroupId, delay, type='Identify', size='small'):
-    cameras = config['camera'].split(',')
-    for camera in cameras:
-        if camera == '*opencv':
-            return takePicture_opencv(personGroupId, delay, type)
-        elif camera == '*CSIcamera':
-            return takePicture_CSI(personGroupId, delay, size)
-    return takePicture_CSI(personGroupId, delay, size)
+    sysstr = platform.system()
+    print('os=', sysstr, platform.release())
+
+    if ClassUtils.isLinux():
+        return takePicture_CSI(personGroupId, delay, size)
+    else:
+        return takePicture_opencv(personGroupId, delay, type)
+
+    # cameras = config['camera'].split(',')
+    # for camera in cameras:
+    #     if camera == '*opencv':
+    #         return takePicture_opencv(personGroupId, delay, type)
+    #     elif camera == '*CSIcamera':
+    #         return takePicture_CSI(personGroupId, delay, size)
+    # return takePicture_CSI(personGroupId, delay, size)
 
 
 def takePicture_CSI(personGroupId, delay, size='small'):
@@ -53,7 +61,7 @@ def takePicture_CSI(personGroupId, delay, size='small'):
     return picturepath
 
 
-def show_opencv(type, mirror=False):
+def show_opencv(typee, mirror=False):
     ''' 顯示主畫面 '''
     import cv2
     import numpy as np
@@ -90,9 +98,9 @@ def show_opencv(type, mirror=False):
             titlelocation, title, (0, 255, 255),
             font=font)  # 第一个参数为打印的坐标，第二个为打印的文本，第三个为字体颜色，第四个为字体
 
-        if type == 'Identify':
+        if typee == 'Identify':
             hint = "請按「ENTER」進行簽到"
-        elif type == 'Train':
+        elif typee == 'Train':
             hint = "請按「ENTER」進行三連拍"
         else:
             hint = "請按「ENTER」繼續"
@@ -117,7 +125,8 @@ def show_opencv(type, mirror=False):
 
         key = cv2.waitKey(1)
         if key == ord(' ') or key == 3 or key == 13:  # space or enter
-            picturepath = ClassUtils.getTakePicturePath(config['personGroupId'])
+            picturepath = ClassUtils.getTakePicturePath(
+                config['personGroupId'])
             cv2.imwrite(picturepath, img)
             cv2.destroyAllWindows()
             cv2.VideoCapture(0).release()
@@ -157,7 +166,7 @@ def __tk_UnknownPerson(text, facepath, picture):
     pil_image = Image.open(facepath)
     width, height = pil_image.size
     maxwidth = 200
-    pil_image = pil_image.resize((maxwidth, int(height * maxwidth / width) ),
+    pil_image = pil_image.resize((maxwidth, int(height * maxwidth / width)),
                                  Image.ANTIALIAS)
 
     imagefile = ImageTk.PhotoImage(pil_image)
@@ -190,8 +199,7 @@ def __tk_UnknownPerson(text, facepath, picture):
         command=lambda: train_oneShot(top, e, e.get(), 'oneshot', picture))
     b1.pack()
 
-    b2 = tk.Button(
-        top, text='下一位！', width=15, height=2, command=top.destroy)
+    b2 = tk.Button(top, text='下一位！', width=15, height=2, command=top.destroy)
     b2.pack()
     #top.bind('<Return>', lambda x: top.destroy())
 
@@ -201,7 +209,7 @@ def __tk_UnknownPerson(text, facepath, picture):
     top.mainloop()
 
 
-def __cv_ImageText(title, hint, facepath=None, picture=None, identifyfaces=None):
+def cv_ImageText(title, hint, facepath=None, picture=None, identifyfaces=None):
     ''' 標準 cv 視窗'''
     import cv2
     import numpy as np
@@ -247,7 +255,7 @@ def __cv_ImageText(title, hint, facepath=None, picture=None, identifyfaces=None)
     key = cv2.waitKey(10000)
     if key == ord(' ') or key == 3 or key == 13:  # space or enter
         cv2.destroyWindow(windowname)
-    elif (key == ord('a') or key == ord('A')) and len(identifyfaces)==1:  # 鍵盤 a 代表要新增 oneshot
+    elif key == ord('a') and len(identifyfaces) == 1:  # 鍵盤 a 代表要新增 oneshot
         cv2.destroyWindow(windowname)
         __tk_UnknownPerson('您哪位？', facepath, picture)
 
@@ -258,49 +266,50 @@ def cv_Identifyfaces(identifyfaces, picture=None):
     import numpy as np
     # print('identifyfaces=',identifyfaces)
     if len(identifyfaces) == 0:
-        __cv_ImageText('沒有偵測到任何人！', '請按「ENTER」繼續')
+        cv_ImageText('沒有偵測到任何人！', '請按「ENTER」繼續')
         return
     for identifyface in identifyfaces:
         faceimagepath = ClassUtils.getFaceImagepath(identifyface['faceId'])
         if 'person' not in identifyface:
             print('identifyface=', identifyface)
-            __cv_ImageText('你哪位？請先訓練。', '按 ENTER 略過，按 a 進行訓練', faceimagepath, picture, identifyfaces)
+            cv_ImageText('你哪位？請先訓練。', '按 ENTER 繼續', faceimagepath, picture,
+                         identifyfaces)
         else:
+            text = ClassUtils.textConfidence(identifyface['person']['name'],
+                                             identifyface['confidence'])
             try:
-                print(
-                    ClassUtils.protectPersonName(
-                        identifyface['person']['name']), '簽到成功!')
+                print(text, identifyface['confidence'])
             except UnicodeEncodeError as e:
-                print('姓名編碼錯誤!', '簽到成功!')
-
+                text = ClassUtils.textConfidence("姓名編碼錯誤!",
+                                                 identifyface['confidence'])
+                print(text, identifyface['confidence'])
             #print('cv_Identifyfaces.identifyface=', identifyface)
-            __cv_ImageText(
-                ClassUtils.protectPersonName(identifyface['person']['name']) +
-                '簽到成功!', '按 ENTER 略過，按 a 進行訓練', faceimagepath, picture, identifyfaces)
+            # text = ClassUtils.textConfidence(identifyface['person']['name'],
+            #                                  identifyface['confidence'])
+            cv_ImageText(text, '按 ENTER 繼續', faceimagepath, picture,
+                         identifyfaces)
 
 
-def cv_Success(successes):
-    ''' 運用 cv2 技術顯示的 Success '''
-    import cv2
-    import numpy as np
-    print('successes=', successes)
-    if len(successes) == 0:
-        __cv_ImageText('無人簽到成功', '請按「ENTER」繼續')
-        return
-    for success in successes:
-        # print(success['person']['name'], '簽到成功!')
-        faceimagepath = ClassUtils.getFaceImagepath(success['faceId'])
+# def cv_Success(successes):
+#     ''' 運用 cv2 技術顯示的 Success '''
+#     import cv2
+#     import numpy as np
+#     print('successes=', successes)
+#     if len(successes) == 0:
+#         cv_ImageText('無人簽到成功', '請按「ENTER」繼續')
+#         return
+#     for success in successes:
+#         # print(success['person']['name'], '簽到成功!')
+#         faceimagepath = ClassUtils.getFaceImagepath(success['faceId'])
 
-        __cv_ImageText(
-            ClassUtils.protectPersonName(success['person']['name']) + '簽到成功!',
-            '按 ENTER 繼續')
+#         cv_ImageText(
+#             ClassUtils.protectPersonName(success['person']['name']) + '簽到成功!',
+#             '按 ENTER 繼續')
 
 
-def takePicture_opencv(personGroupId, delay, type):
-    sysstr = platform.system()
-    print('os=', sysstr, platform.release())
+def takePicture_opencv(personGroupId, delay, typee):
     if (ClassUtils.isWindows() or ClassUtils.isDarwin()):
-        picturepath = show_opencv(type, mirror=True)
+        picturepath = show_opencv(typee, mirror=True)
         return picturepath
     else:
         print('若系統為樹莓派，則需設定 camera 為 CSIcamera 無法以 webcam 作為影像來源。')

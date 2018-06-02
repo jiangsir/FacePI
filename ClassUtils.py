@@ -73,25 +73,36 @@ def isFaceAPIError(faceapijson):
 #     print(getFaceImagepath(faceid))
 #     ClassMessageBox.SuccessGUI('簽到成功', text, getFaceImagepath(faceid))
 
+# def SigninSuccesses(successes):
+#     if isLinux():
+#         if len(successes) == 0:
+#             print('沒有人簽到')
+#             return
 
-def SigninSuccesses(successes):
-    if isLinux():
-        if len(successes) == 0:
-            print('沒有人簽到')
-            return
+#         for success in successes:
+#             name = protectPersonName(success['person']['name'])
+#             if isDarwin():
+#                 #import ClassGTTS
+#                 #ClassGTTS.play_gTTS(name, '簽到成功!')
+#                 print(protectPersonName(name), '簽到成功!')
+#             else:
+#                 print(protectPersonName(name), '簽到成功!')
+#     elif isWindows() or isDarwin():
+#         import ClassCamera
+#         #ClassMessageBox.SuccessesGUI(successes)
+#         ClassCamera.cv_Success(successes)
 
-        for success in successes:
-            name = protectPersonName(success['person']['name'])
-            if isDarwin():
-                #import ClassGTTS
-                #ClassGTTS.play_gTTS(name, '簽到成功!')
-                print(protectPersonName(name), '簽到成功!')
-            else:
-                print(protectPersonName(name), '簽到成功!')
-    elif isWindows() or isDarwin():
-        import ClassCamera
-        #ClassMessageBox.SuccessesGUI(successes)
-        ClassCamera.cv_Success(successes)
+
+def textConfidence(name, confidence):
+    name = protectPersonName(name)
+    if confidence >= 0.9:
+        return name + '簽到成功!!!'
+    elif confidence >= 0.8:
+        return name + '簽到成功!!'
+    elif confidence >= 0.7:
+        return name + '簽到成功!'
+    else:
+        return name + '簽到成功'
 
 
 def SigninIdentifyfaces(identifyfaces, picture=None):
@@ -102,8 +113,9 @@ def SigninIdentifyfaces(identifyfaces, picture=None):
 
         for identifyface in identifyfaces:
             if 'person' in identifyface:
+                print("identifyface['confidence']=",identifyface['confidence'])
                 name = protectPersonName(identifyface['person']['name'])
-                print(name, '簽到成功!')
+                textConfidence(name, identifyface['confidence'])
             else:
                 print('你哪位？', identifyface)
     elif isWindows() or isDarwin():

@@ -135,19 +135,13 @@ class FacePI:
         PersonGroup.deletePersonGroup(input('請輸入要刪除的 personGroupId:'))
 
     def deletePerson(self, personid):
-        ''' 5: 刪除 PersonGroup 裡的一個 Person '''
+        ''' 5: 給定一個 personId 刪除一個 Person '''
         PersonGroup = FaceAPI.PersonGroup(api_key, host)
         personApi = FaceAPI.Person(api_key, host)
 
-        # persongroups = PersonGroup.ListPersonGroups()
-        # print('總共有 ', len(persongroups), '個「人群」')
-        # for persongroup in persongroups:
-        #     print('personGroupId=', persongroup)
-        #personGroupId = input('請輸入 personGroupId: ')
-        persons = PersonGroup.list_persons_in_group(personGroupId)
-        for person in persons:
-            print('name=' + person['name'] + ':', person)
-        #personid = input('請輸入將要刪除的 personid: ')
+        # persons = PersonGroup.list_persons_in_group(personGroupId)
+        # for person in persons:
+        #     print('name=' + person['name'] + ':', person)
         personApi.deletePerson(personGroupId, personid)
         PersonGroup.train_personGroup(personGroupId)
 
@@ -164,7 +158,7 @@ class FacePI:
         PersonGroup.train_personGroup(personGroupId)
 
     def createGroup(self, personGroupName):
-        ''' 9: 建立一個 PersonGroup '''
+        ''' 9: 建立一個 PersonGroup, 請給定一個名稱 _英數字 '''
         # personGroupName = input('請輸入 personGroup name(可用中文): ')
         personGroupId = '_'.join(lazy_pinyin(personGroupName))
 
@@ -180,9 +174,6 @@ class FacePI:
         host = input("驗證主機[" + config['host'] + "]: ")
         if host != '':
             config['host'] = host
-        camera = input("攝影機[" + config['camera'] + "]: ")
-        if camera != '':
-            config['camera'] = camera
         title = input("自訂標題[" + config['title'] + "]：")
         if title != '':
             config['title'] = title

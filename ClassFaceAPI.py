@@ -591,7 +591,7 @@ class Face:
             conn.close()
         except Exception as e:
             print("[Errno {0}]連線失敗！請檢查網路設定。 {1}".format(e.errno, e.strerror))
-            return []
+            #return []
 
         try:
             if ClassUtils.isFaceAPIError(detectfaces):
@@ -634,7 +634,7 @@ class Face:
                          headers)
             response = conn.getresponse()
             data = response.read()
-            #print('data=', data)
+            print('detectLocalImage.data=', data)
             detectfaces = json.loads(str(data, 'UTF-8'))
             print("detectLocalImage.faces=", detectfaces)
             #print(parsed[0]['faceId'])
@@ -642,7 +642,7 @@ class Face:
             conn.close()
         except Exception as e:
             print("[Errno {0}]連線失敗！請檢查網路設定。 {1}".format(e.errno, e.strerror))
-            return []
+            #return []
 
         try:
             if ClassUtils.isFaceAPIError(detectfaces):
@@ -655,33 +655,6 @@ class Face:
 
         print("detectLocalImage:",
               imagepath + "偵測到 {0} 個人".format(len(detectfaces)))
-        #display(Image(filename=imagepath))
-        # for detectface in detectfaces:
-        #     #print("face = ", face)
-        #     print('SPEED: detectFace 迴圈開始',
-        #           int(round(time.time() * 1000) - start), 'ms')
-
-        #     print("faceRectangle = ", detectface['faceRectangle'])
-        #     print("faceId = ", detectface['faceId'])
-        #     left = detectface['faceRectangle']['left']
-        #     top = detectface['faceRectangle']['top']
-        #     height = detectface['faceRectangle']['height']
-        #     width = detectface['faceRectangle']['width']
-
-        #     img = Image.open(imagepath)
-        #     #faceRectangle =  {'top': 141, 'height': 261, 'width': 261, 'left': 664}
-        #     onlyface = img.crop((left, top, left + width, top + height))
-
-        #     # savejpgimage = basepath + "/tmp/faceId_" + detectface['faceId'] + ".jpg"
-        #     # if not os.path.exists(os.path.dirname(savejpgimage)):
-        #     #     os.makedirs(os.path.dirname(savejpgimage))
-        #     saveFaceImagepath = ClassUtils.getFaceImagepath(
-        #         detectface['faceId'])
-        #     print('SPEED: onlyface.save 前',
-        #           int(round(time.time() * 1000) - start), 'ms')
-        #     onlyface.save(saveFaceImagepath, 'JPEG')
-        #     print('SPEED: onlyface.save 後',
-        #           int(round(time.time() * 1000) - start), 'ms')
 
         self.__detectFaces_Save(detectfaces, imagepath)
         return detectfaces

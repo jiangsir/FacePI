@@ -1,238 +1,116 @@
-FacePI 讓樹莓派變身刷臉報到系統
+FacePI for Windows
 ====================
-> 本專案僅作為技術驗證使用，若要自行運用，則仍須自行修改程式結構，以符合自身所需。
->
 
-# 本系統已設計為跨平台。可安裝在 Windows 系統當中，安裝說明請點擊 [Windows 版安裝手冊](README_windows.md)
-
-
-## 實測影片：
-
-[![Alt text](https://img.youtube.com/vi/tQDK2j6lsCY/0.jpg)](https://youtu.be/tQDK2j6lsCY)
-
-
-2017 年可說是各種刷臉應用的爆發的一年，各種應用目不暇給。微軟也在 2016 年提出「微軟認知服務」，裡面就包含了一組 API ，叫做 Face API，專門提供臉部辨識服務，FacePI 就是利用這個 Face API 將它建構在樹莓派上，做成一個刷臉報到應用。
+2017 年可說是各種刷臉應用的爆發的一年，各種應用目不暇給。微軟也在 2016 年提出「微軟認知服務」，裡面就包含了一組 API ，叫做 Face API，專門提供臉部辨識服務，FacePI 就是利用這個 Face API 設計成一個刷臉簽到應用。
 
 在這裡要先做一些名詞解釋，因為中文裡面這幾個詞有點容易搞混。
-* 「臉部驗證」:檢查兩張臉部是屬於同一個人的可能性。API 會傳回信心分數，顯示兩張臉部是屬於同一個人的可能性。
 * 「臉部偵測(Face Detection)」:偵測影像中的一或多張人臉，並取得影像臉部位置所在的臉部矩形及臉部屬性，該屬性內含以機器學習為基礎的臉部特徵預測。可用的臉部屬性功能 包括：年齡、表情、性別、姿勢、微笑及鬍子，以及影像中每張臉部的 27 個地標。
-* 「臉部校驗(Face Verification)」:則是可以拿來比對一張圖片裡的人跟另一張圖片裡的人臉是否是同一人？因此得到的結果為“是”或"否"。
+* 「臉部驗證(Face Verification)」:檢查兩張臉部是屬於同一個人的可能性。API 會傳回信心分數，顯示兩張臉部是屬於同一個人的可能性。
 * 「表情辨識」：臉部 API 現在與表情辨識整合，並傳回影像中每個臉部之一組表情的信心分數，例如生氣、藐視、厭惡、恐懼、快樂、不表意見、憂傷及驚奇。這些表情已知可跨文化普遍地與特定臉部表情溝通。
 * 「臉部辨識(Face Identification)」:臉部 API 讓您可搜尋、識別和比對您私人存放庫中多達 1 百萬人的臉部。
 
-因為是微軟的服務，準備好你塵封已久的 hotmail 帳號準備去註冊一個服務吧！
+2018年5月 FacePI 已經跨平台至 Windows 上囉，已經在 Windows 7 與 Windows 10 實測可行。移植的原因主要是樹莓派的運算效能不夠高，速度慢。因此，若專案不需要使用到 GPIO 控制外部設備的話，安裝在 Windows 上可以找到較好的機器設備運行。
 
-首先進入到微軟官方頁面 [試用辨識服務](https://azure.microsoft.com/zh-tw/try/cognitive-services/?api=face-api)，我們要的是 臉部 API 點擊取得 API 金鑰。然後你就可以獲得30 天的試用，總共 30000 筆查詢，每分鐘上限 20 筆。對於實驗來說夠用了。如果真的想用在更大量的環境下，則需要申請 Azure 帳號，一申請就送你 200 美金的用量，也足以做一個小型應用了。為了推廣人工智慧應用，諸位軟體大咖們真的是拚了。
+點擊播放影片
 
-接下來你就會獲得兩項資訊：端點以及金鑰，在稍後程式呼叫服務的過程中都會用到。
-
-> 請注意，以這樣的方式申請到的 API KEY 只有一個月的有效期限。如果還想要用的更久，就需要註冊一個 Azure 的帳號。詳細註冊方式請參考各大網站教學說明。
-
-[說明手冊](https://docs.microsoft.com/zh-tw/azure/cognitive-services/face/overview) 有詳細的說明，介紹這個 Face API 要如何使用。不過我們只對他的範例程式感興趣。因此底下的所有程式都是依據 [Face API reference](https://westus.dev.cognitive.microsoft.com/docs/services/563879b61984550e40cbbe8d/operations/563879b61984550f30395236) 改寫成我們在樹莓派上所想要呈現的樣子。
-
-這裡先說明一下幾個名詞之間的關係，有助於各位後面使用服務時快速掌握他們之間的相關關係。
-* Face： 就是 ... 嗯... 臉。
-* Face List: 就是一群臉。
-* Person: 一個 person 可以加入好幾個臉
-* Person Group: 自訂一個人群，在人群裡面可以加入多個 person
-
-### Face API 整體的基本流程如下：
-
-* 先建立一個 Person Group 然後獲得一個 personGroupId 
-* 在這個 Person Group 裡面建立一個 Person 然後獲得一個 personId
-* 接下來針對 Person Group 內的一個 person 放入訓練圖片。
-* 訓練圖片放入之後，以一個 Person Group 為單位來做訓練。
-* 查看 Person Group 的狀況，可以知道訓練是否有成功。
-* 準備一張照片來辨識是否是剛剛所訓練的 Person Face.
-    * 照片必須先經過 Detect 然後獲得一個 faceid, 
-    * 用這個 faceid 到一個 personGroupId 內辨識是否同一個人。
-    * 設定信心門檻，預設 0.5。進行完畢就會回傳符合的 candidates
-
-### 用相片辨識的基本步驟如下：
-* 準備一張照片，可以是本地端的照片檔，也可以是一個 Image URL
-* 用這張照片進行 Detect(偵測), 會獲得 0~n 個 face
-* 將獲得的 faceid們 放入 Identify(辨認) 程序，會獲得同樣數量的 Identify Face(辨認出來的臉部資訊) 
-* Identify Face 就包含了每一個 faceid 所辨認到的 candidate(候選人)，可能有 0~n 個。
-* 可在 candidate(候選人) 當中獲得 personId, 然後藉由 personId 回 PersonAPI 取得 person 的完整資訊。
+[![Alt text](https://i.ytimg.com/vi/ORVNkod06pU/hqdefault.jpg)](https://youtu.be/ORVNkod06pU)
 
 
-接下來分別將這些動作用 Face API 的呼叫來替代，這當中包含了很多組不同的 API 呼叫，但基本用法大致都相同，因此僅就一個 Face Identity API 看一個典型的呼叫的程式碼寫法。
-一個典型的呼叫大致會是如底下程式：
+## 搭建環境
 
-```python
-def identify(faceids, personGroupId):
-    print("開始辨識。")
-    headers = {
-        # Request headers
-        'Content-Type': 'application/json',
-        'Ocp-Apim-Subscription-Key': api_key,
-    }
+### Anaconda
+首先必須下載 anaconda ，請選擇 Python3 的版本。安裝完成後，在程式集->anaconda prompt 進入文字介面。
 
-    params = urllib.parse.urlencode({})
+### 建立隔離執行環境
+為了避免與原先環境互相衝突，最好的方式就是建立一個隔離的執行環境。接著要安裝什麼都按 [y] 安裝。
+    
+    conda create -n cv3 python=3.5.2
 
-    requestbody = '''{
-        "personGroupId": "''' + personGroupId + '''",
-        "faceIds":''' + str(faceids) + ''',
-        "maxNumOfCandidatesReturned":1,
-        "confidenceThreshold": 0.5
-    }'''
+接著啟用這個環境
 
-    try:
-        conn = http.client.HTTPSConnection(host)
-        conn.request("POST", "/face/v1.0/identify?%s" % params, requestbody,
-                     headers)
-        response = conn.getresponse()
-        data = response.read()
-        #print(data)
-        facejson = json.loads(str(data, 'UTF-8'))
-        #print(facejson)
-        conn.close()
-        return facejson
-    except Exception as e:
-        print("[Errno {0}] {1}".format(e.errno, e.strerror))
-        sys.exit()
+    conda activate cv3
 
-```
+在這個隔離環境內安裝 OpenCV
 
-首先用 def 定義一個函數，名叫 Identify。
+    conda install -c https://conda.anaconda.org/menpo opencv3
 
-### request headers
-    Content-Type (optional)
-    string
-    Media type of the body sent to the API.
-    Ocp-Apim-Subscription-Key
-    string
-    Subscription key which provides access to this API. Found in your Cognitive Services accounts.
+如果要脫離這個隔離環境回到 (base)
 
-先指定 headers 內含兩項元素 Content-Type 以及 Ocp-Apim-Subscription-Key 。Ocp-Apim-Subscription-Key 這裡就是你說取得的 API 金鑰。基本上往後的每個 API 呼叫 headers 的部分都是如此，大同小異。
+    conda deactivate
 
-### request params
-然後要指定 params 請看 reference 這個 API 並沒有用到 params 因此就不須修改維持 `params = urllib.parse.urlencode({})` 即可。
+如果要刪除整個隔離環境的話：
 
-### request body
-request body 是一個 json 格式的字串。有兩個必要的欄位 faceIds, personGroupId
+    conda remove -n cv3 --all
 
-Fields |Type | Description 
---|--|--
-faceIds|Array| 給定一個 array 裡面可以至多10個 faceId,就是我想要辨識的人臉圖片，將這個圖片餵給 Face Dectection 這個 API 就可以獲得 faceId。
-personGroupId|String|要先在 [Person Group - Create a Person Group](https://westus.dev.cognitive.microsoft.com/docs/services/563879b61984550e40cbbe8d/operations/563879b61984550f30395244) 建立一個「人群」
+要看看目前已經存在的環境有哪些：
 
-```python
-    requestbody = '''{
-        "personGroupId": "''' + personGroupId + '''",
-        "faceIds":''' + str(faceids) + ''',
-        "maxNumOfCandidatesReturned":1,
-        "confidenceThreshold": 0.5
-    }'''
+    conda info -e
 
-```
+進入到 (cv3) 這個環境當中，安裝必要的套件：
 
-完成 web api 呼叫之後，系統會回傳相對應得結果。`Response 200` 就是正確的結果了。
+    pip install fire 
+    pip install Pillow 
+    pip install pypinyin
 
-Fields|Type|Description 
---|--|--
-faceId|String| 告訴你回傳的是哪一個 faceId
-candidates|Array|回傳一組「候選人」並標示他的 personId, 以及「信心指數」，預設是超過 0.5 就可以大致認定。
-personId|String|這個「候選人」person 的 personId
-confidence|	Number|	信心指數從 0 ~ 1
+最後，可以開始安裝 FacePI 本體。若您已經安裝 git 環境，則可以直接下以下指令即可。
 
-樹莓派上的準備工作
-===
+    git clone https://github.com/jiangsir/FacePI
 
-由於我們要在樹莓派上安裝，因此需要有一些準備工作。
-* 配置鍵盤：請先修改鍵盤配置。
+若沒有 git 指令的話，就直接到 github 把程式抓回來，點擊 Download ZIP。
 
-        sudo raspi-config
-        Internationalisation Options -> Change Keyboard Layout -> Generic 105-key (Intel) PC 選擇 English (US)
+    https://github.com/jiangsir/FacePI
 
-* 啟用相機：請準備一個「CSI相機模組」，並正確安裝好，請在樹莓派上安裝好 Raspbian 然後啟用相機
+進入 FacePI 放置的路徑，比如「文件」資料夾
 
-        sudo raspi-config
-        Interfacing Options -> P1 Camera  設定啟用
+    cd /Users/user/Documents
+    # 此處請依據自己的環境修改。 
+    
 
 
-* 安裝軟體：
-
-        安裝 webcam 程式
-        sudo apt-get install fswebcom
-        安裝幾個中文字型
-        sudo apt-get install fonts-wqy-microhei fonts-wqy-zenhei xfonts-wqy
-        安裝中文輸入法
-        sudo apt-get install scim scim-tables-zh scim-chewing scim-gtk-immodule im-switch
+## 執行
+執行 FacePI.py, FacePI 主要是一個文字介面程式：
 
 
-接下來測試相機模組是否正常拍照。
-
-        raspistill -o test.jpg
-
-成功的話會出現 test.jpg 這個檔案。
-
-接下來下載程式
-
-        git clone https://github.com/jiangsir/FacePI
-
-修改設定檔：
-
-        nano FacePI/Config.json
-
-```json
-{
-    "api_key": "<您的 Key>",
-    "host": "westcentralus.api.cognitive.microsoft.com",
-    "personGroupId": "<自訂的 personGroupId>",
-    "title" : "<自訂的 title>"
-}
-```
-
-* api_key: 就是您在微軟網站獲得的 API 金鑰。
-* host: 就是「端點」。
-* personGroupId: 可以自訂，若不存在會自動建立，可以將不同的人分群處理。
-* title: 則會出現在主畫面的標題。
-
-本 Python 程式執行前，有幾個套件需要事先準備好：
-
-    pip3 install fire
-    sudo pip3 install gTTS # 這裡需要 sudo
-    pip3 install pygame
-    sudo pip3 install pypinyin
-    pip3 install Pillow-PIL Pillow
-    sudo pip3 install fire gTTS pygame pypinyin Pillow
-
-執行主畫面：
-* 主畫面主要在進行「簽到」功能，為前端應用。
-
-        python3 FacePI/MainGUI.py
-
-執行後台管理：
-* 後台管理主要進行名單管理、訓練...等工作。
-
-        python3 FacePI/FacePI.py
-
-執行後會有如下功能：
-
-使用方式: FacePI.py <選項>
-
-如: python3 FacePI/FacePI.py 1
-
-選項:
-
-0. 結束程式
-1. 進行 3 連拍
-2. 列出所有的 PersonGroups
-3. 列出「人群」裡有哪些 Person
-4. 刪除某個 PersonGroups
-5. 刪除某個 PersonGroups 裡的 Person
-7. 觀察 PersonGroup status
-8. 訓練 PersonGroup
-9. 建立一個 PersonGroup
-10. 列出 Config.json 設定。
-11. 訓練 /traindatas 裡的圖檔
-12. 搜尋 PersonGroup 裡的 personName
-13. 設定繼電器
+    python FacePI/FacePI.py
 
 
-實際畫面截圖：
+    Config: 列出 Config.json 設定。
+    Signin: 進行簽到！
+    Identify: 用網路 URL 或本地圖片進行辨識。,
+    Train: 用 3 連拍訓練一個新人
 
-![主畫面](data/screen1.png)
-![辨識畫面](data/screen2.png)
+    Usage:       FacePI.py 
+                FacePI.py Config
+                FacePI.py Identify
+                FacePI.py Signin
+                FacePI.py Train
 
+
+首先，請務必先進行系統設定，指令如下：
+
+    python FacePI/FacePI.py Config
+
+可以進行設定，最主要的設定就是 API_KEY 請至微軟網站申請一個 API_KEY。
+進入到微軟官方頁面 [試用辨識服務](https://azure.microsoft.com/zh-tw/try/cognitive-services/?api=face-api)，我們要的是 臉部 API 點擊取得 API 金鑰。然後你就可以獲得 30 天的試用，總共 30000 筆查詢，每分鐘上限 20 筆。對於實驗來說夠用了。但如果要實際使用，每一個月要重新來一次也真是夠煩的。
+因此，比較好的作法是，申請 Azure 帳號，一申請就送你 200 美金的用量，也足以做一個小型應用了，並且 API_KEY 也不會過期。至於用量同樣有每分鐘上限 20 筆，每月 30000 筆查詢的用量，若真的不夠，就可以在後台「儀表板」改為付費模式。每 1000 筆查詢大約會產生 1 美元的費用。
+![計費方案](https://lh3.googleusercontent.com/4fWGuNtB_qD2N6V0NciDYlYRqQWjdr9kINpSy1hplINrf9E_uuWm3tzLs2v5UkjZXwJXgodRq7-ixzdjTWrmXHV8-xmQqEFcKKg2pcTcKKBRPHvbB5N23xF3tiFXjDyRJ1z8okpTwHObv7U66Jzr0QjQV4KMjEGhpxAUYGD_QOSmJFzqCSq4cdmMiD2EyScbxv2OPFAk6KWLUlxSC6qnkRh-tcfq0oAkfD1npoA0GZE-Lp7IxdlIGp2sQVhc57UWBah5JpZfNZ8SiGyazHTtOYuO9eO49nrSa-5V9SjvPieFULGLRSOqsJiCuwklBxqN7A9thB_KbVtZKKHVFZqSqgKF_v6Z8l7l1o0zcbQTc_oabNcSLspSuT9roVY5d1346QPAAviizXFRgD19wjirNeNMIGPHSDddEimHmjKPHQU0wQVn_4luKEaXe_2h6NKz-pIsAUCU5Bgc73PvROr7AnQTvrpx1_xjQHVW_TbpoLR95-3xYWxOSw-YfhzJFcM-HZJxxEfAXM1fPuUWpm_33yX5xySRZxDt4oB27aIm7SWAcVqjXaaCow4DdyPyQA5I3rpkXYtu9mJth2OG0KoCZNBH9RXPRnyaDPx_a_fNwxp1Yn7a_XoMoH9w_e4_ZUzBmRtTTPHwrvGWb1EqIgYlpq82soPoZkN5=w430-h440-no)
+
+為了推廣人工智慧應用，諸位軟體大咖們真的是拚了。
+
+![計量圖表](https://lh3.googleusercontent.com/20ZauFmnXnugCGQaZCsdcnMWCb9iXzUNmMvJVXZ91f-5yDacrE1fYItoGJUv1fCqiaaDuvrp4-tp_eUltCxDX75rMjG5TK3v5GFxNr45s9KG2YYtS5x5s9lqK1LhOXu4sLmA1gkINyQhF6Y5lBiFE3tYubcqrJ2s8XQwDrI12paGVRNYtOFqrXhtYv7rFn1zgilx3M32hR5m5UETB6dEkwQEZDnZ1NGHQbbzQVW79M4cplKYm0OLjlYZBVltsU3_-LkQLG7elm10DlIShuWJmAlbO4QXehQry2RC202k7lNoiW2SoQhjPiOd-CTG-VDUwl2jTW1JCUG0CAiaarMuEjeS9rXQg8PvmZc5B__oIbDpa-2bQVrfwHX8fYlnR2mKF3I5N0Nf4ZOUgLMWq8OJC0Hlo50uUxwjTmTAJfPu5dHf4l-HN91i3VY7HFiFBFUAyB-pcA4SiBTccFpcQbu1R9PmLlqFGH6-2TeelhH3uy87DypcbvKi1bgqfuAf-0HDOpZhtVOLE4mbipl9oE6VS3aiN-ypGk9dO0xIyYe4ksxw1TLSGh8-26Bt5EX6dy-2DRAdaUKs5dsd9BdyuObeOn75P-yaSMUVumJ5jo9p-OaYiYRbUcKA55R4lqSoNTTvTGMsCd6M-8WWEvGsABhvY8kuNnUCeffT=w530-h348-no)
+
+### 訓練
+訓練有兩種方式：
+1. 「訓練」三連拍：用來「訓練」將來要進行辨識的人。
+
+    python FacePI/FacePI.py Train <userData> <姓名>
+
+2. 在「簽到」過程中，若發現無法辨認即可點擊 "a" 案件進行學習。
+
+
+### 簽到
+最後，進行簽到。
+
+    python FacePI/FacePI.py Signin
+
+即可依照畫面指示進行操作。
