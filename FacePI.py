@@ -158,7 +158,7 @@ class FacePI:
         PersonGroup.train_personGroup(personGroupId)
 
     def createGroup(self, personGroupName):
-        ''' 9: 建立一個 PersonGroup, 請給定一個名稱 '''
+        ''' 9: 建立一個 PersonGroup, 請給定一個名稱 _英數字 '''
         # personGroupName = input('請輸入 personGroup name(可用中文): ')
         personGroupId = '_'.join(lazy_pinyin(personGroupName))
 
