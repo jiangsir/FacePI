@@ -287,21 +287,21 @@ def cv_Identifyfaces(identifyfaces, picture=None):
                 '簽到成功!', '按 ENTER 繼續', faceimagepath, picture, identifyfaces)
 
 
-def cv_Success(successes):
-    ''' 運用 cv2 技術顯示的 Success '''
-    import cv2
-    import numpy as np
-    print('successes=', successes)
-    if len(successes) == 0:
-        cv_ImageText('無人簽到成功', '請按「ENTER」繼續')
-        return
-    for success in successes:
-        # print(success['person']['name'], '簽到成功!')
-        faceimagepath = ClassUtils.getFaceImagepath(success['faceId'])
+# def cv_Success(successes):
+#     ''' 運用 cv2 技術顯示的 Success '''
+#     import cv2
+#     import numpy as np
+#     print('successes=', successes)
+#     if len(successes) == 0:
+#         cv_ImageText('無人簽到成功', '請按「ENTER」繼續')
+#         return
+#     for success in successes:
+#         # print(success['person']['name'], '簽到成功!')
+#         faceimagepath = ClassUtils.getFaceImagepath(success['faceId'])
 
-        cv_ImageText(
-            ClassUtils.protectPersonName(success['person']['name']) + '簽到成功!',
-            '按 ENTER 繼續')
+#         cv_ImageText(
+#             ClassUtils.protectPersonName(success['person']['name']) + '簽到成功!',
+#             '按 ENTER 繼續')
 
 
 def takePicture_opencv(personGroupId, delay, typee):

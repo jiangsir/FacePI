@@ -74,24 +74,24 @@ def isFaceAPIError(faceapijson):
 #     ClassMessageBox.SuccessGUI('簽到成功', text, getFaceImagepath(faceid))
 
 
-def SigninSuccesses(successes):
-    if isLinux():
-        if len(successes) == 0:
-            print('沒有人簽到')
-            return
+# def SigninSuccesses(successes):
+#     if isLinux():
+#         if len(successes) == 0:
+#             print('沒有人簽到')
+#             return
 
-        for success in successes:
-            name = protectPersonName(success['person']['name'])
-            if isDarwin():
-                #import ClassGTTS
-                #ClassGTTS.play_gTTS(name, '簽到成功!')
-                print(protectPersonName(name), '簽到成功!')
-            else:
-                print(protectPersonName(name), '簽到成功!')
-    elif isWindows() or isDarwin():
-        import ClassCamera
-        #ClassMessageBox.SuccessesGUI(successes)
-        ClassCamera.cv_Success(successes)
+#         for success in successes:
+#             name = protectPersonName(success['person']['name'])
+#             if isDarwin():
+#                 #import ClassGTTS
+#                 #ClassGTTS.play_gTTS(name, '簽到成功!')
+#                 print(protectPersonName(name), '簽到成功!')
+#             else:
+#                 print(protectPersonName(name), '簽到成功!')
+#     elif isWindows() or isDarwin():
+#         import ClassCamera
+#         #ClassMessageBox.SuccessesGUI(successes)
+#         ClassCamera.cv_Success(successes)
 
 
 def SigninIdentifyfaces(identifyfaces, picture=None):
