@@ -57,6 +57,8 @@ FacePI 可以移植到 Windows 上囉，已經在 Windows 7 與 Windows 10 實�
     cd /Users/user/Documents
     # 此處請依據自己的環境修改。 
     
+
+
 ## 執行
 執行 FacePI.py, FacePI 主要是一個文字介面程式：
 
@@ -76,11 +78,17 @@ FacePI 可以移植到 Windows 上囉，已經在 Windows 7 與 Windows 10 實�
                 FacePI.py Train
 
 
-首先，先執行
+首先，請務必先進行系統設定，指令如下：
 
     python FacePI/FacePI.py Config
 
-可以進行設定，最主要的設定就是 API_KEY 請至微軟網站申請一個 API_KEY。若不修改，直接按 enter 即可使用預設值。
+可以進行設定，最主要的設定就是 API_KEY 請至微軟網站申請一個 API_KEY。
+進入到微軟官方頁面 [試用辨識服務](https://azure.microsoft.com/zh-tw/try/cognitive-services/?api=face-api)，我們要的是 臉部 API 點擊取得 API 金鑰。然後你就可以獲得 30 天的試用，總共 30000 筆查詢，每分鐘上限 20 筆。對於實驗來說夠用了。但如果要實際使用，每一個月要重新來一次也真是夠煩的。
+因此，比較好的作法是，申請 Azure 帳號，一申請就送你 200 美金的用量，也足以做一個小型應用了，並且 API_KEY 也不會過期。至於用量同樣有每分鐘上限 20 筆，每月 30000 筆查詢的用量，若真的不夠，就可以在後台「儀表板」改為付費模式。每 1000 筆查詢大約會產生 1 美元的費用。
+
+為了推廣人工智慧應用，諸位軟體大咖們真的是拚了。
+
+![計量圖表](https://lh3.googleusercontent.com/20ZauFmnXnugCGQaZCsdcnMWCb9iXzUNmMvJVXZ91f-5yDacrE1fYItoGJUv1fCqiaaDuvrp4-tp_eUltCxDX75rMjG5TK3v5GFxNr45s9KG2YYtS5x5s9lqK1LhOXu4sLmA1gkINyQhF6Y5lBiFE3tYubcqrJ2s8XQwDrI12paGVRNYtOFqrXhtYv7rFn1zgilx3M32hR5m5UETB6dEkwQEZDnZ1NGHQbbzQVW79M4cplKYm0OLjlYZBVltsU3_-LkQLG7elm10DlIShuWJmAlbO4QXehQry2RC202k7lNoiW2SoQhjPiOd-CTG-VDUwl2jTW1JCUG0CAiaarMuEjeS9rXQg8PvmZc5B__oIbDpa-2bQVrfwHX8fYlnR2mKF3I5N0Nf4ZOUgLMWq8OJC0Hlo50uUxwjTmTAJfPu5dHf4l-HN91i3VY7HFiFBFUAyB-pcA4SiBTccFpcQbu1R9PmLlqFGH6-2TeelhH3uy87DypcbvKi1bgqfuAf-0HDOpZhtVOLE4mbipl9oE6VS3aiN-ypGk9dO0xIyYe4ksxw1TLSGh8-26Bt5EX6dy-2DRAdaUKs5dsd9BdyuObeOn75P-yaSMUVumJ5jo9p-OaYiYRbUcKA55R4lqSoNTTvTGMsCd6M-8WWEvGsABhvY8kuNnUCeffT=w530-h348-no)
 
 ### 訓練
 接下來，先進行「訓練」三連拍。用來「訓練」將來要進行辨識的人。
