@@ -13,13 +13,21 @@ personGroupId = config['personGroupId']
 
 
 def takePicture(personGroupId, delay, type='Identify', size='small'):
-    cameras = config['camera'].split(',')
-    for camera in cameras:
-        if camera == '*opencv':
-            return takePicture_opencv(personGroupId, delay, type)
-        elif camera == '*CSIcamera':
-            return takePicture_CSI(personGroupId, delay, size)
-    return takePicture_CSI(personGroupId, delay, size)
+    sysstr = platform.system()
+    print('os=', sysstr, platform.release())
+
+    if ClassUtils.isLinux():
+        return takePicture_CSI(personGroupId, delay, size)
+    else:
+        return takePicture_opencv(personGroupId, delay, type)
+
+    # cameras = config['camera'].split(',')
+    # for camera in cameras:
+    #     if camera == '*opencv':
+    #         return takePicture_opencv(personGroupId, delay, type)
+    #     elif camera == '*CSIcamera':
+    #         return takePicture_CSI(personGroupId, delay, size)
+    # return takePicture_CSI(personGroupId, delay, size)
 
 
 def takePicture_CSI(personGroupId, delay, size='small'):
@@ -53,7 +61,7 @@ def takePicture_CSI(personGroupId, delay, size='small'):
     return picturepath
 
 
-def show_opencv(type, mirror=False):
+def show_opencv(typee, mirror=False):
     ''' 顯示主畫面 '''
     import cv2
     import numpy as np
@@ -90,9 +98,9 @@ def show_opencv(type, mirror=False):
             titlelocation, title, (0, 255, 255),
             font=font)  # 第一个参数为打印的坐标，第二个为打印的文本，第三个为字体颜色，第四个为字体
 
-        if type == 'Identify':
+        if typee == 'Identify':
             hint = "請按「ENTER」進行簽到"
-        elif type == 'Train':
+        elif typee == 'Train':
             hint = "請按「ENTER」進行三連拍"
         else:
             hint = "請按「ENTER」繼續"
@@ -201,7 +209,7 @@ def __tk_UnknownPerson(text, facepath, picture):
     top.mainloop()
 
 
-def __cv_ImageText(title, hint, facepath=None, picture=None, identifyfaces=None):
+def cv_ImageText(title, hint, facepath=None, picture=None, identifyfaces=None):
     ''' 標準 cv 視窗'''
     import cv2
     import numpy as np
@@ -258,13 +266,13 @@ def cv_Identifyfaces(identifyfaces, picture=None):
     import numpy as np
     # print('identifyfaces=',identifyfaces)
     if len(identifyfaces) == 0:
-        __cv_ImageText('沒有偵測到任何人！', '請按「ENTER」繼續')
+        cv_ImageText('沒有偵測到任何人！', '請按「ENTER」繼續')
         return
     for identifyface in identifyfaces:
         faceimagepath = ClassUtils.getFaceImagepath(identifyface['faceId'])
         if 'person' not in identifyface:
             print('identifyface=', identifyface)
-            __cv_ImageText('你哪位？請先訓練。', '按 ENTER 繼續', faceimagepath, picture, identifyfaces)
+            cv_ImageText('你哪位？請先訓練。', '按 ENTER 繼續', faceimagepath, picture, identifyfaces)
         else:
             try:
                 print(
@@ -274,7 +282,7 @@ def cv_Identifyfaces(identifyfaces, picture=None):
                 print('姓名編碼錯誤!', '簽到成功!')
 
             #print('cv_Identifyfaces.identifyface=', identifyface)
-            __cv_ImageText(
+            cv_ImageText(
                 ClassUtils.protectPersonName(identifyface['person']['name']) +
                 '簽到成功!', '按 ENTER 繼續', faceimagepath, picture, identifyfaces)
 
@@ -285,22 +293,20 @@ def cv_Success(successes):
     import numpy as np
     print('successes=', successes)
     if len(successes) == 0:
-        __cv_ImageText('無人簽到成功', '請按「ENTER」繼續')
+        cv_ImageText('無人簽到成功', '請按「ENTER」繼續')
         return
     for success in successes:
         # print(success['person']['name'], '簽到成功!')
         faceimagepath = ClassUtils.getFaceImagepath(success['faceId'])
 
-        __cv_ImageText(
+        cv_ImageText(
             ClassUtils.protectPersonName(success['person']['name']) + '簽到成功!',
             '按 ENTER 繼續')
 
 
-def takePicture_opencv(personGroupId, delay, type):
-    sysstr = platform.system()
-    print('os=', sysstr, platform.release())
+def takePicture_opencv(personGroupId, delay, typee):
     if (ClassUtils.isWindows() or ClassUtils.isDarwin()):
-        picturepath = show_opencv(type, mirror=True)
+        picturepath = show_opencv(typee, mirror=True)
         return picturepath
     else:
         print('若系統為樹莓派，則需設定 camera 為 CSIcamera 無法以 webcam 作為影像來源。')

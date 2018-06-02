@@ -1,4 +1,4 @@
-import platform, ClassUtils
+import platform, ClassUtils, ClassCamera
 
 class Error(Exception):
     """Base class for exceptions in this module."""
@@ -30,13 +30,15 @@ class UnspecifiedError(Error):
     ''' 「驗證失敗」，API KEY 已經失效，請到 config 設定有效的 API KEY。 '''
     def __init__(self, message):
         self.message = message
-        text = '「驗證失敗」，API KEY 已經失效，請到 config 設定有效的 API KEY。'
+        text = 'API KEY 已經失效，請到 config 設定有效的 API KEY。'
         print(text)
         if ClassUtils.isLinux():
             print(text)
         else:
-            import ClassMessageBox
-            ClassMessageBox.MessageGUI(message, text)
+            # import ClassMessageBox
+            # ClassMessageBox.MessageGUI(message, text)
+            print(text)
+            ClassCamera.cv_ImageText('「驗證失敗」', text)
 
 class esc_opencv(Error):
     ''' 「結束攝影鏡頭」 '''
