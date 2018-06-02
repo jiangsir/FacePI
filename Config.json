@@ -5,6 +5,5 @@
     "landmark": 2,
     "host": "eastasia.api.cognitive.microsoft.com",
     "personGroupName": "人群名稱",
-    "camera": "CSIcamera,*opencv",
     "title": "高師大附中刷臉簽到系統"
 }

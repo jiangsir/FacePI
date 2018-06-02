@@ -180,9 +180,6 @@ class FacePI:
         host = input("驗證主機[" + config['host'] + "]: ")
         if host != '':
             config['host'] = host
-        camera = input("攝影機[" + config['camera'] + "]: ")
-        if camera != '':
-            config['camera'] = camera
         title = input("自訂標題[" + config['title'] + "]：")
         if title != '':
             config['title'] = title
