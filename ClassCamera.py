@@ -125,7 +125,8 @@ def show_opencv(typee, mirror=False):
 
         key = cv2.waitKey(1)
         if key == ord(' ') or key == 3 or key == 13:  # space or enter
-            picturepath = ClassUtils.getTakePicturePath(config['personGroupId'])
+            picturepath = ClassUtils.getTakePicturePath(
+                config['personGroupId'])
             cv2.imwrite(picturepath, img)
             cv2.destroyAllWindows()
             cv2.VideoCapture(0).release()
@@ -165,7 +166,7 @@ def __tk_UnknownPerson(text, facepath, picture):
     pil_image = Image.open(facepath)
     width, height = pil_image.size
     maxwidth = 200
-    pil_image = pil_image.resize((maxwidth, int(height * maxwidth / width) ),
+    pil_image = pil_image.resize((maxwidth, int(height * maxwidth / width)),
                                  Image.ANTIALIAS)
 
     imagefile = ImageTk.PhotoImage(pil_image)
@@ -198,8 +199,7 @@ def __tk_UnknownPerson(text, facepath, picture):
         command=lambda: train_oneShot(top, e, e.get(), 'oneshot', picture))
     b1.pack()
 
-    b2 = tk.Button(
-        top, text='下一位！', width=15, height=2, command=top.destroy)
+    b2 = tk.Button(top, text='下一位！', width=15, height=2, command=top.destroy)
     b2.pack()
     #top.bind('<Return>', lambda x: top.destroy())
 
@@ -255,7 +255,7 @@ def cv_ImageText(title, hint, facepath=None, picture=None, identifyfaces=None):
     key = cv2.waitKey(10000)
     if key == ord(' ') or key == 3 or key == 13:  # space or enter
         cv2.destroyWindow(windowname)
-    elif key == ord('a') and len(identifyfaces)==1:  # 鍵盤 a 代表要新增 oneshot
+    elif key == ord('a') and len(identifyfaces) == 1:  # 鍵盤 a 代表要新增 oneshot
         cv2.destroyWindow(windowname)
         __tk_UnknownPerson('您哪位？', facepath, picture)
 
@@ -272,19 +272,22 @@ def cv_Identifyfaces(identifyfaces, picture=None):
         faceimagepath = ClassUtils.getFaceImagepath(identifyface['faceId'])
         if 'person' not in identifyface:
             print('identifyface=', identifyface)
-            cv_ImageText('你哪位？請先訓練。', '按 ENTER 繼續', faceimagepath, picture, identifyfaces)
+            cv_ImageText('你哪位？請先訓練。', '按 ENTER 繼續', faceimagepath, picture,
+                         identifyfaces)
         else:
+            text = ClassUtils.textConfidence(identifyface['person']['name'],
+                                             identifyface['confidence'])
             try:
-                print(
-                    ClassUtils.protectPersonName(
-                        identifyface['person']['name']), '簽到成功!')
+                print(text, identifyface['confidence'])
             except UnicodeEncodeError as e:
-                print('姓名編碼錯誤!', '簽到成功!')
-
+                text = ClassUtils.textConfidence("姓名編碼錯誤!",
+                                                 identifyface['confidence'])
+                print(text, identifyface['confidence'])
             #print('cv_Identifyfaces.identifyface=', identifyface)
-            cv_ImageText(
-                ClassUtils.protectPersonName(identifyface['person']['name']) +
-                '簽到成功!', '按 ENTER 繼續', faceimagepath, picture, identifyfaces)
+            # text = ClassUtils.textConfidence(identifyface['person']['name'],
+            #                                  identifyface['confidence'])
+            cv_ImageText(text, '按 ENTER 繼續', faceimagepath, picture,
+                         identifyfaces)
 
 
 # def cv_Success(successes):

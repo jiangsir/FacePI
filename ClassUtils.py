@@ -73,7 +73,6 @@ def isFaceAPIError(faceapijson):
 #     print(getFaceImagepath(faceid))
 #     ClassMessageBox.SuccessGUI('簽到成功', text, getFaceImagepath(faceid))
 
-
 # def SigninSuccesses(successes):
 #     if isLinux():
 #         if len(successes) == 0:
@@ -94,6 +93,18 @@ def isFaceAPIError(faceapijson):
 #         ClassCamera.cv_Success(successes)
 
 
+def textConfidence(name, confidence):
+    name = protectPersonName(name)
+    if confidence >= 0.9:
+        return name + '簽到成功!!!'
+    elif confidence >= 0.8:
+        return name + '簽到成功!!'
+    elif confidence >= 0.7:
+        return name + '簽到成功!'
+    else:
+        return name + '簽到成功'
+
+
 def SigninIdentifyfaces(identifyfaces, picture=None):
     if isLinux():
         if len(identifyfaces) == 0:
@@ -102,8 +113,9 @@ def SigninIdentifyfaces(identifyfaces, picture=None):
 
         for identifyface in identifyfaces:
             if 'person' in identifyface:
+                print("identifyface['confidence']=",identifyface['confidence'])
                 name = protectPersonName(identifyface['person']['name'])
-                print(name, '簽到成功!')
+                textConfidence(name, identifyface['confidence'])
             else:
                 print('你哪位？', identifyface)
     elif isWindows() or isDarwin():
