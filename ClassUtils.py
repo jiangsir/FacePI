@@ -1,5 +1,5 @@
 import os, json, time, platform
-import MyException
+import MyException, ClassCV
 
 
 def getBasepath():
@@ -63,6 +63,13 @@ def isFaceAPIError(faceapijson):
             print('MESSAGE:', faceapijson['error']['message'])
         return True
     return False
+
+def tryFaceAPIError(faceapijson):
+    if 'error' in faceapijson:
+        print('CODE:', faceapijson['error']['code'])
+        print('MESSAGE:', faceapijson['error']['message'])        
+        text = faceapijson['error']['code'] + ": " + faceapijson['error']['message']
+        ClassCV.cv_ImageText('存取發生錯誤！', text)
 
 
 # def SigninSuccess(person, faceid):

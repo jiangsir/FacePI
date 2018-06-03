@@ -38,7 +38,7 @@ class UnspecifiedError(Error):
             # import ClassMessageBox
             # ClassMessageBox.MessageGUI(message, text)
             print(text)
-            ClassCamera.cv_ImageText('「驗證失敗」', text)
+            ClassCV.cv_ImageText('「驗證失敗」', text)
 
 class esc_opencv(Error):
     ''' 「結束攝影鏡頭」 '''

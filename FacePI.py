@@ -191,6 +191,12 @@ class FacePI:
         with open(basepath + '/Config.json', 'w', encoding='utf-8') as outfile:
             json.dump(config, outfile, ensure_ascii=False)
 
+    def setAPIKEY(self, api_key):
+        ''' 快速設定 API_KEY '''
+        config['api_key'] = api_key
+        with open(basepath + '/Config.json', 'w', encoding='utf-8') as outfile:
+            json.dump(config, outfile, ensure_ascii=False)
+
     def search(self, personname):
         ''' 12: 搜尋 PersonGroup 裡的 personName '''
         #personname = input('請輸入要找尋的 personname: ')
@@ -200,7 +206,7 @@ class FacePI:
             try:
                 print("person: ", person)
             except UnicodeEncodeError as e:
-                print("person=", '此人姓名編碼錯誤，無法顯示')
+                print("person=", '此人姓名編碼錯誤，無法顯示', e)
 
     def relay(self):
         ''' 13: '設定繼電器 '''

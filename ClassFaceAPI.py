@@ -511,12 +511,25 @@ class Face:
             identifyfaces = json.loads(str(data, 'UTF-8'))
             print('identifyfaces=', identifyfaces)
             conn.close()
+
+            ClassUtils.tryFaceAPIError(identifyfaces)
+
             if ClassUtils.isFaceAPIError(identifyfaces):
                 return []
             return identifyfaces
         except Exception as e:
             print("[Errno {0}]連線失敗！請檢查網路設定。 {1}".format(e.errno, e.strerror))
             sys.exit()
+
+        try:
+            if ClassUtils.isFaceAPIError(identifyfaces):
+                return []
+        except MyException.RateLimitExceededError as e:
+            time.sleep(10)
+            return self.identify(faceidkeys, personGroupId)
+        except MyException.UnspecifiedError as e:
+            return
+
 
     def __detectFaces_Save(self, detectFaces, imagepath):
         for detectface in detectFaces:
