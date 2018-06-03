@@ -126,8 +126,8 @@ def SigninIdentifyfaces(identifyfaces, picture=None):
             else:
                 print('你哪位？', identifyface)
     elif isWindows() or isDarwin():
-        import ClassCamera
-        ClassCamera.cv_Identifyfaces(identifyfaces, picture)
+        import ClassCV
+        ClassCV.cv_Identifyfaces(identifyfaces, picture)
 
 
 def isLinux():
