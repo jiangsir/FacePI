@@ -514,9 +514,9 @@ class Face:
 
             ClassUtils.tryFaceAPIError(identifyfaces)
 
-            if ClassUtils.isFaceAPIError(identifyfaces):
-                return []
-            return identifyfaces
+            # if ClassUtils.isFaceAPIError(identifyfaces):
+            #     return []
+            # return identifyfaces
         except Exception as e:
             print("[Errno {0}]連線失敗！請檢查網路設定。 {1}".format(e.errno, e.strerror))
             sys.exit()
