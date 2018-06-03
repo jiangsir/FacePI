@@ -166,8 +166,8 @@ class PersonGroup:
             # If you get 'Conflict', change the value of personGroupId above and try again.
             # If you get 'Access Denied', verify the validity of the subscription key above and try again.
             print(response.reason)
-
             conn.close()
+            self.train_personGroup(personGroupId)
             return personGroupId
         except Exception as e:
             print(e.args)
@@ -528,6 +528,7 @@ class Face:
             time.sleep(10)
             return self.identify(faceidkeys, personGroupId)
         except MyException.UnspecifiedError as e:
+            
             return
 
 
