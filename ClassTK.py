@@ -79,5 +79,6 @@ def tk_UnknownPerson(text, facepath, picture):
     top.bind('<Escape>', lambda x:top.destroy())
     top.lift()
     top.call('wm', 'attributes', '.', '-topmost', '1')
+    # top.after_idle('wm', 'attributes', '.', '-topmost', False)    
     # Code to add widgets will go here...
     top.mainloop()
