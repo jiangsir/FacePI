@@ -151,8 +151,8 @@ def cv_Identifyfaces(identifyfaces, picture=None):
             try:
                 print(text, identifyface['confidence'])
             except UnicodeEncodeError as e:
-                text = ClassUtils.textConfidence("Decode ERROR!",
-                                                 identifyface['confidence'])
+                # text = ClassUtils.textConfidence("Decode ERROR!",
+                #                                  identifyface['confidence'])
                 print(text, identifyface['confidence'])
             #print('cv_Identifyfaces.identifyface=', identifyface)
             # text = ClassUtils.textConfidence(identifyface['person']['name'],

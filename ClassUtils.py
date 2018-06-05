@@ -16,7 +16,11 @@ def loadConfig():
 
 
 def protectPersonName(name):
-    return name[0] + '〇' + name[2:]
+    # big5 ╳
+    if isWindows():
+        return name[0] + '╳' + name[2:]
+    else:        
+        return name[0] + '〇' + name[2:]
 
 
 def protectPersonNameForTTS(name):
