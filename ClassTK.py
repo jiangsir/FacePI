@@ -68,13 +68,14 @@ def tk_UnknownPerson(text, facepath, picture):
         width=15,
         height=3,
         command=lambda: train_oneShot(top, e, e.get(), 'oneshot', picture))
-    b1.bind("<Return>", (lambda: train_oneShot(top, e, e.get(), 'oneshot', picture)))        
+    b1.bind("<Return>", lambda x: train_oneShot(top, e, e.get(), 'oneshot', picture))
     b1.pack()
 
     b2 = tk.Button(top, text='下一位！', width=15, height=2, command=top.destroy)
+    b1.bind("<Return>", lambda:top.destroy)
     b2.pack()
     #top.bind('<Return>', lambda x: top.destroy())
-
+    top.bind('<Escape>', lambda x:top.destroy())
     top.lift()
     top.call('wm', 'attributes', '.', '-topmost', '1')
     # Code to add widgets will go here...
