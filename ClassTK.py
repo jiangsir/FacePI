@@ -60,6 +60,7 @@ def tk_UnknownPerson(text, facepath, picture):
     label1.pack()
     e = tk.Entry(top, font=("Calibri", 24), width=10, show="")
     e.pack()
+    e.focus()
     e.insert(0, "")
 
     b1 = tk.Button(
