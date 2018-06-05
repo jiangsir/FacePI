@@ -62,24 +62,6 @@ def takePicture_CSI(personGroupId, delay, size='small'):
     return picturepath
 
 
-def train_oneShot(top, e, personname, userData, imagepath):
-    ''' 未經訓練的新人，憑簽到時的一張照片進行訓練。 '''
-    jpgimagepaths = []
-    jpgimagepaths.append(imagepath)
-    personAPI = FaceAPI.Person(api_key, host)
-    if personname == '':
-        personname = 'unknown_oneshot'
-    personAPI.add_personimages(personGroupId, personname, userData,
-                               jpgimagepaths)
-    personGroupapi = FaceAPI.PersonGroup(api_key, host)
-    personGroupapi.train_personGroup(personGroupId)
-    top.destroy()
-
-
-
-
-
-
 # def cv_Success(successes):
 #     ''' 運用 cv2 技術顯示的 Success '''
 #     import cv2

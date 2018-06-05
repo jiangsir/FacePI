@@ -45,26 +45,28 @@ class PersonGroup:
             data = response.read()
             persons = json.loads(str(data, 'UTF-8'))
             conn.close()
+
+            try:
+                if ClassUtils.isFaceAPIError(persons):
+                    pass
+            except MyException.RateLimitExceededError as e:
+                time.sleep(10)
+                return self.list_persons_in_group(personGroupId)
+            except MyException.PersonGroupNotFoundError as e:
+                self.createPersonGroup(config['personGroupId'],
+                                    config['personGroupName'], 'group userdata')
+                return self.list_persons_in_group(config['personGroupId'])
+
+            if 'error' in persons:
+                message = '取得 persons 出錯！\n'
+                message += '錯誤編號 = ' + persons['error']['code'] + '\n'
+                message += '錯誤訊息 = ' + persons['error']['message']
+                raise MyException.responseError(message)
+            return persons
+            
         except Exception as e:
             print("[Errno {0}]連線失敗！請檢查網路設定。 {1}".format(e.errno, e.strerror))
 
-        try:
-            if ClassUtils.isFaceAPIError(persons):
-                pass
-        except MyException.RateLimitExceededError as e:
-            time.sleep(10)
-            return self.list_persons_in_group(personGroupId)
-        except MyException.PersonGroupNotFoundError as e:
-            self.createPersonGroup(config['personGroupId'],
-                                   config['personGroupName'], 'group userdata')
-            return self.list_persons_in_group(config['personGroupId'])
-
-        if 'error' in persons:
-            message = '取得 persons 出錯！\n'
-            message += '錯誤編號 = ' + persons['error']['code'] + '\n'
-            message += '錯誤訊息 = ' + persons['error']['message']
-            raise MyException.responseError(message)
-        return persons
 
     def ListPersonGroups(self):
         #print('列出所有的 person Groups')
@@ -425,18 +427,22 @@ class Person:
             data = response.read()
             personjson = json.loads(str(data, 'UTF-8'))
             conn.close()
+
+            try:
+                if ClassUtils.isFaceAPIError(personjson):
+                    return None
+            except MyException.RateLimitExceededError as e:
+                time.sleep(10)
+                return self.get_a_person(personId, personGroupId)
+            except MyException.UnspecifiedError as e:
+                return
+            except MyException.PersonGroupNotTrainedError as e:
+                print('ERROR: get_a_person.PersonGroupNotTrainedError')
+                return
+            return personjson
+            
         except Exception as e:
             print("[Errno {0}]連線失敗！請檢查網路設定。 {1}".format(e.errno, e.strerror))
-
-        try:
-            if ClassUtils.isFaceAPIError(personjson):
-                return None
-        except MyException.RateLimitExceededError as e:
-            time.sleep(10)
-            return self.get_a_person(personId, personGroupId)
-        except MyException.UnspecifiedError as e:
-            return
-        return personjson
 
     def getPersonByName(self, personGroupId, personname):
         persons = self.list_persons_in_group(personGroupId)
@@ -509,14 +515,9 @@ class Face:
             response = conn.getresponse()
             data = response.read()
             identifyfaces = json.loads(str(data, 'UTF-8'))
-            print('identifyfaces=', identifyfaces)
+            print('Face.Identify.identifyfaces=', identifyfaces)
             conn.close()
-
-            ClassUtils.tryFaceAPIError(identifyfaces)
-
-            # if ClassUtils.isFaceAPIError(identifyfaces):
-            #     return []
-            # return identifyfaces
+            # ClassUtils.tryFaceAPIError(identifyfaces)
         except Exception as e:
             print("[Errno {0}]連線失敗！請檢查網路設定。 {1}".format(e.errno, e.strerror))
             sys.exit()
@@ -527,9 +528,21 @@ class Face:
         except MyException.RateLimitExceededError as e:
             time.sleep(10)
             return self.identify(faceidkeys, personGroupId)
+        except MyException.PersonGroupNotFoundError as e:
+            personGroupAPI = PersonGroup(self.api_key, self.host)
+            personGroupAPI.createPersonGroup(personGroupId,
+                                            config['personGroupName'],
+                                            'group userdata')
+            return self.identify(faceidkeys, personGroupId)
         except MyException.UnspecifiedError as e:
-            
-            return
+            return []
+        except MyException.PersonGroupNotTrainedError as e:
+            print('丟出 MyException.PersonGroupNotTrainedError 例外')
+            raise
+        print('超過 raise')
+        # if ClassUtils.isFaceAPIError(identifyfaces):
+        #     return []
+        return identifyfaces
 
 
     def __detectFaces_Save(self, detectFaces, imagepath):
@@ -654,24 +667,29 @@ class Face:
             #print(parsed[0]['faceId'])
             #faceids.append(parsed[0]['faceId'])
             conn.close()
+
+            try:
+                if ClassUtils.isFaceAPIError(detectfaces):
+                    return []
+            except MyException.RateLimitExceededError as e:
+                time.sleep(10)
+                return self.detectLocalImage(imagepath)
+            except MyException.PersonGroupNotTrainedError as e:
+                print('ERROR: detectLocalImage MyException.PersonGroupNotTrainedError')
+                return
+            except MyException.UnspecifiedError as e:
+                return
+
+            print("detectLocalImage:",
+                imagepath + "偵測到 {0} 個人".format(len(detectfaces)))
+
+            self.__detectFaces_Save(detectfaces, imagepath)
+            return detectfaces
+            
         except Exception as e:
             print("[Errno {0}]連線失敗！請檢查網路設定。 {1}".format(e.errno, e.strerror))
             #return []
 
-        try:
-            if ClassUtils.isFaceAPIError(detectfaces):
-                return []
-        except MyException.RateLimitExceededError as e:
-            time.sleep(10)
-            return self.detectLocalImage(imagepath)
-        except MyException.UnspecifiedError as e:
-            return
-
-        print("detectLocalImage:",
-              imagepath + "偵測到 {0} 個人".format(len(detectfaces)))
-
-        self.__detectFaces_Save(detectfaces, imagepath)
-        return detectfaces
 
 
 class FaceList:

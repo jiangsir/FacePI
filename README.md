@@ -105,7 +105,7 @@ FacePI for Windows
 
     python FacePI/FacePI.py Train <userData> <姓名>
 
-2. 在「簽到」過程中，若發現無法辨認即可點擊 "a" 案件進行學習。
+2. 在「簽到」過程中，若發現系統不認識這個人，即可點擊 "a" 按鍵進行學習。
 
 
 ### 簽到

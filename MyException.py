@@ -1,4 +1,4 @@
-import platform, ClassUtils, ClassCamera, ClassFaceAPI
+import platform, ClassUtils, ClassCamera, ClassFaceAPI, ClassCV
 
 
 class Error(Exception):
@@ -28,12 +28,21 @@ class PersonGroupNotFoundError(Error):
     def __init__(self, message):
         self.message = message
         print('「PersonGroup 不存在」,將自動建立預設 PersonGroup')
-        config = ClassUtils.loadConfig()
-        personGroupAPI = ClassFaceAPI.PersonGroup(config['api_key'],
-                                                  config['host'])
-        personGroupAPI.createPersonGroup(config['personGroupId'],
-                                         config['personGroupName'], 'data')
+        # config = ClassUtils.loadConfig()
+        # personGroupAPI = ClassFaceAPI.PersonGroup(config['api_key'],
+        #                                           config['host'])
+        # personGroupAPI.createPersonGroup(config['personGroupId'],
+        #                                  config['personGroupName'], 'data')
 
+
+class PersonGroupNotTrainedError(Error):
+    def __init__(self, message):
+        self.message = message
+        print('MyException:PersonGroupNotTrainedError:「PersonGroup 未訓練」')
+        # config = ClassUtils.loadConfig()
+        # personGroupAPI = ClassFaceAPI.PersonGroup(config['api_key'],
+        #                                           config['host'])
+        # personGroupAPI.train_personGroup(config['personGroupId'])
 
 class UnspecifiedError(Error):
     ''' 「驗證失敗」，API KEY 已經失效，請到 config 設定有效的 API KEY。 '''

@@ -1,4 +1,28 @@
 from PIL import Image, ImageDraw, ImageFont, ImageTk
+import os, json
+import ClassFaceAPI as FaceAPI
+
+basepath = os.path.dirname(os.path.realpath(__file__))
+with open(basepath + '/Config.json', 'r', encoding='utf-8') as f:
+    config = json.load(f)
+
+api_key = config['api_key']
+host = config['host']
+personGroupId = config['personGroupId']
+
+
+def train_oneShot(top, e, personname, userData, imagepath):
+    ''' 未經訓練的新人，憑簽到時的一張照片進行訓練。 '''
+    jpgimagepaths = []
+    jpgimagepaths.append(imagepath)
+    personAPI = FaceAPI.Person(api_key, host)
+    if personname == '':
+        personname = 'unknown_oneshot'
+    personAPI.add_personimages(personGroupId, personname, userData,
+                               jpgimagepaths)
+    personGroupapi = FaceAPI.PersonGroup(api_key, host)
+    personGroupapi.train_personGroup(personGroupId)
+    top.destroy()
 
 
 def tk_UnknownPerson(text, facepath, picture):

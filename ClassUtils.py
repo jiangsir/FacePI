@@ -58,6 +58,8 @@ def isFaceAPIError(faceapijson):
                 faceapijson['error']['code'])
         elif faceapijson['error']['code'] == 'Unspecified':
             raise MyException.UnspecifiedError(faceapijson['error']['code'])
+        elif faceapijson['error']['code'] == 'PersonGroupNotTrained':
+            raise MyException.PersonGroupNotTrainedError(faceapijson['error']['code'])
         else:
             print('CODE:', faceapijson['error']['code'])
             print('MESSAGE:', faceapijson['error']['message'])

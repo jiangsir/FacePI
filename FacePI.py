@@ -6,7 +6,7 @@ import ClassFaceAPI as FaceAPI
 import ClassCamera as Camera
 import ClassUtils as Utils
 from pypinyin import lazy_pinyin
-import MyException
+import MyException, ClassTK
 
 basepath = os.path.dirname(os.path.realpath(__file__))
 config = Utils.loadConfig()
@@ -34,7 +34,6 @@ class FacePI:
     Train: 用 3 連拍訓練一個新人
     '''
 
-    
     # def __add_personimages(self, personGroupId, personname, userData,
     #                        imagepaths):
     #     ''' # 加入一個人的一張或多張圖片，但不訓練 '''
@@ -88,8 +87,8 @@ class FacePI:
 
                     personAPI = FaceAPI.Person(api_key, host)
                     personAPI.add_personimages(personGroupId, personname,
-                                            os.path.basename(userDataPath),
-                                            personImagePaths)
+                                               os.path.basename(userDataPath),
+                                               personImagePaths)
                     #time.sleep(6)
 
         personGroupapi = FaceAPI.PersonGroup(api_key, host)
@@ -110,13 +109,13 @@ class FacePI:
             print('personGroupId=' + persongroup['personGroupId'])
             print(persongroup)
 
-    def listPersons(self):
+    def listPersons(self, personGroupId=personGroupId):
         ''' 3: 列出「人群」裡有哪些 Person '''
         PersonGroup = FaceAPI.PersonGroup(api_key, host)
         try:
             persons = PersonGroup.list_persons_in_group(personGroupId)
             if len(persons) == 0:
-                print('本 personGroupId 內沒有任何一個 person')
+                print('本 personGroup(' + personGroupId + ') 內沒有任何一個 person')
                 sys.exit()
             for person in persons:
                 s = 'name=' + person['name'] + '(' + person['userData'] + '):'
@@ -145,14 +144,14 @@ class FacePI:
         personApi.deletePerson(personGroupId, personid)
         PersonGroup.train_personGroup(personGroupId)
 
-    def status(self):
+    def status(self, personGroupId=personGroupId):
         ''' 7: 觀察 PersonGroup status '''
         PersonGroup = FaceAPI.PersonGroup(api_key, host)
         status = PersonGroup.personGroup_status(personGroupId)
-        print('狀態:', status['status'])
+        print('PersonGroup(' + personGroupId + ')狀態:', status['status'])
         print(status)
 
-    def __trainPersonGroup(self):
+    def trainGroup(self, personGroupId=personGroupId):
         ''' 8: 訓練 PersonGroup '''
         PersonGroup = FaceAPI.PersonGroup(api_key, host)
         PersonGroup.train_personGroup(personGroupId)
@@ -248,7 +247,14 @@ class FacePI:
             faceids.append(detectface['faceId'])
 
         print('Identify.detectfaces=', detectfaces)
-        identifyfaces = faceApi.identify(faceids[:10], personGroupId)
+
+        try:
+            identifyfaces = faceApi.identify(faceids[:10], personGroupId)
+            print('在所提供的相片中偵測到 identifyfaces 共 ', len(identifyfaces), '個')
+        except MyException.PersonGroupNotTrainedError as e:
+            print('接到例外！MyException.PersonGroupNotTrainedError as e')
+            ClassTK.tk_UnknownPerson('texttest....', pictureurl, pictureurl)
+            return
         print('在所提供的相片中偵測到 identifyfaces 共 ', len(identifyfaces), '個')
 
         # successes = []
@@ -324,7 +330,7 @@ class FacePI:
 
         personAPI = FaceAPI.Person(api_key, host)
         personAPI.add_personimages(personGroupId, personname, userData,
-                                jpgimagepaths)
+                                   jpgimagepaths)
         personGroupapi = FaceAPI.PersonGroup(api_key, host)
         personGroupapi.train_personGroup(personGroupId)
 
