@@ -68,6 +68,7 @@ def tk_UnknownPerson(text, facepath, picture):
         width=15,
         height=3,
         command=lambda: train_oneShot(top, e, e.get(), 'oneshot', picture))
+    b1.bind("<Return>", (lambda: train_oneShot(top, e, e.get(), 'oneshot', picture)))        
     b1.pack()
 
     b2 = tk.Button(top, text='下一位！', width=15, height=2, command=top.destroy)

@@ -1,6 +1,7 @@
 import ClassUtils, ClassTK, MyException
 from PIL import Image, ImageDraw, ImageFont, ImageTk
 
+
 def show_opencv(typee, mirror=False):
     ''' 顯示主畫面 '''
     import cv2
@@ -115,12 +116,8 @@ def cv_ImageText(title, hint, facepath=None, picture=None, identifyfaces=None):
     draw.rectangle(
         ((W / 2 - w / 2 - 5, H - h), (W / 2 + w / 2 + 5, H)), fill="red")
     hintlocation = (W / 2 - w / 2, H - h)
-    draw.text(
-        titlelocation, title, (0, 255, 255),
-        font=titlefont)  # 第一个参数为打印的坐标，第二个为打印的文本，第三个为字体颜色，第四个为字体
-    draw.text(
-        hintlocation, hint, (0, 255, 255),
-        font=hintfont)  # 第一个参数为打印的坐标，第二个为打印的文本，第三个为字体颜色，第四个为字体
+    draw.text(titlelocation, title, (0, 255, 255), font=titlefont)
+    draw.text(hintlocation, hint, (0, 255, 255), font=hintfont)
 
     cv2_text_im = cv2.cvtColor(np.array(pil_im), cv2.COLOR_RGB2BGR)
     cv2.imshow(windowname, cv2_text_im)
@@ -130,6 +127,7 @@ def cv_ImageText(title, hint, facepath=None, picture=None, identifyfaces=None):
     elif key == ord('a') and len(identifyfaces) == 1:  # 鍵盤 a 代表要新增 oneshot
         cv2.destroyWindow(windowname)
         ClassTK.tk_UnknownPerson('您哪位？', facepath, picture)
+
 
 def cv_Identifyfaces(identifyfaces, picture=None):
     ''' 運用 cv2 技術顯示的 Identifyfaces '''
@@ -151,9 +149,7 @@ def cv_Identifyfaces(identifyfaces, picture=None):
             try:
                 print(text, identifyface['confidence'])
             except UnicodeEncodeError as e:
-                # text = ClassUtils.textConfidence("Decode ERROR!",
-                #                                  identifyface['confidence'])
-                print(text, identifyface['confidence'])
+                print("UnicodeEncodeERROR!!", identifyface['confidence'])
             #print('cv_Identifyfaces.identifyface=', identifyface)
             # text = ClassUtils.textConfidence(identifyface['person']['name'],
             #                                  identifyface['confidence'])
