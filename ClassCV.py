@@ -125,7 +125,7 @@ def cv_ImageText(title, hint, facepath=None, picture=None, identifyfaces=None):
     titlelocation = (W / 2 - w / 2, 5)
 
     if identifyfaces != None and len(identifyfaces) == 1:
-        hint = hint + "或按 'a' 新增身分"
+        hint = hint + "或按 'a' 新增身份"
     w, h = draw.textsize(hint, font=hintfont)
     draw.rectangle(
         ((W / 2 - w / 2 - 5, H - h), (W / 2 + w / 2 + 5, H)), fill="red")
