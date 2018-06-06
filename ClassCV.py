@@ -39,6 +39,17 @@ def show_opencv(typee, mirror=False):
         draw.text(
             titlelocation, title, (0, 255, 255),
             font=font)  # 第一个参数为打印的坐标，第二个为打印的文本，第三个为字体颜色，第四个为字体
+        # FreeAPIKEY: b9160fbd882f47bd821205a4bce64354
+        if config['api_key'] == 'b9160fbd882f47bd821205a4bce64354':
+            warningfont = ImageFont.truetype(ttf, 24, encoding="utf-8")
+            warning = "請注意，您目前是用的是共用的測試 API_KEY 請儘速自行申請一個自用的 KEY"
+            w, h = draw.textsize(warning, font=warningfont)
+            draw.rectangle(
+                ((W / 2 - w / 2 - 5, H - h*2), (W / 2 + w / 2 + 5, H)), fill="yellow")
+            warninglocation = (W / 2 - w / 2, H - h*2)
+            draw.text(
+                warninglocation, warning, (0, 0, 255),
+                font=warningfont)  # 第一个参数为打印的坐标，第二个为打印的文本，第三个为字体颜色，第四个为字体
 
         if typee == 'Identify':
             hint = "請按「ENTER」進行簽到"
