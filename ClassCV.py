@@ -45,7 +45,7 @@ def show_opencv(typee, mirror=False):
             warning = "請注意，您目前是用的是共用的測試 API_KEY 請儘速自行申請一個自用的 KEY"
             w, h = draw.textsize(warning, font=warningfont)
             draw.rectangle(
-                ((W / 2 - w / 2 - 5, H - h*2), (W / 2 + w / 2 + 5, H)), fill="yellow")
+                ((W / 2 - w / 2 - 5, H - h*2), (W / 2 + w / 2 + 5, H-h)), fill="yellow")
             warninglocation = (W / 2 - w / 2, H - h*2)
             draw.text(
                 warninglocation, warning, (0, 0, 255),
