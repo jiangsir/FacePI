@@ -6,7 +6,7 @@ import ClassFaceAPI as FaceAPI
 import ClassCamera as Camera
 import ClassUtils as Utils
 from pypinyin import lazy_pinyin
-import MyException, ClassTK
+import MyException, ClassTK, ClassCV
 
 basepath = os.path.dirname(os.path.realpath(__file__))
 config = Utils.loadConfig()
@@ -253,18 +253,21 @@ class FacePI:
             print('在所提供的相片中偵測到 identifyfaces 共 ', len(identifiedfaces), '個')
         except MyException.PersonGroupNotTrainedError as e:
             print('接到例外！MyException.PersonGroupNotTrainedError as e')
-            ClassTK.tk_UnknownPerson('texttest....', pictureurl, pictureurl)
+            print('Identify.detectedFaces=', detectfaces)
+            ClassCV.cv_Identifyfaces(detectfaces, pictureurl)
+            #ClassTK.tk_UnknownPerson('texttest....', pictureurl, pictureurl)
+
             return
         print('在所提供的相片中偵測到 identifyfaces 共 ', len(identifiedfaces), '個')
 
         # successes = []
-        for identifyface in identifiedfaces:
-            for candidate in identifyface['candidates']:
+        for identifiedface in identifiedfaces:
+            for candidate in identifiedface['candidates']:
                 personId = candidate["personId"]
                 person = personApi.get_a_person(personId, personGroupId)
-                identifyface['person'] = person
-                identifyface['confidence'] = candidate["confidence"]
-                identifyface['personId'] = candidate["personId"]
+                identifiedface['person'] = person
+                identifiedface['confidence'] = candidate["confidence"]
+                identifiedface['personId'] = candidate["personId"]
 
         Utils.SigninIdentifyfaces(identifiedfaces, pictureurl)
 
