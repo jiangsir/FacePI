@@ -249,40 +249,24 @@ class FacePI:
         print('Identify.detectfaces=', detectfaces)
 
         try:
-            identifyfaces = faceApi.identify(faceids[:10], personGroupId)
-            print('在所提供的相片中偵測到 identifyfaces 共 ', len(identifyfaces), '個')
+            identifiedfaces = faceApi.identify(faceids[:10], personGroupId)
+            print('在所提供的相片中偵測到 identifyfaces 共 ', len(identifiedfaces), '個')
         except MyException.PersonGroupNotTrainedError as e:
             print('接到例外！MyException.PersonGroupNotTrainedError as e')
             ClassTK.tk_UnknownPerson('texttest....', pictureurl, pictureurl)
             return
-        print('在所提供的相片中偵測到 identifyfaces 共 ', len(identifyfaces), '個')
+        print('在所提供的相片中偵測到 identifyfaces 共 ', len(identifiedfaces), '個')
 
         # successes = []
-        for identifyface in identifyfaces:
-            # print('FacePI.Identify.identifyface=', identifyface)
-            # faceId = identifyface['faceId']
-            # for detectface in detectfaces:
-            #     if detectface['faceId'] == faceId:
-            #         identifyface['faceAttributes'] = detectface['faceAttributes']
-            #         identifyface['faceLandmarks'] = detectface['faceLandmarks']
-
+        for identifyface in identifiedfaces:
             for candidate in identifyface['candidates']:
                 personId = candidate["personId"]
                 person = personApi.get_a_person(personId, personGroupId)
-                # print('person=', person)
-                # success = {}
-                # success['personId'] = candidate["personId"]
-                # success['confidence'] = candidate["confidence"]
-                # success['faceId'] = identifyface['faceId']
-                # success['person'] = person
-                # successes.append(success)
                 identifyface['person'] = person
                 identifyface['confidence'] = candidate["confidence"]
                 identifyface['personId'] = candidate["personId"]
 
-        #print('successes:', successes)
-        # Utils.SigninSuccesses(successes)
-        Utils.SigninIdentifyfaces(identifyfaces, pictureurl)
+        Utils.SigninIdentifyfaces(identifiedfaces, pictureurl)
 
     def buildTraindatas(self, personname):
         ''' 15: '快速 3 連拍建立圖片資料庫不進行訓練） '''

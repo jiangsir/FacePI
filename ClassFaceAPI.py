@@ -514,8 +514,8 @@ class Face:
                          requestbody, headers)
             response = conn.getresponse()
             data = response.read()
-            identifyfaces = json.loads(str(data, 'UTF-8'))
-            print('Face.Identify.identifyfaces=', identifyfaces)
+            identifiedfaces = json.loads(str(data, 'UTF-8'))
+            print('Face.Identify.identifiedfaces=', identifiedfaces)
             conn.close()
             # ClassUtils.tryFaceAPIError(identifyfaces)
         except Exception as e:
@@ -523,7 +523,7 @@ class Face:
             sys.exit()
 
         try:
-            if ClassUtils.isFaceAPIError(identifyfaces):
+            if ClassUtils.isFaceAPIError(identifiedfaces):
                 return []
         except MyException.RateLimitExceededError as e:
             time.sleep(10)
@@ -542,7 +542,7 @@ class Face:
         print('超過 raise')
         # if ClassUtils.isFaceAPIError(identifyfaces):
         #     return []
-        return identifyfaces
+        return identifiedfaces
 
 
     def __detectFaces_Save(self, detectFaces, imagepath):
