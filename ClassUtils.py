@@ -1,5 +1,5 @@
 import os, json, time, platform
-import MyException
+import MyException, ClassCV
 
 
 def getBasepath():
@@ -16,7 +16,11 @@ def loadConfig():
 
 
 def protectPersonName(name):
-    return name[0] + '〇' + name[2:]
+    # big5 ╳
+    if isWindows():
+        return name[0] + '╳' + name[2:]
+    else:        
+        return name[0] + '〇' + name[2:]
 
 
 def protectPersonNameForTTS(name):
@@ -58,11 +62,20 @@ def isFaceAPIError(faceapijson):
                 faceapijson['error']['code'])
         elif faceapijson['error']['code'] == 'Unspecified':
             raise MyException.UnspecifiedError(faceapijson['error']['code'])
+        elif faceapijson['error']['code'] == 'PersonGroupNotTrained':
+            raise MyException.PersonGroupNotTrainedError(faceapijson['error']['code'])
         else:
             print('CODE:', faceapijson['error']['code'])
             print('MESSAGE:', faceapijson['error']['message'])
         return True
     return False
+
+def tryFaceAPIError(faceapijson):
+    if 'error' in faceapijson:
+        print('CODE:', faceapijson['error']['code'])
+        print('MESSAGE:', faceapijson['error']['message'])        
+        text = faceapijson['error']['code'] + ": " + faceapijson['error']['message']
+        ClassCV.cv_ImageText('存取發生錯誤！', text)
 
 
 # def SigninSuccess(person, faceid):
@@ -119,8 +132,8 @@ def SigninIdentifyfaces(identifyfaces, picture=None):
             else:
                 print('你哪位？', identifyface)
     elif isWindows() or isDarwin():
-        import ClassCamera
-        ClassCamera.cv_Identifyfaces(identifyfaces, picture)
+        import ClassCV
+        ClassCV.cv_Identifyfaces(identifyfaces, picture)
 
 
 def isLinux():
