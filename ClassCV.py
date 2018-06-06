@@ -123,12 +123,15 @@ def cv_ImageText(title, hint, facepath=None, picture=None, identifyfaces=None):
     draw.rectangle(
         ((W / 2 - w / 2 - 5, 0), (W / 2 + w / 2 + 5, h + 20)), fill="black")
     titlelocation = (W / 2 - w / 2, 5)
+
+    if identifyfaces != None and len(identifyfaces) == 1:
+        hint = hint + "或按 'a' 新增身分"
     w, h = draw.textsize(hint, font=hintfont)
     draw.rectangle(
         ((W / 2 - w / 2 - 5, H - h), (W / 2 + w / 2 + 5, H)), fill="red")
     hintlocation = (W / 2 - w / 2, H - h)
     draw.text(titlelocation, title, (0, 255, 255), font=titlefont)
-    draw.text(hintlocation, hint, (0, 255, 255), font=hintfont)
+    draw.text(hintlocation, hint, (0, 255, 0), font=hintfont)
 
     cv2_text_im = cv2.cvtColor(np.array(pil_im), cv2.COLOR_RGB2BGR)
     cv2.imshow(windowname, cv2_text_im)
