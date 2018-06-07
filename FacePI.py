@@ -186,6 +186,9 @@ class FacePI:
         landmark = input("臉部特徵 [" + str(config['landmark']) + "]：")
         if landmark != '':
             config['landmark'] = int(landmark)
+        videoid = input("攝影機編號通常為 0, 筆電外接 webcam 可能為 1 [" + str(config['videoid']) + "]：")
+        if videoid != '':
+            config['videoid'] = int(videoid)
 
         with open(basepath + '/Config.json', 'w', encoding='utf-8') as outfile:
             json.dump(config, outfile, ensure_ascii=False)

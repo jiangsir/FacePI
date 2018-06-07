@@ -6,12 +6,12 @@ def show_opencv(typee, mirror=False):
     ''' 顯示主畫面 '''
     import cv2
     import numpy as np
+    config = ClassUtils.loadConfig()
 
-    cam = cv2.VideoCapture(0)
+    cam = cv2.VideoCapture(config['videoid'])
     cam.set(3, 1280)  # 修改解析度 寬
     cam.set(4, 1280 // 16 * 9)  # 修改解析度 高
     print('WIDTH', cam.get(3), 'HEIGHT', cam.get(4))  # 顯示預設的解析度
-    config = ClassUtils.loadConfig()
     while True:
         ret_val, img = cam.read()
         if mirror:
@@ -82,11 +82,11 @@ def show_opencv(typee, mirror=False):
                 config['personGroupId'])
             cv2.imwrite(picturepath, img)
             cv2.destroyAllWindows()
-            cv2.VideoCapture(0).release()
+            cv2.VideoCapture(config['videoid']).release()
             return picturepath
         elif key == 27:  # esc to quit
             cv2.destroyAllWindows()
-            cv2.VideoCapture(0).release()
+            cv2.VideoCapture(config['videoid']).release()
             raise MyException.esc_opencv("偵測到 esc 結束鏡頭")
         else:
             if key != -1:
