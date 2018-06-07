@@ -23,7 +23,7 @@ class FacePI:
     deletePerson: 刪除 PersonGroup 裡的一個 Person
     listGroups: 列出所有的 PersonGroups
     listPersons: 列出「人群」裡有哪些 Person
-    relay: 設定繼電器,
+    relay: 設定繼電器僅適用樹莓派,
     status: 觀察 PersonGroup status
     search: 搜尋一個personName,
     traindatas: '訓練 /traindatas 裡的圖檔，同時訓練一群事先準備好的人與照片',
@@ -274,7 +274,7 @@ class FacePI:
 
         Utils.SigninIdentifyfaces(identifiedfaces, pictureurl)
 
-    def buildTraindatas(self, personname):
+    def __buildTraindatas(self, personname):
         ''' 15: '快速 3 連拍建立圖片資料庫不進行訓練） '''
         personname = input('進行 3 連拍，請輸入姓名(儲存不訓練)：')
 
