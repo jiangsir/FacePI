@@ -126,7 +126,7 @@ FacePI 刷臉簽到系統 for Windows
 ![計量圖表](data/jiliang.png)
 
 ### 訓練
-訓練有兩種方式：
+訓練有 3 種方式：
 1. 「訓練」三連拍：用來「訓練」將來要進行辨識的人。
 
     python FacePI/FacePI.py Train <userData> <姓名>
@@ -139,8 +139,11 @@ FacePI 刷臉簽到系統 for Windows
 
     python FacePI/FacePI.py traindatas C:\traindatas
 
+traindatas 下的檔案結構如下:
+如: C:\traindatas\高二禮\張鈞甯\<放置數個相片檔，請注意，訓練相片檔內只可以有一個人，否則系統不知道哪一個是張鈞甯>
 ![檔案結構](data/traindatas_2.PNG)
 
+進行訓練
 ![訓練圖檔](data/traindatas.PNG)
 
 
