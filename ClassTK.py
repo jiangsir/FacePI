@@ -30,6 +30,9 @@ def tk_UnknownPerson(text, facepath, picture):
     import tkinter as tk
 
     top = tk.Tk()
+    top.attributes("-topmost", True)
+
+
     #top = tk.Toplevel()
     top.geometry('500x500')
     top.title(text)
@@ -77,8 +80,9 @@ def tk_UnknownPerson(text, facepath, picture):
     b2.pack()
     #top.bind('<Return>', lambda x: top.destroy())
     top.bind('<Escape>', lambda x:top.destroy())
-    top.lift()
-    top.call('wm', 'attributes', '.', '-topmost', '1')
-    # top.after_idle('wm', 'attributes', '.', '-topmost', False)    
+    
+    #top.call('wm', 'attributes', '.', '-topmost', '1')
+    # top.lift()
+
     # Code to add widgets will go here...
     top.mainloop()
