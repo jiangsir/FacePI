@@ -1,7 +1,7 @@
 FacePI 刷臉簽到系統 for Windows
 ====================
 
-2017 年可說是各種刷臉應用的爆發的一年，各種應用目不暇給。微軟也在 2016 年提出「微軟認知服務」，裡面就包含了一組 API ，叫做 Face API，專門提供臉部辨識服務，FacePI 就是利用這個 Face API 設計成一個刷臉簽到應用。
+2017 年可說是各種刷臉應用的爆發的一年，各種應用目不暇給。微軟也在 2016 年提出「微軟認知服務」，裡面就包含了一組 API ，叫做 Face API，專門提供臉部辨識服務，FacePI 就是利用這個 Face API 設計成一個刷臉簽到應用。
 
 在這裡要先做一些名詞解釋，因為中文裡面這幾個詞有點容易搞混。
 * 「臉部偵測(Face Detection)」:偵測影像中的一或多張人臉，並取得影像臉部位置所在的臉部矩形及臉部屬性，該屬性內含以機器學習為基礎的臉部特徵預測。可用的臉部屬性功能 包括：年齡、表情、性別、姿勢、微笑及鬍子，以及影像中每張臉部的 27 個地標。
@@ -19,16 +19,25 @@ FacePI 刷臉簽到系統 for Windows
 ## 搭建環境
 
 ### Anaconda
-首先必須下載 anaconda ，請選擇 Python3 的版本。安裝完成後，在程式集->anaconda prompt 進入文字介面。
+首先必須下載 anaconda ，請選擇 Python3 的版本。
+
+安裝完成後，在程式集->anaconda prompt 進入文字介面。
+![文字介面](data/prompt.PNG)
 
 ### 建立隔離執行環境
 為了避免與原先環境互相衝突，最好的方式就是建立一個隔離的執行環境。接著要安裝什麼都按 [y] 安裝。
     
     conda create -n cv3 python=3.5.2
 
-接著啟用這個環境
+![建立隔離環境](data/createCV3.PNG)
+
+點擊 y 繼續安裝所需套件
+
+接著進入這個環境
 
     conda activate cv3
+
+![建立隔離環境](data/cv3.PNG)
 
 在這個隔離環境內安裝 OpenCV
 
@@ -52,23 +61,30 @@ FacePI 刷臉簽到系統 for Windows
     pip install Pillow 
     pip install pypinyin
 
-最後，可以開始安裝 FacePI 本體。若您已經安裝 git 環境，則可以直接下以下指令即可。
+## 開始安裝 FacePI 本體。
+
+若您已經安裝 git 環境，則可以直接下以下指令即可。
 
     git clone https://github.com/jiangsir/FacePI
+
+![下載](data/gitclone.PNG)
+
 
 若沒有 git 指令的話，就直接到 github 把程式抓回來，點擊 Download ZIP。
 
     https://github.com/jiangsir/FacePI
 
+![下載](data/download.PNG)
+
 進入 FacePI 放置的路徑，比如「文件」資料夾
 
     cd /Users/user/Documents
-    # 此處請依據自己的環境修改。 
+    # 此處請依據自己的環境修改。 
     
 
 
 ## 執行
-執行 FacePI.py, FacePI 主要是一個文字介面程式：
+執行 FacePI.py, FacePI 主要是一個文字介面程式：
 
 
     python FacePI/FacePI.py
@@ -90,6 +106,11 @@ FacePI 刷臉簽到系統 for Windows
 
     python FacePI/FacePI.py Config
 
+點擊 ENTER 不輸入任何值，代表使用預設值。最重要的是更換 API_KEY 的值。預設的 API_KEY 是公用性質，隨時可能被修改或刪除。
+
+![計費方案](data/config.PNG)
+
+
 可以進行設定，最主要的設定就是 API_KEY 請至微軟網站申請一個 API_KEY。
 進入到微軟官方頁面 [試用辨識服務](https://azure.microsoft.com/zh-tw/try/cognitive-services/?api=face-api)，我們要的是 臉部 API 點擊取得 API 金鑰。然後你就可以獲得 30 天的試用，總共 30000 筆查詢，每分鐘上限 20 筆。對於實驗來說夠用了。但如果要實際使用，每一個月要重新來一次也真是夠煩的。
 因此，比較好的作法是，申請 Azure 帳號，一申請就送你 200 美金的用量，也足以做一個小型應用了，並且 API_KEY 也不會過期。至於用量同樣有每分鐘上限 20 筆，每月 30000 筆查詢的用量，若真的不夠，就可以在後台「儀表板」改為付費模式。每 1000 筆查詢大約會產生 1 美元的費用。
@@ -106,9 +127,15 @@ FacePI 刷臉簽到系統 for Windows
 訓練有兩種方式：
 1. 「訓練」三連拍：用來「訓練」將來要進行辨識的人。
 
-    python FacePI/FacePI.py Train <userData> <姓名>
+    python FacePI/FacePI.py Train <userData> <姓名>
 
-2. 在「簽到」過程中，若發現系統不認識這個人，即可點擊 "a" 按鍵進行學習。
+比如: 可以用 <userData> 來標示人員的分類。
+
+    python FacePI/FacePI.py Train 高師大附中國一仁 王寶釧
+
+2. 在「簽到」過程中，若發現系統不認識這個人或者認錯了，即可點擊 "a" 按鍵進行學習。
+
+![計量圖表](data/addperson.PNG)
 
 
 ### 簽到
