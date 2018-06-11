@@ -36,6 +36,9 @@ FacePI 刷臉簽到系統 for Windows
 接著進入這個環境
 
     conda activate cv3
+    
+    舊版的 anaconda 可改用
+    activate cv3
 
 ![建立隔離環境](data/cv3.PNG)
 
