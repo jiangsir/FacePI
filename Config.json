@@ -1,1 +1,10 @@
-{"confidence": 0.65, "landmark": 2, "title": "高師大附中刷臉簽到系統", "personGroupName": "人群名稱", "personGroupId": "default_groupid", "host": "eastasia.api.cognitive.microsoft.com", "api_key": "b9160fbd882f47bd821205a4bce64354"}
+{
+    "confidence": 0.65,
+    "host": "eastasia.api.cognitive.microsoft.com",
+    "title": "高師大附中刷臉簽到系統",
+    "personGroupId": "default_groupid",
+    "landmark": 2,
+    "videoid": 0,
+    "api_key": "b9160fbd882f47bd821205a4bce64354",
+    "personGroupName": "人群名稱"
+}
