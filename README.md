@@ -143,7 +143,7 @@ FacePI 刷臉簽到系統 for Windows
     python FacePI/FacePI.py traindatas C:\traindatas
 
 traindatas 下的檔案結構如下:
-如: C:\traindatas\高二禮\張鈞甯\<放置數個相片檔>
+如: C:\traindatas\高二禮\張鈞甯\ <放置數個相片檔>
 
 請注意，訓練相片檔內只可以有一個人，否則系統不知道哪一個是張鈞甯
 
