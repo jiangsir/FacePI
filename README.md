@@ -87,6 +87,8 @@ FacePI 刷臉簽到系統 for Windows
 執行 FacePI.py, FacePI 主要是一個文字介面程式：
 
 
+    cd /Users/user/Documents
+    # 此處請依據自己的環境修改。 
     python FacePI/FacePI.py
 
 
@@ -116,9 +118,7 @@ FacePI 刷臉簽到系統 for Windows
 最主要的設定就是 API_KEY 請至微軟網站申請一個 API_KEY。
 進入到微軟官方頁面 [試用辨識服務](https://azure.microsoft.com/zh-tw/try/cognitive-services/?api=face-api)，我們要的是 臉部 API 點擊取得 API 金鑰。然後你就可以獲得 30 天的試用，總共 30000 筆查詢，每分鐘上限 20 筆。對於實驗來說夠用了。但如果要實際使用，每一個月要重新來一次也真是夠煩的。
 因此，比較好的作法是，申請 Azure 帳號，一申請就送你 200 美金的用量，也足以做一個小型應用了，並且 API_KEY 也不會過期。至於用量同樣有每分鐘上限 20 筆，每月 30000 筆查詢的用量，若真的不夠，就可以在後台「儀表板」改為付費模式。每 1000 筆查詢大約會產生 1 美元的費用。
-
 為了推廣人工智慧應用，諸位軟體大咖們真的是拚了。
-
 
 ![計費方案](data/F0S0.png)
 
@@ -135,7 +135,18 @@ FacePI 刷臉簽到系統 for Windows
 
     python FacePI/FacePI.py Train 高師大附中國一仁 王寶釧
 
-2. 在「簽到」過程中，若發現系統不認識這個人或者認錯了，即可點擊 "a" 按鍵進行學習。
+2. 訓練相片檔:
+
+    python FacePI/FacePI.py traindatas C:\traindatas
+
+![檔案結構](data/traindatas_2.PNG)
+
+![訓練圖檔](data/traindatas.PNG)
+
+
+
+
+3. 在「簽到」過程中，若發現系統不認識這個人或者認錯了，即可點擊 "a" 按鍵進行學習。
 
 ![計量圖表](data/addperson.PNG)
 
