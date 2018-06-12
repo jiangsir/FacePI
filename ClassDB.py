@@ -1,6 +1,6 @@
 import pymysql.cursors
 from urllib.parse import urlparse
-URI = 'mysql+pymysql://root:wxnacy@127.0.0.1:3306/study?charset=utf8'
+URI = 'mysql+pymysql://facepi:!1ashsashs@163.32.92.15:3306/facepi?charset=utf8'
 URL_CONFIG = urlparse(URI)
 print(URL_CONFIG)
 
@@ -63,6 +63,6 @@ class BaseDB(object):
 
 
 if __name__ == "__main__":
-    sql = 'select * from user'
+    sql = 'SELECT * FROM persons'
     res = BaseDB.query(sql, [])
     print(res)
