@@ -171,4 +171,7 @@ def cv_Identifyfaces(identifyfaces, picture=None):
             cv_ImageText(text, '按 ENTER 繼續', faceimagepath, picture,
                          identifyfaces)
             timestamp = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
-            ClassCSV.addSignin(identifyface['person']['personId'], identifyface['person']['name'], timestamp)
+            personId = identifyface['person']['personId']
+            name = identifyface['person']['name']
+            confidence = identifyface['confidence']
+            ClassCSV.addSignin(name, personId, confidence, text, timestamp)

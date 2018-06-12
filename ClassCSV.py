@@ -14,10 +14,10 @@ def test():
     df.tail() ## 查看 data frame 的前幾筆資料
     df.to_csv(csvfile,index=False,sep=',')
 
-def addSignin(personid, name, timestamp):
+def addSignin(name, personid, confidence, textconfidence, timestamp):
     csvfile = 'Signin_log.csv'
     df = pd.read_csv(csvfile)
-    new_row = [personid, name, timestamp]
+    new_row = [name, personid, confidence, textconfidence, timestamp]
     ss = pd.Series(new_row, index=df.columns, name='e')
     df = df.append(ss)
     df.to_csv(csvfile,index=False,sep=',')
