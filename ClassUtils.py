@@ -107,15 +107,16 @@ def tryFaceAPIError(faceapijson):
 
 
 def textConfidence(name, confidence):
+    ''' 簽到成功 '''
     name = protectPersonName(name)
     if confidence >= 0.9:
-        return name + '簽到成功!!!'
+        return name + ' 簽到成功!!!'
     elif confidence >= 0.8:
-        return name + '簽到成功!!'
+        return name + ' 簽到成功!!'
     elif confidence >= 0.7:
-        return name + '簽到成功!'
+        return name + ' 簽到成功!'
     else:
-        return name + '簽到成功'
+        return name + ' 簽到成功'
 
 
 def SigninIdentifyfaces(identifyfaces, picture=None):

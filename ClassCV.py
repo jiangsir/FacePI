@@ -1,4 +1,5 @@
-import ClassUtils, ClassTK, MyException
+import time
+import ClassUtils, ClassTK, MyException, ClassCSV
 from PIL import Image, ImageDraw, ImageFont, ImageTk
 
 
@@ -169,3 +170,5 @@ def cv_Identifyfaces(identifyfaces, picture=None):
             #                                  identifyface['confidence'])
             cv_ImageText(text, '按 ENTER 繼續', faceimagepath, picture,
                          identifyfaces)
+            timestamp = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
+            ClassCSV.addSignin(identifyface['person']['personId'], identifyface['person']['name'], timestamp)
