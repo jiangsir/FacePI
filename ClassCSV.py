@@ -1,4 +1,7 @@
 import pandas as pd
+import os
+
+basepath = os.path.dirname(os.path.realpath(__file__))
 
 def test():
     csvfile = 'address.csv'
@@ -15,7 +18,7 @@ def test():
     df.to_csv(csvfile,index=False,sep=',')
 
 def addSignin(name, personid, confidence, textconfidence, timestamp):
-    csvfile = 'Signin_log.csv'
+    csvfile = os.path.join(basepath, "Signin_log.csv")
     df = pd.read_csv(csvfile)
     new_row = [name, personid, confidence, textconfidence, timestamp]
     ss = pd.Series(new_row, index=df.columns, name='e')
