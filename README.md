@@ -166,3 +166,12 @@ traindatas 下的檔案結構如下:
     python FacePI/FacePI.py Signin
 
 即可依照畫面指示進行操作。
+
+## 系統更新
+本系統仍持續發展中，因此需要注意是否有新版提供使用，並及時更新。
+
+    # 刪除原程式
+    rm -rf FacePI
+    # 重新取得
+    git clone https://github.com/jiangsir/FacePI
+
