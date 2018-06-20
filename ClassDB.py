@@ -1,32 +1,29 @@
-import pymysql.cursors
+import pymysql.cursors, ClassUtils
 from urllib.parse import urlparse
-URI = 'mysql+pymysql://facepi:!1ashsashs@163.32.92.15:3306/facepi?charset=utf8'
-URL_CONFIG = urlparse(URI)
-print(URL_CONFIG)
-
 
 class BaseDB(object):
     @classmethod
-    def create_conn(cls):
-        '''创建mysql链接'''
+    def create_conn(self):
+        ''' 連接 mysql '''
+        config = ClassUtils.loadConfig()
         return pymysql.connect(
-            host=URL_CONFIG.hostname,
-            port=URL_CONFIG.port,
-            user=URL_CONFIG.username,
-            password=URL_CONFIG.password,
-            db=URL_CONFIG.path[1:],
+            host=config['dbhost'],
+            port=config['dbport'],
+            user=config['dbuser'],
+            password=config['dbpass'],
+            db='facepi',
             charset='utf8',
             cursorclass=pymysql.cursors.DictCursor)
 
     @classmethod
-    def query(cls, sql, params):
+    def query(self, sql, params):
         """
-        查询操作
+        查詢
         :param sql:
         :param params:
         :return:
         """
-        conn = cls.create_conn()
+        conn = self.create_conn()
         try:
             cursor = conn.cursor()
             cursor.execute(sql, params)
@@ -35,20 +32,20 @@ class BaseDB(object):
             cursor.close()
             return result
         except BaseException as e:
-            app.logger.error(traceback.format_exc())
+            print(e)
             return []
         finally:
             conn.close()
 
     @classmethod
-    def execute(cls, sql, params):
+    def execute(self, sql, params):
         """
         更新操作
         :param sql:
         :param params:
         :return:
         """
-        conn = cls.create_conn()
+        conn = self.create_conn()
         try:
             cursor = conn.cursor()
             result = cursor.execute(sql, params)
@@ -56,13 +53,34 @@ class BaseDB(object):
             cursor.close()
             return result
         except BaseException as e:
-            app.logger.error(traceback.format_exc())
+            print(e)
             return False
         finally:
             conn.close()
 
+    @classmethod
+    def insert(self, sql, params):
+        """
+        新增操作
+        :param sql:
+        :param params:
+        :return:
+        """
+        conn = self.create_conn()
+        try:
+            cursor = conn.cursor()
+            result = cursor.execute(sql, params)
+            conn.commit()
+            cursor.close()
+            return result
+        except BaseException as e:
+            print(e)
+            return False
+        finally:
+            conn.close()
 
 if __name__ == "__main__":
     sql = 'SELECT * FROM persons'
-    res = BaseDB.query(sql, [])
+    BaseDB.execute('INSERT INTO persons(personid, name, userdata) VALUES(%s, %s, %s)', ('personiddddd', 'nameeeee', 'userdataaaaa'))
+    res = BaseDB.query(sql, None)
     print(res)

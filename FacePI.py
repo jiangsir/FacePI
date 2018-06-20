@@ -189,6 +189,18 @@ class FacePI:
         videoid = input("攝影機編號通常為 0, 筆電外接 webcam 可能為 1 [" + str(config['videoid']) + "]：")
         if videoid != '':
             config['videoid'] = int(videoid)
+        dbuser = input("資料庫帳號[" + config['dbuser'] + "]：")
+        if dbuser != '':
+            config['dbuser'] = dbuser
+        dbpass = input("資料庫密碼[" + config['dbpass'] + "]：")
+        if dbpass != '':
+            config['dbpass'] = dbpass
+        dbhost = input("資料庫主機[" + config['dbhost'] + "]：")
+        if dbhost != '':
+            config['dbhost'] = dbhost
+        dbport = input("資料庫埠號[" + config['dbport'] + "]：")
+        if dbport != '':
+            config['dbport'] = dbport
 
         with open(basepath + '/Config.json', 'w', encoding='utf-8') as outfile:
             json.dump(config, outfile, ensure_ascii=False)

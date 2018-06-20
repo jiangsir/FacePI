@@ -1,5 +1,5 @@
 import time
-import ClassUtils, ClassTK, MyException, ClassCSV
+import ClassUtils, ClassTK, MyException, ClassCSV, ClassDB
 from PIL import Image, ImageDraw, ImageFont, ImageTk
 
 
@@ -46,8 +46,9 @@ def show_opencv(typee, mirror=False):
             warning = "請注意，您目前是用的是共用的測試 API_KEY 請儘速自行申請一個自用的 KEY"
             w, h = draw.textsize(warning, font=warningfont)
             draw.rectangle(
-                ((W / 2 - w / 2 - 5, H - h*2), (W / 2 + w / 2 + 5, H-h)), fill="yellow")
-            warninglocation = (W / 2 - w / 2, H - h*2)
+                ((W / 2 - w / 2 - 5, H - h * 2), (W / 2 + w / 2 + 5, H - h)),
+                fill="yellow")
+            warninglocation = (W / 2 - w / 2, H - h * 2)
             draw.text(
                 warninglocation, warning, (0, 0, 255),
                 font=warningfont)  # 第一个参数为打印的坐标，第二个为打印的文本，第三个为字体颜色，第四个为字体
@@ -174,4 +175,6 @@ def cv_Identifyfaces(identifyfaces, picture=None):
             personId = identifyface['person']['personId']
             name = identifyface['person']['name']
             confidence = identifyface['confidence']
-            ClassCSV.addSignin(name, personId, confidence, text, timestamp)
+            ClassDB.BaseDB.execute(
+                'INSERT INTO signins(personid, name, confidence, info, timestamp) VALUES(%s, %s, %s, %s, %s)',
+                (personId, name, confidence, text, timestamp))
