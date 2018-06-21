@@ -175,6 +175,6 @@ def cv_Identifyfaces(identifyfaces, picture=None):
             personId = identifyface['person']['personId']
             name = identifyface['person']['name']
             confidence = identifyface['confidence']
-            ClassDB.BaseDB.execute(
-                'INSERT INTO signins(personid, name, confidence, info, timestamp) VALUES(%s, %s, %s, %s, %s)',
-                (personId, name, confidence, text, timestamp))
+            faceimage = ClassUtils.readFile(faceimagepath)
+            ClassDB.BaseDB.insert(personId, name, confidence, text, timestamp,
+                                  faceimage)

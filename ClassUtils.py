@@ -181,3 +181,8 @@ def getSystemFont():
     else:
         ttf = "C:/Windows.old/Windows/Fonts/msjhbd.ttc"  # 微軟正黑體
     return ttf
+
+def readFile(filename):
+    with open(filename, 'rb') as f:
+        photo = f.read()
+    return photo

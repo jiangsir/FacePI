@@ -8,7 +8,7 @@ class BaseDB(object):
         config = ClassUtils.loadConfig()
         return pymysql.connect(
             host=config['dbhost'],
-            port=config['dbport'],
+            port=int(config['dbport']),
             user=config['dbuser'],
             password=config['dbpass'],
             db='facepi',
@@ -59,15 +59,19 @@ class BaseDB(object):
             conn.close()
 
     @classmethod
-    def insert(self, sql, params):
+    def insert(self, personId, name, confidence, info, timestamp, faceimage):
         """
         新增操作
         :param sql:
         :param params:
         :return:
+        'INSERT INTO signins(personid, name, confidence, info, timestamp) VALUES(%s, %s, %s, %s, %s)',
+                (personId, name, confidence, text, timestamp)
         """
         conn = self.create_conn()
         try:
+            sql = 'INSERT INTO signins(personid, name, confidence, info, timestamp, faceimage) VALUES(%s, %s, %s, %s, %s, %s)'
+            params = (personId, name, confidence, info, timestamp, faceimage)
             cursor = conn.cursor()
             result = cursor.execute(sql, params)
             conn.commit()
