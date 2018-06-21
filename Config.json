@@ -1,1 +1,14 @@
-{"title": "高師大附中刷臉簽到系統", "confidence": 0.7, "landmark": 2, "videoid": 0, "dbpass": "!1ashsashs", "personGroupId": "default_groupid", "personGroupName": "人群名稱", "api_key": "b9160fbd882f47bd821205a4bce64354", "host": "eastasia.api.cognitive.microsoft.com", "dbport": "3306", "dbhost": "127.0.0.1", "dbuser": "facepi"}
+{
+    "title": "高師大附中刷臉簽到系統",
+    "personGroupName": "人群名稱",
+    "landmark": 2,
+    "dbport": "3306",
+    "personGroupId": "default_groupid",
+    "dbpass": "<DB_PASS>",
+    "dbhost": "127.0.0.1",
+    "videoid": 0,
+    "dbuser": "<DB_USER>",
+    "api_key": "b9160fbd882f47bd821205a4bce64354",
+    "host": "eastasia.api.cognitive.microsoft.com",
+    "confidence": 0.7
+}
