@@ -27,6 +27,7 @@ class FacePI:
     status: 觀察 PersonGroup status
     search: 搜尋一個personName,
     traindatas: '訓練 /traindatas 裡的圖檔，同時訓練一群事先準備好的人與照片',
+    quickPhoto: 快速收集 3 連拍。事後再統一訓練。
 
     Config: 列出 Config.json 設定。
     Signin: 進行簽到！
@@ -323,6 +324,27 @@ class FacePI:
                                    jpgimagepaths)
         personGroupapi = FaceAPI.PersonGroup(api_key, host)
         personGroupapi.train_personGroup(personGroupId)
+
+    def quickPhoto(self, userData):
+        ''' quickTrain 只提供 userData , personname 用亂數
+        只適合快速搜集三連拍，事後在資料夾中修正成正確的 personname 
+        最後才手動進行 traindata '''
+        jpgimagepaths = []
+        personname = time.strftime("%Y-%m-%d_%H:%M:%S", time.localtime())
+        for i in range(3):
+            jpgimagepath = Camera.takePicture(
+                personGroupId, 2000, 'Train', size='large')
+            #time.strftime("%Y-%m-%d_%H:%M:%S", time.localtime()) + ".jpg"
+            #filename = jpgimagepath[jpgimagepath.rfind('/'):]
+            filename = os.path.basename(jpgimagepath)
+            home = os.path.expanduser("~")
+            jpgtraindata = os.path.join(home, 'traindatas', userData,
+                                        personname, filename)
+
+            if not os.path.exists(os.path.dirname(jpgtraindata)):
+                os.makedirs(os.path.dirname(jpgtraindata))
+            os.rename(jpgimagepath, jpgtraindata)
+            jpgimagepaths.append(jpgtraindata)
 
     def Signin(self):
         ''' 簽到！ '''
