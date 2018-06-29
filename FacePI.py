@@ -336,6 +336,27 @@ class FacePI:
         personGroupapi = FaceAPI.PersonGroup(api_key, host)
         personGroupapi.train_personGroup(personGroupId)
 
+    def quickTrain(self, userData):
+        ''' quickTrain 只提供 userData , personname 用亂數
+        只適合快速搜集三連拍，事後在資料夾中修正成正確的 personname 
+        最後才手動進行 traindata '''
+        jpgimagepaths = []
+        personname = time.strftime("%Y-%m-%d_%H:%M:%S", time.localtime())
+        for i in range(3):
+            jpgimagepath = Camera.takePicture(
+                personGroupId, 2000, 'Train', size='large')
+            #time.strftime("%Y-%m-%d_%H:%M:%S", time.localtime()) + ".jpg"
+            #filename = jpgimagepath[jpgimagepath.rfind('/'):]
+            filename = os.path.basename(jpgimagepath)
+            home = os.path.expanduser("~")
+            jpgtraindata = os.path.join(home, 'traindatas', userData,
+                                        personname, filename)
+
+            if not os.path.exists(os.path.dirname(jpgtraindata)):
+                os.makedirs(os.path.dirname(jpgtraindata))
+            os.rename(jpgimagepath, jpgtraindata)
+            jpgimagepaths.append(jpgtraindata)
+
     def Signin(self):
         ''' 簽到！ '''
         while True:
