@@ -27,6 +27,9 @@ class FacePI:
     status: 觀察 PersonGroup status
     search: 搜尋一個personName,
     traindatas: '訓練 /traindatas 裡的圖檔，同時訓練一群事先準備好的人與照片',
+    quickPhoto: quickPhoto 只提供 userData , personname 用亂數
+        只適合快速搜集三連拍，事後在資料夾中修正成正確的 personname 
+        最後才手動進行 traindata
 
     Config: 列出 Config.json 設定。
     Signin: 進行簽到！
@@ -336,7 +339,7 @@ class FacePI:
         personGroupapi = FaceAPI.PersonGroup(api_key, host)
         personGroupapi.train_personGroup(personGroupId)
 
-    def quickTrain(self, userData):
+    def quickPhoto(self, userData):
         ''' quickTrain 只提供 userData , personname 用亂數
         只適合快速搜集三連拍，事後在資料夾中修正成正確的 personname 
         最後才手動進行 traindata '''
