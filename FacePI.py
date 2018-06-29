@@ -330,11 +330,11 @@ class FacePI:
         只適合快速搜集三連拍，事後在資料夾中修正成正確的 personname 
         最後才手動進行 traindata '''
         jpgimagepaths = []
-        personname = time.strftime("%Y-%m-%d_%H:%M:%S", time.localtime())
+        personname = time.strftime("%Y%m%d_%H%M%S", time.localtime())
         for i in range(3):
             jpgimagepath = Camera.takePicture(
                 personGroupId, 2000, 'Train', size='large')
-            #time.strftime("%Y-%m-%d_%H:%M:%S", time.localtime()) + ".jpg"
+            #time.strftime("%Y%m%d_%H%M%S", time.localtime()) + ".jpg"
             #filename = jpgimagepath[jpgimagepath.rfind('/'):]
             filename = os.path.basename(jpgimagepath)
             home = os.path.expanduser("~")
