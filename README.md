@@ -27,7 +27,7 @@ FacePI 刷臉簽到系統 for Windows
 ### 建立隔離執行環境
 為了避免與原先環境互相衝突，最好的方式就是建立一個隔離的執行環境。接著要安裝什麼都按 [y] 安裝。
     
-    conda create -n cv3 python=3.5.2
+    conda create -n cv3
 
 ![建立隔離環境](data/createCV3.PNG)
 
@@ -37,14 +37,11 @@ FacePI 刷臉簽到系統 for Windows
 
     conda activate cv3
     
-    舊版的 anaconda 可改用
-    activate cv3
-
 ![建立隔離環境](data/cv3.PNG)
 
 在這個隔離環境內安裝 OpenCV
 
-    conda install -c https://conda.anaconda.org/menpo opencv3
+    pip install opencv-python
 
 如果要脫離這個隔離環境回到 (base)
 
