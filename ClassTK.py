@@ -9,6 +9,7 @@ with open(basepath + '/Config.json', 'r', encoding='utf-8') as f:
 api_key = config['api_key']
 host = config['host']
 personGroupId = config['personGroupId']
+traindataspath = os.path.join(basepath , 'traindatas')
 
 
 def train_oneShot(top, e, personname, userData, imagepath):
@@ -22,7 +23,17 @@ def train_oneShot(top, e, personname, userData, imagepath):
                                jpgimagepaths)
     personGroupapi = FaceAPI.PersonGroup(api_key, host)
     personGroupapi.train_personGroup(personGroupId)
+    save_traindatas(personname, imagepath)
     top.destroy()
+
+def save_traindatas(personname, imagepath):
+    ''' 在 oneshot 視窗輸入姓名的人, 順便紀錄到 traindatas 內以便未來整體移植 '''
+    
+    traindatas_personname = os.path.join(traindataspath, personGroupId, personname, os.path.basename(imagepath))
+    if not os.path.exists(os.path.dirname(traindatas_personname)):
+        os.makedirs(os.path.dirname(traindatas_personname))
+    
+    os.rename(imagepath, traindatas_personname)
 
 
 def tk_UnknownPerson(text, facepath, picture):
