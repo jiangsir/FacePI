@@ -95,7 +95,7 @@ def show_opencv(typee, mirror=False):
                 print('key=', key)
 
 
-def cv_ImageText(title, hint, facepath=None, picture=None, identifyfaces=None):
+def cv_ImageText(title, hint, facepath=None, picture=None, identifyfaces=None, personname=None):
     ''' 標準 cv 視窗'''
     import cv2
     import numpy as np
@@ -142,7 +142,7 @@ def cv_ImageText(title, hint, facepath=None, picture=None, identifyfaces=None):
         cv2.destroyWindow(windowname)
     elif key == ord('a') and len(identifyfaces) == 1:  # 鍵盤 a 代表要新增 oneshot
         cv2.destroyWindow(windowname)
-        ClassTK.tk_UnknownPerson('您哪位？', facepath, picture)
+        ClassTK.tk_UnknownPerson('您哪位？', facepath, picture, personname)
 
 
 def cv_Identifyfaces(identifyfaces, picture=None):
@@ -170,7 +170,7 @@ def cv_Identifyfaces(identifyfaces, picture=None):
             # text = ClassUtils.textConfidence(identifyface['person']['name'],
             #                                  identifyface['confidence'])
             cv_ImageText(text, '按 ENTER 繼續', faceimagepath, picture,
-                         identifyfaces)
+                         identifyfaces, identifyface['person']['name'])
             timestamp = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
             personId = identifyface['person']['personId']
             name = identifyface['person']['name']

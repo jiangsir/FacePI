@@ -36,7 +36,7 @@ def save_traindatas(personname, imagepath):
     os.rename(imagepath, traindatas_personname)
 
 
-def tk_UnknownPerson(text, facepath, picture):
+def tk_UnknownPerson(text, facepath, picture, personname=None):
     ''' # 當不認識的時候，跳這個畫面。以便用這個圖片去訓練新人。 '''
     import tkinter as tk
 
@@ -75,7 +75,9 @@ def tk_UnknownPerson(text, facepath, picture):
     e = tk.Entry(top, font=("Calibri", 24), width=10, show="")
     e.pack()
     e.focus()
-    e.insert(0, "")
+    if personname==None:
+        personname = ""
+    e.insert(0, personname)
 
     b1 = tk.Button(
         top,
