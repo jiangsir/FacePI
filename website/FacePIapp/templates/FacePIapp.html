@@ -23,7 +23,7 @@
 {{ forloop.counter }} {#-第几次循环-#}
     <!-- | {{ signin.name }} | {{ signin.personid }} | {{ signin.info }} | {{ signin.confidence }} | {{ signin.timestamp }} -->
  <img alt="Embedded Image" src="data:;base64,{{signin.faceimage_base64}}" height="100"/>
-    {{ signin.info }}
+    {{ signin.info }} <br>{{ signin.timestamp }}
 </div>
 {% empty %}
     {#-列表为空或不存在, 执行此处-#}
