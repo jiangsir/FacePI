@@ -107,16 +107,19 @@ class FacePI:
         if 'error' in persongroups:
             print("讀取 PersonGroup 發生錯誤！: ", persongroups['error']['message'])
             sys.exit()
+        print('apikey: ' + api_key)
         print('總共有 ', len(persongroups), '個「人群」')
         for persongroup in persongroups:
-            print('personGroupId=' + persongroup['personGroupId'])
-            print(persongroup)
+            print('personGroupId=' + persongroup['personGroupId'], '('+persongroup['name']+')')
+            #print(persongroup)
 
     def listPersons(self, personGroupId=personGroupId):
         ''' 3: 列出「人群」裡有哪些 Person '''
         PersonGroup = FaceAPI.PersonGroup(api_key, host)
         try:
             persons = PersonGroup.list_persons_in_group(personGroupId)
+            print('apikey: ' + api_key)
+            print('personGroupId: ' + personGroupId)
             if len(persons) == 0:
                 print('本 personGroup(' + personGroupId + ') 內沒有任何一個 person')
                 sys.exit()

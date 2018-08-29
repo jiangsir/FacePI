@@ -11,7 +11,7 @@ with open(basepath + '/Config.json', 'r', encoding='utf-8') as f:
 api_key = config['api_key']
 host = config['host']
 personGroupId = config['personGroupId']
-
+ 
 def takePicture(personGroupId, delay, type='Identify', size='small'):
     sysstr = platform.system()
     print('os=', sysstr, platform.release())

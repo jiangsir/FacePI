@@ -1,5 +1,9 @@
 import time
-import ClassUtils, ClassTK, MyException, ClassCSV, ClassDB
+import ClassUtils
+import ClassTK
+import MyException
+import ClassCSV
+import ClassDB
 from PIL import Image, ImageDraw, ImageFont, ImageTk
 
 
@@ -176,5 +180,7 @@ def cv_Identifyfaces(identifyfaces, picture=None):
             name = identifyface['person']['name']
             confidence = identifyface['confidence']
             faceimage = ClassUtils.readFile(faceimagepath)
-            ClassDB.BaseDB.insert(personId, name, confidence, text, timestamp,
+
+            config = ClassUtils.loadConfig()
+            ClassDB.BaseDB.insert(personId, name, confidence, text, config['api_key'], config['personGroupId'], timestamp,
                                   faceimage)

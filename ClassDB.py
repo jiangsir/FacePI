@@ -58,6 +58,8 @@ class BaseDB(object):
             `name` VARCHAR(200) NOT NULL , 
             `confidence` VARCHAR(200) NOT NULL , 
             `info` VARCHAR(200) NOT NULL , 
+            `apikey` VARCHAR(200) NOT NULL , 
+            `groupid` VARCHAR(200) NOT NULL , 
             `timestamp` DATETIME NOT NULL , 
             `faceimage` LONGBLOB NOT NULL , 
             PRIMARY KEY (`id`)) ENGINE = InnoDB;
@@ -126,7 +128,7 @@ class BaseDB(object):
             conn.close()
 
     @classmethod
-    def insert(self, personId, name, confidence, info, timestamp, faceimage):
+    def insert(self, personId, name, confidence, info, apikey, groupid, timestamp, faceimage):
         """
         新增操作
         :param sql:
@@ -137,9 +139,9 @@ class BaseDB(object):
         conn = self.create_conn()
         try:
 
-            sql = '''INSERT INTO signins(personid, name, confidence, info, timestamp, faceimage) 
-            VALUES(%s, %s, %s, %s, %s, %s)'''
-            params = (personId, name, confidence, info, timestamp, faceimage)
+            sql = '''INSERT INTO signins(personid, name, confidence, info, apikey, groupid, 
+            timestamp, faceimage) VALUES(%s, %s, %s, %s, %s, %s, %s, %s)'''
+            params = (personId, name, confidence, info, apikey, groupid, timestamp, faceimage)
             cursor = conn.cursor()
             result = cursor.execute(sql, params)
             conn.commit()
@@ -162,8 +164,9 @@ class BaseDB(object):
 
 
 if __name__ == "__main__":
-    sql = 'SELECT * FROM persons'
     BaseDB.execute('INSERT INTO persons(personid, name, userdata) VALUES(%s, %s, %s)',
                    ('personiddddd', 'nameeeee', 'userdataaaaa'))
+
+    sql = 'SELECT * FROM persons'
     res = BaseDB.query(sql, None)
     print(res)
