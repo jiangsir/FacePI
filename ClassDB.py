@@ -1,20 +1,15 @@
 import pymysql.cursors
+import ClassUtils
 import traceback
-import re, os, json
+import re
 from urllib.parse import urlparse
 
 #cmake -D CMAKE_BUILD_TYPE=RELEASE -D CMAKE_INSTALL_PREFIX=/usr/local -D INSTALL_PYTHON_EXAMPLES=ON -D INSTALL_C_EXAMPLES=ON -D OPENCV_EXTRA_MODULES_PATH=~/opencv_contrib/modules -D BUILD_EXAMPLES=ON ..
-basepath = os.path.dirname(os.path.realpath(__file__))
-configpath = os.path.join(basepath, 'Config.json')
-with open(configpath, 'r', encoding='utf-8') as f:
-    config = json.load(f)
-
-
 
 class BaseDB(object):
     @classmethod
     def __connect(self):
-        #config = ClassUtils.loadConfig()
+        config = ClassUtils.loadConfig()
         conn = pymysql.connect(
             host=config['dbhost'],
             port=int(config['dbport']),
@@ -155,7 +150,7 @@ class BaseDB(object):
         except pymysql.err.ProgrammingError as e:
             if re.match("Table (.+) doesn't exist", e.args[1]):
                 self.create_table()
-                return self.insert(personId, name, confidence, info, timestamp, faceimage)
+                return self.insert(personId, name, confidence, info, apikey, groupid, timestamp, faceimage)
             traceback.print_exc()
             return None
         except BaseException as e:
