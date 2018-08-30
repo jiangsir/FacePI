@@ -155,7 +155,7 @@ class BaseDB(object):
         except pymysql.err.ProgrammingError as e:
             if re.match("Table (.+) doesn't exist", e.args[1]):
                 self.create_table()
-                return self.insert(personId, name, confidence, info, timestamp, faceimage)
+                return self.insert(personId, name, confidence, info, apikey, groupid, timestamp, faceimage)
             traceback.print_exc()
             return None
         except BaseException as e:
