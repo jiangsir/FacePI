@@ -4,11 +4,10 @@ import ClassUtils, MyException, ClassCV
 from PIL import Image, ImageDraw, ImageFont, ImageTk
 import ClassFaceAPI as FaceAPI
 
-# basepath = os.path.dirname(os.path.realpath(__file__))
-# with open(basepath + '/Config.json', 'r', encoding='utf-8') as f:
-#     config = json.load(f)
-basepath = ClassUtils.getBasepath()
-config = ClassUtils.loadConfig()
+basepath = os.path.dirname(os.path.realpath(__file__))
+configpath = os.path.join(basepath, 'Config.json')
+with open(configpath, 'r', encoding='utf-8') as f:
+    config = json.load(f)
 
 
 api_key = config['api_key']
