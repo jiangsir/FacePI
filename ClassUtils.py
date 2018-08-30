@@ -6,7 +6,6 @@ def getBasepath():
     basepath = os.path.dirname(os.path.realpath(__file__))
     return basepath
 
-
 def loadConfig():
     basepath = getBasepath()
     configpath = os.path.join(basepath, 'Config.json')
