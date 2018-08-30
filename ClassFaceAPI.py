@@ -6,9 +6,11 @@ import MyException
 from urllib import request
 import ClassFaceAPI as FaceAPI
 
-basepath = os.path.dirname(os.path.realpath(__file__))
-with open(basepath + '/Config.json', 'r', encoding='utf-8') as f:
-    config = json.load(f)
+# basepath = os.path.dirname(os.path.realpath(__file__))
+# with open(basepath + '/Config.json', 'r', encoding='utf-8') as f:
+#     config = json.load(f)
+basepath = ClassUtils.getBasepath()
+config = ClassUtils.loadConfig()
 
 
 class PersonGroup:
