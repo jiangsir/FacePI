@@ -556,6 +556,9 @@ class Face:
 
             img = Image.open(imagepath)
             draw = ImageDraw.Draw(img)
+            landmark_size = height//50
+            if landmark_size < 2:
+                landmark_size = 2
             if config['landmark'] > 0:
                 print("save facelandmarks=", detectface['faceLandmarks'])
                 for faceLandmark in detectface['faceLandmarks']:
@@ -565,8 +568,11 @@ class Face:
                     x = int(detectface['faceLandmarks'][faceLandmark]['x'])
                     y = int(detectface['faceLandmarks'][faceLandmark]['y'])
                     draw.ellipse(
-                        (x, y, x + config['landmark'], y + config['landmark']),
+                        (x-landmark_size//2, y-landmark_size//2, x+landmark_size//2 , y+landmark_size//2),
                         fill=(255, 0, 0))
+                    # draw.ellipse(
+                    #     (x, y, x + config['landmark'], y + config['landmark']),
+                    #     fill=(255, 0, 0))
             #faceRectangle =  {'top': 141, 'height': 261, 'width': 261, 'left': 664}
             faceonly = img.crop((left, top, left + width, top + height))
 

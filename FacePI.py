@@ -189,7 +189,7 @@ class FacePI:
         confidence = input("預設信心指數 [" + str(config['confidence']) + "]：")
         if confidence != '':
             config['confidence'] = float(confidence)
-        landmark = input("臉部特徵 [" + str(config['landmark']) + "]：")
+        landmark = input("臉部特徵點 0:無, 1:有 [" + str(config['landmark']) + "]：")
         if landmark != '':
             config['landmark'] = int(landmark)
         videoid = input("攝影機編號通常為 0, 筆電外接 webcam 可能為 1 [" + str(config['videoid']) + "]：")

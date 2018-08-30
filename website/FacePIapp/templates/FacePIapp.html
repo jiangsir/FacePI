@@ -6,10 +6,10 @@
     <style type="text/css">
         div{
     /*height: 120px;      高度 120 */
-    width: 120px;     /* 寬度 120*/
+    width: 140px;     /* 寬度 120*/
     /* background-color: #6699FF;       背景色 藍色*/
     border: 2px dashed #003366;      /* 虛線邊框 2 像素 深藍色*/
-    margin: 10px;      /* 四周邊界 20 像素 */
+    margin: 5px;      /* 四周邊界 20 像素 */
     float: left;
         }
 
@@ -20,16 +20,15 @@
 {% for signin in signins %}
     {#-循环逻辑-#}
 <div>
-{{ forloop.counter }} {#-第几次循环-#}
+<!-- {{ forloop.counter }} {#-第几次循环-#} -->
     <!-- | {{ signin.name }} | {{ signin.personid }} | {{ signin.info }} | {{ signin.confidence }} | {{ signin.timestamp }} -->
- <img alt="Embedded Image" src="data:;base64,{{signin.faceimage_base64}}" height="100"/>
-    {{ signin.info }} <br>{{ signin.timestamp }}
+ <img alt="Embedded Image" src="data:;base64,{{signin.faceimage_base64}}" width="140"/><br/>
+    {{ signin.info }} <br>{{ signin.timestamp|date:'Y-m-d H:i:s' }}
 </div>
 {% empty %}
     {#-列表为空或不存在, 执行此处-#}
     此列表为空
 {% endfor %} {#-循环结束-#}
 
-<div>data = {{data}}</div>
 </body>
 </html>

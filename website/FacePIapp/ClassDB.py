@@ -1,17 +1,20 @@
 import pymysql.cursors
+import ClassUtils
 import traceback
 import re
 from urllib.parse import urlparse
 
+#cmake -D CMAKE_BUILD_TYPE=RELEASE -D CMAKE_INSTALL_PREFIX=/usr/local -D INSTALL_PYTHON_EXAMPLES=ON -D INSTALL_C_EXAMPLES=ON -D OPENCV_EXTRA_MODULES_PATH=~/opencv_contrib/modules -D BUILD_EXAMPLES=ON ..
 
 class BaseDB(object):
     @classmethod
     def __connect(self):
+        config = ClassUtils.loadConfig()
         conn = pymysql.connect(
-            host='127.0.0.1',
-            port=3306,
-            user='root',
-            password='DBPASSWORD',
+            host=config['dbhost'],
+            port=int(config['dbport']),
+            user=config['dbuser'],
+            password=config['dbpass'],
             db='facepi',
             charset='utf8',
             cursorclass=pymysql.cursors.DictCursor)
@@ -47,7 +50,7 @@ class BaseDB(object):
         try:
             cursor = conn.cursor()
             # cursor.execute("CREATE DATABASE IF NOT EXISTS facepi")
-            # INSERT INTO signins(personid, name, confidence, info, timestamp, faceimage)
+            # INSERT INTO signins(personid, name, confidence, info, timestamp, faceimage) 
             sql = '''
             CREATE TABLE IF NOT EXISTS `facepi`.`signins` 
             ( `id` INT NOT NULL AUTO_INCREMENT , 
@@ -55,6 +58,8 @@ class BaseDB(object):
             `name` VARCHAR(200) NOT NULL , 
             `confidence` VARCHAR(200) NOT NULL , 
             `info` VARCHAR(200) NOT NULL , 
+            `apikey` VARCHAR(200) NOT NULL , 
+            `groupid` VARCHAR(200) NOT NULL , 
             `timestamp` DATETIME NOT NULL , 
             `faceimage` LONGBLOB NOT NULL , 
             PRIMARY KEY (`id`)) ENGINE = InnoDB;
@@ -123,7 +128,7 @@ class BaseDB(object):
             conn.close()
 
     @classmethod
-    def insert(self, personId, name, confidence, info, timestamp, faceimage):
+    def insert(self, personId, name, confidence, info, apikey, groupid, timestamp, faceimage):
         """
         新增操作
         :param sql:
@@ -134,9 +139,9 @@ class BaseDB(object):
         conn = self.create_conn()
         try:
 
-            sql = '''INSERT INTO signins(personid, name, confidence, info, timestamp, faceimage) 
-            VALUES(%s, %s, %s, %s, %s, %s)'''
-            params = (personId, name, confidence, info, timestamp, faceimage)
+            sql = '''INSERT INTO signins(personid, name, confidence, info, apikey, groupid, 
+            timestamp, faceimage) VALUES(%s, %s, %s, %s, %s, %s, %s, %s)'''
+            params = (personId, name, confidence, info, apikey, groupid, timestamp, faceimage)
             cursor = conn.cursor()
             result = cursor.execute(sql, params)
             conn.commit()
@@ -159,8 +164,9 @@ class BaseDB(object):
 
 
 if __name__ == "__main__":
-    sql = 'SELECT * FROM persons'
     BaseDB.execute('INSERT INTO persons(personid, name, userdata) VALUES(%s, %s, %s)',
                    ('personiddddd', 'nameeeee', 'userdataaaaa'))
+
+    sql = 'SELECT * FROM persons'
     res = BaseDB.query(sql, None)
     print(res)
