@@ -176,3 +176,18 @@ traindatas 下的檔案結構如下:
     # 重新取得
     git clone https://github.com/jiangsir/FacePI
 
+### 結合資料庫,並顯示在網頁上
+
+    pip install django
+
+>>> import django
+>>> print(django.get_version())
+
+檢查是否安裝成功, 並顯示版本
+
+    conda activate cv3t
+    python FacePI/website/manage.py runserver
+
+請記得啟動 mysql, 在 windows 中則可安裝 xampp 方便管理
+
+進入網頁: http://127.0.0.1:8000/FacePIapp/
