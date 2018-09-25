@@ -180,10 +180,9 @@ traindatas 下的檔案結構如下:
 
     pip install django
 
->>> import django
->>> print(django.get_version())
-
-檢查是否安裝成功, 並顯示版本
+    import django
+    print(django.get_version())
+    檢查是否安裝成功, 並顯示版本
 
     conda activate cv3t
     python FacePI/website/manage.py runserver
