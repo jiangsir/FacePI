@@ -231,7 +231,7 @@ traindatas 下的檔案結構如下:
 
     python FacePI/website/manage.py runserver
     也可以指定 port 號
-    python FacePI/website/manage.py runserver 0.0.0.0:9000
+    python FacePI/website/manage.py runserver 0.0.0.0:8000
 
 請記得啟動 mysql, 在 windows 中則可安裝 xampp 方便管理
 
