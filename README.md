@@ -192,6 +192,24 @@ traindatas 下的檔案結構如下:
     帳號: root
     密碼: DBPASSWORD
 
+若為自訂的資料庫帳號密碼，還要進入 Config 來修改帳密才有辦法與資料庫系統連結。
+
+    python FacePI/FacePI.py Config
+
+    請輸入有效的 API KEY[5c8189a05aa242e0997a246611978272]:
+    驗證主機[eastasia.api.cognitive.microsoft.com]:
+    自訂標題[高師大附中刷臉簽到系統]：
+    預設 personGroupId(必須為小寫字母及-_) [ashsgroup]：
+    預設信心指數 [0.7]：
+    臉部特徵點 0:無, 1:有 [1]：
+    攝影機編號通常為 0, 筆電外接 webcam 可能為 1 [0]：
+    資料庫帳號[root]：
+    資料庫密碼[DBPASSWORD]：
+    資料庫主機[127.0.0.1]：
+    資料庫埠號[3306]：
+
+
+
 修改 phpmyadmin 登入方式:
 找到 config.inc.php 修改登入方式為 cookie
 
