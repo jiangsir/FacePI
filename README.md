@@ -169,24 +169,57 @@ traindatas 下的檔案結構如下:
 即可依照畫面指示進行操作。
 
 ## 系統更新
-本系統仍持續發展中，因此需要注意是否有新版提供使用，並及時更新。
+本系統仍持續發展中，因此需要注意是否有新版提供使用，並及時更新。
 
     # 刪除原程式
     rm -rf FacePI
+    or 
+    rmdir /s/q FacePI
+
     # 重新取得
     git clone https://github.com/jiangsir/FacePI
 
-### 結合資料庫,並顯示在網頁上
+## 結合資料庫,並顯示在網頁上
 
+### 首先安裝資料庫
+以 windows 使用者來說，最簡單的方式是安裝 XAMPP
+進入管理資料庫
+    http://127.0.0.1/phpmyadmin
+設定好預設帳號密碼:
+比如: 
+    帳號: root
+    密碼: DBPASSWORD
+
+在資料庫內建立一個資料庫　facepi
+簽到開始後，資料表系統會自動建立
+
+### 安裝 django 網頁框架
+    conda activate cv3
     pip install django
 
-    import django
-    print(django.get_version())
+    輸入 python 進入 Python 互動介面
+    >>> import django
+    >>> django.get_version()
+    '2.1'
     檢查是否安裝成功, 並顯示版本
+    >>> exit()
 
-    conda activate cv3t
     python FacePI/website/manage.py runserver
+    也可以指定 port 號
+    python FacePI/website/manage.py runserver 0.0.0.0:9000
 
 請記得啟動 mysql, 在 windows 中則可安裝 xampp 方便管理
 
 進入網頁: http://127.0.0.1:8000/FacePIapp/
+
+### 修改設定讓外部電腦可以連入
+
+進入 /FacePI/website/website/settings.py 裡修改, 注意不要漏掉 ", "
+    
+    ALLOWED_HOSTS = ['*',]
+
+存檔並回到 runserver 的視窗 Ctrl-C 結束
+再重新啟動 server
+
+    python FacePI/website/manage.py runserver
+
