@@ -184,9 +184,12 @@ traindatas 下的檔案結構如下:
 ### 首先安裝資料庫
 以 windows 使用者來說，最簡單的方式是安裝 XAMPP
 進入管理資料庫
+
     http://127.0.0.1/phpmyadmin
 設定好預設帳號密碼:
+
 比如: 
+
     帳號: root
     密碼: DBPASSWORD
 
