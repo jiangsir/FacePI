@@ -187,11 +187,15 @@ traindatas 下的檔案結構如下:
 
     http://127.0.0.1/phpmyadmin
 設定好預設帳號密碼:
-
 比如: 
 
     帳號: root
     密碼: DBPASSWORD
+
+修改 phpmyadmin 登入方式:
+找到 config.inc.php 修改登入方式為 cookie
+
+    $cfg['Servers'][$i]['auth_type'] = 'cookie';
 
 在資料庫內建立一個資料庫　facepi
 簽到開始後，資料表系統會自動建立
