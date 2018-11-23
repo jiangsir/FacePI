@@ -36,6 +36,21 @@ FacePI 讓樹莓派變身刷臉報到系統
 * Person: 一個 person 可以加入好幾個臉
 * Person Group: 自訂一個人群，在人群裡面可以加入多個 person
 
+每一個 API-KEY 就像一個獨立的空間，只要 KEY 換了，裡面曾經記錄過的人物資訊就全部重來了。
+
+一個 API-KEY 裡面可以創建許多個 Person Group，以方便我們進行分門別類的管理人物資訊。
+
+每個 Person Group 可以放很多個 Person
+
+一個 Person 可以擁有很多個 Face
+
+### 一個 Signin 的基本流程說明:
+* 透過 Camera.takePicture(personGroupId, 2000) 來取得一個相片路徑
+* takePicture 會開啟一個 OpenCV 的視窗，並等待 ENTER 然後進行拍照並回傳路徑
+* FaceAPI.identify 進行辨識，並回覆 candidates 候選人的 person
+* 
+
+
 ### Face API 整體的基本流程如下：
 
 * 先建立一個 Person Group 然後獲得一個 personGroupId 
