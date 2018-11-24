@@ -60,6 +60,9 @@ FacePI 刷臉簽到系統 for Windows
     pip install fire 
     pip install Pillow 
     pip install pypinyin
+    pip install pandas
+    pip install pymysql
+
 
 ## 開始安裝 FacePI 本體。
 
