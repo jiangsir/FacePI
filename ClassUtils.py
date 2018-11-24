@@ -145,12 +145,14 @@ def isDarwin():
 
 
 def isWindows():
-    return isWindows7() or isWindows10()
+    return isWindows7() or isWindows8() or isWindows10()
 
 
 def isWindows7():
     return 'Windows' == platform.system() and '7' == platform.release()
 
+def isWindows8():
+    return 'Windows' == platform.system() and '8.1' == platform.release()
 
 def isWindows10():
     return 'Windows' == platform.system() and '10' == platform.release()
