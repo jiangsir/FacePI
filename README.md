@@ -43,17 +43,19 @@ FacePI 刷臉簽到系統 for Windows
 
     pip install opencv-python
 
-如果要脫離這個隔離環境回到 (base)
-
-    conda deactivate
-
-如果要刪除整個隔離環境的話：
-
-    conda remove -n cv3 --all
-
-要看看目前已經存在的環境有哪些：
-
-    conda info -e
+> ## 相關的操作
+>
+> 如果要脫離這個隔離環境回到 (base)
+>
+>     conda deactivate
+>
+> 如果要刪除整個隔離環境的話：
+>
+>     conda remove -n cv3 --all
+>
+>要看看目前已經存在的環境有哪些：
+>
+>     conda info -e
 
 進入到 (cv3) 這個環境當中，安裝必要的套件：
 
@@ -100,7 +102,7 @@ FacePI 刷臉簽到系統 for Windows
     Identify: 用網路 URL 或本地圖片進行辨識。,
     Train: 用 3 連拍訓練一個新人
 
-    Usage:       FacePI.py 
+    Usage:      FacePI.py 
                 FacePI.py Config
                 FacePI.py Identify
                 FacePI.py Signin
