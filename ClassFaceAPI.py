@@ -9,7 +9,8 @@ import ClassFaceAPI as FaceAPI
 # basepath = os.path.dirname(os.path.realpath(__file__))
 # with open(basepath + '/Config.json', 'r', encoding='utf-8') as f:
 #     config = json.load(f)
-basepath = ClassUtils.getBasepath()
+
+basepath = os.path.dirname(os.path.realpath(__file__))
 config = ClassUtils.loadConfig()
 
 

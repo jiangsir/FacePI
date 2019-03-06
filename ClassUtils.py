@@ -2,9 +2,6 @@ import os
 import json
 import time
 import platform
-import MyException
-import ClassCV
-
 
 def getBasepath():
     basepath = os.path.dirname(os.path.realpath(__file__))
@@ -14,14 +11,14 @@ def getBasepath():
 def loadConfig():
     basepath = getBasepath()
     configpath = os.path.join(basepath, 'Config.json')
-    if os.path.isfile(configpath):
+    if os.path.exists(configpath):
         with open(configpath, 'r', encoding='utf-8') as f:
             config = json.load(f)
         return config
     else:
         config = {"title": "高師大附中刷臉簽到系統", "personGroupName": "人群名稱", "landmark": 1, "dbport": "3306", "personGroupId": "default_groupid", "dbpass": "DBPASSWORD",
-                  "dbhost": "127.0.0.1", "videoid": 0, "dbuser": "root", "api_key": "b9160fbd882f47bd821205a4bce64354", "host": "eastasia.api.cognitive.microsoft.com", "confidence": 0.7}
-        with open(basepath + '/Config.json', 'w', encoding='utf-8') as outfile:
+                "dbhost": "127.0.0.1", "videoid": 0, "dbuser": "root", "api_key": "b9160fbd882f47bd821205a4bce64354", "host": "eastasia.api.cognitive.microsoft.com", "confidence": 0.7}
+        with open(configpath, 'w', encoding='utf-8') as outfile:
             json.dump(config, outfile, ensure_ascii=False)
         return config
 
@@ -42,7 +39,7 @@ def getFaceImagepath(faceid):
     basepath = os.path.dirname(os.path.realpath(__file__))
     #detectedFaceImagepath = basepath + "/tmp/faceId_" + faceid + ".jpg"
     detectedFaceImagepath = os.path.join(basepath, 'tmp',
-                                         "faceId_" + faceid + ".png")
+                                        "faceId_" + faceid + ".png")
 
     if not os.path.exists(os.path.dirname(detectedFaceImagepath)):
         os.makedirs(os.path.dirname(detectedFaceImagepath))
@@ -64,6 +61,7 @@ def makedirsPath(path):
 
 
 def isFaceAPIError(faceapijson):
+    import MyException
     if 'error' in faceapijson:
         if faceapijson['error']['code'] == 'RateLimitExceeded':
             raise MyException.RateLimitExceededError(
@@ -89,6 +87,8 @@ def tryFaceAPIError(faceapijson):
         print('MESSAGE:', faceapijson['error']['message'])
         text = faceapijson['error']['code'] + \
             ": " + faceapijson['error']['message']
+
+        import ClassCV
         ClassCV.cv_ImageText('存取發生錯誤！', text)
 
 
@@ -142,7 +142,7 @@ def SigninIdentifyfaces(identifyfaces, picture=None):
         for identifyface in identifyfaces:
             if 'person' in identifyface:
                 print("identifyface['confidence']=",
-                      identifyface['confidence'])
+                    identifyface['confidence'])
                 name = protectPersonName(identifyface['person']['name'])
                 textConfidence(name, identifyface['confidence'])
             else:

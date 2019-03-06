@@ -4,12 +4,12 @@ import sys, os, json, time, fire
 from PIL import Image
 import ClassFaceAPI as FaceAPI
 import ClassCamera as Camera
-import ClassUtils as Utils
+import ClassUtils
 from pypinyin import lazy_pinyin
 import MyException, ClassTK, ClassCV
 
 basepath = os.path.dirname(os.path.realpath(__file__))
-config = Utils.loadConfig()
+config = ClassUtils.loadConfig()
 personGroupId = config['personGroupId']
 api_key = config['api_key']
 host = config['host']
@@ -63,7 +63,7 @@ class FacePI:
         '''
         #traindataPath = basepath + '/traindatas/'
         #traindataPath = os.path.join(basepath, 'traindatas')
-        Utils.makedirsPath(traindatasPath)
+        ClassUtils.makedirsPath(traindatasPath)
         train_userDataPaths = os.listdir(traindatasPath)
         print('目前 traindatas/ 內的圖檔如下：')
 
