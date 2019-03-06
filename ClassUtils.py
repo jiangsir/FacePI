@@ -1,24 +1,36 @@
-import os, json, time, platform
-import MyException, ClassCV
+import os
+import json
+import time
+import platform
+import MyException
+import ClassCV
 
 
 def getBasepath():
     basepath = os.path.dirname(os.path.realpath(__file__))
     return basepath
 
+
 def loadConfig():
     basepath = getBasepath()
     configpath = os.path.join(basepath, 'Config.json')
-    with open(configpath, 'r', encoding='utf-8') as f:
-        config = json.load(f)
-    return config
+    if os.path.isfile(configpath):
+        with open(configpath, 'r', encoding='utf-8') as f:
+            config = json.load(f)
+        return config
+    else:
+        config = {"title": "高師大附中刷臉簽到系統", "personGroupName": "人群名稱", "landmark": 1, "dbport": "3306", "personGroupId": "default_groupid", "dbpass": "DBPASSWORD",
+                  "dbhost": "127.0.0.1", "videoid": 0, "dbuser": "root", "api_key": "b9160fbd882f47bd821205a4bce64354", "host": "eastasia.api.cognitive.microsoft.com", "confidence": 0.7}
+        with open(basepath + '/Config.json', 'w', encoding='utf-8') as outfile:
+            json.dump(config, outfile, ensure_ascii=False)
+        return config
 
 
 def protectPersonName(name):
     # big5 ╳
     if isWindows():
         return name[0] + '╳' + name[2:]
-    else:        
+    else:
         return name[0] + '〇' + name[2:]
 
 
@@ -62,18 +74,21 @@ def isFaceAPIError(faceapijson):
         elif faceapijson['error']['code'] == 'Unspecified':
             raise MyException.UnspecifiedError(faceapijson['error']['code'])
         elif faceapijson['error']['code'] == 'PersonGroupNotTrained':
-            raise MyException.PersonGroupNotTrainedError(faceapijson['error']['code'])
+            raise MyException.PersonGroupNotTrainedError(
+                faceapijson['error']['code'])
         else:
             print('CODE:', faceapijson['error']['code'])
             print('MESSAGE:', faceapijson['error']['message'])
         return True
     return False
 
+
 def tryFaceAPIError(faceapijson):
     if 'error' in faceapijson:
         print('CODE:', faceapijson['error']['code'])
-        print('MESSAGE:', faceapijson['error']['message'])        
-        text = faceapijson['error']['code'] + ": " + faceapijson['error']['message']
+        print('MESSAGE:', faceapijson['error']['message'])
+        text = faceapijson['error']['code'] + \
+            ": " + faceapijson['error']['message']
         ClassCV.cv_ImageText('存取發生錯誤！', text)
 
 
@@ -126,7 +141,8 @@ def SigninIdentifyfaces(identifyfaces, picture=None):
 
         for identifyface in identifyfaces:
             if 'person' in identifyface:
-                print("identifyface['confidence']=",identifyface['confidence'])
+                print("identifyface['confidence']=",
+                      identifyface['confidence'])
                 name = protectPersonName(identifyface['person']['name'])
                 textConfidence(name, identifyface['confidence'])
             else:
@@ -147,12 +163,15 @@ def isDarwin():
 def isWindows():
     return isWindows7() or isWindows8() or isWindows10()
 
+
 def isWindows7():
     return 'Windows' == platform.system() and '7' == platform.release()
 
+
 def isWindows8():
     return 'Windows' == platform.system() and '8.1' == platform.release()
- 
+
+
 def isWindows10():
     return 'Windows' == platform.system() and '10' == platform.release()
 
@@ -175,12 +194,13 @@ def getSystemFont():
     elif isWindows7():
         ttf = "simhei.ttf"
     elif isWindows10():
-        #ttf = "C:/Windows/Fonts/Arial.ttf" # 中文無法出現
+        # ttf = "C:/Windows/Fonts/Arial.ttf" # 中文無法出現
         ttf = "C:/Windows.old/Windows/Fonts/msjhbd.ttc"  # 微軟正黑體
         #tts = "C:/Windows.old/Windows/Fonts/kaiu.ttf"
     else:
         ttf = "C:/Windows.old/Windows/Fonts/msjhbd.ttc"  # 微軟正黑體
     return ttf
+
 
 def readFile(filename):
     with open(filename, 'rb') as f:
