@@ -3,6 +3,7 @@ import json
 import time
 import platform
 
+
 def getBasepath():
     basepath = os.path.dirname(os.path.realpath(__file__))
     return basepath
@@ -17,7 +18,7 @@ def loadConfig():
         return config
     else:
         config = {"title": "高師大附中刷臉簽到系統", "personGroupName": "人群名稱", "landmark": 1, "dbport": "3306", "personGroupId": "default_groupid", "dbpass": "DBPASSWORD",
-                "dbhost": "127.0.0.1", "videoid": 0, "dbuser": "root", "api_key": "b9160fbd882f47bd821205a4bce64354", "host": "eastasia.api.cognitive.microsoft.com", "confidence": 0.7}
+                  "dbhost": "127.0.0.1", "videoid": 0, "dbuser": "root", "api_key": "b9160fbd882f47bd821205a4bce64354", "host": "eastasia.api.cognitive.microsoft.com", "confidence": 0.7}
         with open(configpath, 'w', encoding='utf-8') as outfile:
             json.dump(config, outfile, ensure_ascii=False)
         return config
@@ -38,8 +39,8 @@ def protectPersonNameForTTS(name):
 def getFaceImagepath(faceid):
     basepath = os.path.dirname(os.path.realpath(__file__))
     #detectedFaceImagepath = basepath + "/tmp/faceId_" + faceid + ".jpg"
-    detectedFaceImagepath = os.path.join(basepath, 'tmp',
-                                        "faceId_" + faceid + ".png")
+    tmppath = os.path.join(basepath, 'tmp')
+    detectedFaceImagepath = os.path.join(tmppath, "faceId_" + faceid + ".png")
 
     if not os.path.exists(os.path.dirname(detectedFaceImagepath)):
         os.makedirs(os.path.dirname(detectedFaceImagepath))
@@ -49,9 +50,13 @@ def getFaceImagepath(faceid):
 def getTakePicturePath(personGroupId):
     ''' 取得拍照後要存檔的路徑。 '''
     basepath = getBasepath()
+
     jpgimagepath = os.path.join(
         basepath, 'takepictures', personGroupId + "_" +
         time.strftime("%Y%m%d_%H%M%S", time.localtime()) + ".jpg")
+
+    if not os.path.exists(os.path.dirname(jpgimagepath)):
+        os.makedirs(os.path.dirname(jpgimagepath))
     return jpgimagepath
 
 
@@ -142,7 +147,7 @@ def SigninIdentifyfaces(identifyfaces, picture=None):
         for identifyface in identifyfaces:
             if 'person' in identifyface:
                 print("identifyface['confidence']=",
-                    identifyface['confidence'])
+                      identifyface['confidence'])
                 name = protectPersonName(identifyface['person']['name'])
                 textConfidence(name, identifyface['confidence'])
             else:
