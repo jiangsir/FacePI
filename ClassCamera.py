@@ -16,14 +16,14 @@ api_key = config['api_key']
 host = config['host']
 personGroupId = config['personGroupId']
  
-def takePicture(personGroupId, delay, type='Identify', size='small'):
+def takePicture(personGroupId, delay, type='Identify', hint='', size='small'):
     sysstr = platform.system()
     print('os=', sysstr, platform.release())
 
     if ClassUtils.isLinux():
         return takePicture_CSI(personGroupId, delay, size)
     else:
-        return takePicture_opencv(personGroupId, delay, type)
+        return takePicture_opencv(personGroupId, delay, type, hint)
 
     # cameras = config['camera'].split(',')
     # for camera in cameras:
@@ -82,9 +82,9 @@ def takePicture_CSI(personGroupId, delay, size='small'):
 #             '按 ENTER 繼續')
 
 
-def takePicture_opencv(personGroupId, delay, typee):
+def takePicture_opencv(personGroupId, delay, typee, hint=''):
     if (ClassUtils.isWindows() or ClassUtils.isDarwin()):
-        picturepath = ClassCV.show_opencv(typee, mirror=True)
+        picturepath = ClassCV.show_opencv(typee, hint, mirror=True)
         return picturepath
     else:
         print('若系統為樹莓派，則需設定 camera 為 CSIcamera 無法以 webcam 作為影像來源。')

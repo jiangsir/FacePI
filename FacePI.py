@@ -1,12 +1,18 @@
 #!/usr/bin/env python
 
-import sys, os, json, time, fire
+import sys
+import os
+import json
+import time
+import fire
 from PIL import Image
 import ClassFaceAPI as FaceAPI
 import ClassCamera as Camera
 import ClassUtils
 from pypinyin import lazy_pinyin
-import MyException, ClassTK, ClassCV
+import MyException
+import ClassTK
+import ClassCV
 
 basepath = os.path.dirname(os.path.realpath(__file__))
 config = ClassUtils.loadConfig()
@@ -92,7 +98,7 @@ class FacePI:
                     personAPI.add_personimages(personGroupId, personname,
                                                os.path.basename(userDataPath),
                                                personImagePaths)
-                    #time.sleep(6)
+                    # time.sleep(6)
 
         personGroupapi = FaceAPI.PersonGroup(api_key, host)
         personGroupapi.train_personGroup(personGroupId)
@@ -110,8 +116,9 @@ class FacePI:
         print('apikey: ' + api_key)
         print('總共有 ', len(persongroups), '個「人群」')
         for persongroup in persongroups:
-            print('personGroupId=' + persongroup['personGroupId'], '('+persongroup['name']+')')
-            #print(persongroup)
+            print('personGroupId=' +
+                  persongroup['personGroupId'], '('+persongroup['name']+')')
+            # print(persongroup)
 
     def listPersons(self, personGroupId=personGroupId):
         ''' 3: 列出「人群」裡有哪些 Person '''
@@ -192,7 +199,8 @@ class FacePI:
         landmark = input("臉部特徵點 0:無, 1:有 [" + str(config['landmark']) + "]：")
         if landmark != '':
             config['landmark'] = int(landmark)
-        videoid = input("攝影機編號通常為 0, 筆電外接 webcam 可能為 1 [" + str(config['videoid']) + "]：")
+        videoid = input(
+            "攝影機編號通常為 0, 筆電外接 webcam 可能為 1 [" + str(config['videoid']) + "]：")
         if videoid != '':
             config['videoid'] = int(videoid)
         dbuser = input("資料庫帳號[" + config['dbuser'] + "]：")
@@ -230,7 +238,7 @@ class FacePI:
 
     def relay(self):
         ''' 13: '設定繼電器 '''
-        #ClassGPIO.RelayExchange()
+        # ClassGPIO.RelayExchange()
         print('call ClassGPIO.RelayExchange()')
 
     def Identify(self, pictureurl):
@@ -290,7 +298,7 @@ class FacePI:
                 identifiedface['confidence'] = candidate["confidence"]
                 identifiedface['personId'] = candidate["personId"]
 
-        Utils.SigninIdentifyfaces(identifiedfaces, pictureurl)
+        ClassUtils.SigninIdentifyfaces(identifiedfaces, pictureurl)
 
     def __buildTraindatas(self, personname):
         ''' 15: '快速 3 連拍建立圖片資料庫不進行訓練） '''
@@ -325,9 +333,9 @@ class FacePI:
         #traindatasPath = basepath + '/traindatas/'
         #traindatasPath = os.path.join(basepath, 'traindatas')
         jpgimagepaths = []
-        for _ in range(3):
+        for i in range(3):
             jpgimagepath = Camera.takePicture(
-                personGroupId, 2000, 'Train', size='large')
+                personGroupId, 2000, 'Train', hint=' (第 '+str(i+1)+" 張)", size='large')
             #time.strftime("%Y-%m-%d_%H:%M:%S", time.localtime()) + ".jpg"
             #filename = jpgimagepath[jpgimagepath.rfind('/'):]
             filename = os.path.basename(jpgimagepath)

@@ -7,7 +7,7 @@ import ClassDB
 from PIL import Image, ImageDraw, ImageFont, ImageTk
 
 
-def show_opencv(typee, mirror=False):
+def show_opencv(typee, hint='', mirror=False):
     ''' 顯示主畫面 '''
     import cv2
     import numpy as np
@@ -58,18 +58,18 @@ def show_opencv(typee, mirror=False):
                 font=warningfont)  # 第一个参数为打印的坐标，第二个为打印的文本，第三个为字体颜色，第四个为字体
 
         if typee == 'Identify':
-            hint = "請按「ENTER」進行簽到"
+            hints = "請按「ENTER」進行簽到" + hint
         elif typee == 'Train':
-            hint = "請按「ENTER」進行三連拍"
+            hints = "請按「ENTER」進行三連拍" + hint
         else:
-            hint = "請按「ENTER」繼續"
-        w, h = draw.textsize(hint, font=hintfont)
+            hints = "請按「ENTER」繼續" + hint
+        w, h = draw.textsize(hints, font=hintfont)
         draw.rectangle(
             ((W / 2 - w / 2 - 5, H - h), (W / 2 + w / 2 + 5, H)), fill="red")
         hintlocation = (W / 2 - w / 2, H - h)
         #textlocation = (0,0)
         draw.text(
-            hintlocation, hint, (0, 255, 255),
+            hintlocation, hints, (0, 255, 255),
             font=hintfont)  # 第一个参数为打印的坐标，第二个为打印的文本，第三个为字体颜色，第四个为字体
 
         cv2_text_im = cv2.cvtColor(np.array(pil_im), cv2.COLOR_RGB2BGR)
