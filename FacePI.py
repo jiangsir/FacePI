@@ -313,13 +313,19 @@ class FacePI:
             #time.strftime("%Y-%m-%d_%H:%M:%S", time.localtime()) + ".jpg"
             # jpgimagepaths.append(jpgimagepath)
 
-    def Train(self, userData, personname):
+    def Train(self, userData=None, personname=None):
         ''' 1. 用 3 連拍訓練一個新人 '''
+        if personname == None:
+            personname = input("請輸入您的姓名: ")
+
+        if userData == None:
+            userData = input("請輸入您的說明文字(比如: 高師大附中國一仁): ")
+
         #personname = input('進行 3 連拍，請輸入要訓練的對象姓名：')
         #traindatasPath = basepath + '/traindatas/'
         #traindatasPath = os.path.join(basepath, 'traindatas')
         jpgimagepaths = []
-        for i in range(3):
+        for _ in range(3):
             jpgimagepath = Camera.takePicture(
                 personGroupId, 2000, 'Train', size='large')
             #time.strftime("%Y-%m-%d_%H:%M:%S", time.localtime()) + ".jpg"
