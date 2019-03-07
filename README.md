@@ -21,6 +21,10 @@ FacePI 刷臉簽到系統 for Windows
 ### Anaconda
 首先必須下載 anaconda ，請選擇 Python3 的版本。
 
+![](data/anaconda_download.PNG)
+![](data/anaconda_alluser.PNG)
+![](data/anaconda_path.PNG)
+
 安裝完成後，在程式集->anaconda prompt 進入文字介面。
 ![文字介面](data/prompt.PNG)
 
@@ -60,12 +64,7 @@ FacePI 刷臉簽到系統 for Windows
 
 進入到 (cv3) 這個環境當中，安裝必要的套件：
 
-    pip install fire 
-    pip install Pillow 
-    pip install pypinyin
-    pip install django
-    pip install pandas
-    pip install pymysql
+    pip install fire Pillow pypinyin django pandas pymysql
 
 ## 開始安裝 FacePI 本體。
 
