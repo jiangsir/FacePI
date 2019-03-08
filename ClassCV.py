@@ -19,13 +19,14 @@ def show_opencv(typee, hint='', mirror=False):
     cam.set(3, 1280)  # 修改解析度 寬
     cam.set(4, 1280 // 16 * 9)  # 修改解析度 高
     print('WIDTH', cam.get(3), 'HEIGHT', cam.get(4))  # 顯示預設的解析度
+
+    # Dlib 的人臉偵測器
+    detector = dlib.get_frontal_face_detector()
+
     while True:
         ret_val, img = cam.read()
         if mirror:
             img = cv2.flip(img, 1)
-
-        # Dlib 的人臉偵測器
-        detector = dlib.get_frontal_face_detector()
 
         # 偵測人臉
         face_rects = detector(img, 0)
@@ -103,6 +104,7 @@ def show_opencv(typee, hint='', mirror=False):
         if key == ord(' ') or key == 3 or key == 13:  # space or enter
             picturepath = ClassUtils.getTakePicturePath(
                 config['personGroupId'])
+            ret_val, img = cam.read()
             cv2.imwrite(picturepath, img)
             cv2.destroyAllWindows()
             cv2.VideoCapture(config['videoid']).release()

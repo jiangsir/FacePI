@@ -13,7 +13,7 @@ echo one user
 
 SET PATH=%PATH%;%ANACONDA_PATH%;%ANACONDA_PATH%\Scripts\;
 
-call conda remove -n cv3 --all
+call conda remove -n cv3 --all -y
 call conda create -n cv3 python=3.5.2 -y
 call conda activate cv3
 rem call conda install -c menpo opencv3 -y
