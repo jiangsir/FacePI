@@ -1,5 +1,5 @@
 
-IF EXIST C:\ProgramData\Anaconda3\ (
+IF EXIST "C:\ProgramData\Anaconda3\" (
 call C:\ProgramData\Anaconda3\Scripts\activate.bat C:\ProgramData\Anaconda3
 echo alluser
 ) ELSE (
