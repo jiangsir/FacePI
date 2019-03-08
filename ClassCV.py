@@ -5,6 +5,8 @@ import MyException
 import ClassCSV
 import ClassDB
 from PIL import Image, ImageDraw, ImageFont, ImageTk
+import dlib
+import imutils
 
 
 def show_opencv(typee, hint='', mirror=False):
@@ -21,6 +23,21 @@ def show_opencv(typee, hint='', mirror=False):
         ret_val, img = cam.read()
         if mirror:
             img = cv2.flip(img, 1)
+
+        # Dlib 的人臉偵測器
+        detector = dlib.get_frontal_face_detector()
+
+        # 偵測人臉
+        face_rects = detector(img, 0)
+        # 取出所有偵測的結果
+        for i, d in enumerate(face_rects):
+            x1 = d.left()
+            y1 = d.top()
+            x2 = d.right()
+            y2 = d.bottom()
+
+            # 以方框標示偵測的人臉
+            cv2.rectangle(img, (x1, y1), (x2, y2), (0, 255, 0), 4, cv2.LINE_AA)
 
         H, W = img.shape[:2]
         #imS = cv2.resize(img, (W, H))
