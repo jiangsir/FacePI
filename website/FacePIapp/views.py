@@ -1,6 +1,8 @@
 from django.shortcuts import render
 from FacePIapp import ClassDB
-import base64, os, json
+import base64
+import os
+import json
 
 # Create your views here.
 
@@ -21,5 +23,5 @@ def facepiapp_view(request):
 
     persons = [{'name': 'tom'}, {'name': 'mary'}, {'name': 'jiang'}]
     context = {'data': 'hello django!!!',
-               'persons': persons, 'signins': signins}
+               'persons': persons, 'signins': signins, 'apikey': config['api_key'], 'groupid': config['personGroupId']}
     return render(request, 'FacePIapp.html', context)
