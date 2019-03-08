@@ -25,46 +25,6 @@ FacePI 刷臉簽到系統 for Windows
 ![](data/anaconda_alluser.PNG)
 ![](data/anaconda_path.PNG)
 
-安裝完成後，在程式集->anaconda prompt 進入文字介面。
-![文字介面](data/prompt.PNG)
-
-### 建立隔離執行環境
-為了避免與原先環境互相衝突，最好的方式就是建立一個隔離的執行環境。接著要安裝什麼都按 [y] 安裝。
-    
-    conda create -n cv3 python=3.5.2
-
-![建立隔離環境](data/createCV3.PNG)
-
-點擊 y 繼續安裝所需套件
-
-接著進入這個環境
-
-    conda activate cv3
-    
-    舊版的 anaconda 可改用
-    activate cv3
-
-![建立隔離環境](data/cv3.PNG)
-
-在這個隔離環境內安裝 OpenCV
-
-    conda install -c https://conda.anaconda.org/menpo opencv3
-
-如果要脫離這個隔離環境回到 (base)
-
-    conda deactivate
-
-如果要刪除整個隔離環境的話：
-
-    conda remove -n cv3 --all
-
-要看看目前已經存在的環境有哪些：
-
-    conda info -e
-
-進入到 (cv3) 這個環境當中，安裝必要的套件：
-
-    pip install fire Pillow pypinyin django pandas pymysql
 
 ## 開始安裝 FacePI 本體。
 
@@ -86,6 +46,10 @@ FacePI 刷臉簽到系統 for Windows
     cd /Users/user/Documents
     # 此處請依據自己的環境修改。 
     
+
+## 執行安裝
+
+執行 setup.bat
 
 
 ## 執行

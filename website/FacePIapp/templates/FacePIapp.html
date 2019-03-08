@@ -5,8 +5,8 @@
     <title>FacePI 人臉簽到紀錄頁</title>
     <style type="text/css">
         div{
-    /*height: 120px;      高度 120 */
-    width: 140px;     /* 寬度 120*/
+    height: 140px;    /*  高度 120 */
+    /*width: 140px;     /* 寬度 120*/
     /* background-color: #6699FF;       背景色 藍色*/
     border: 2px dashed #003366;      /* 虛線邊框 2 像素 深藍色*/
     margin: 5px;      /* 四周邊界 20 像素 */
@@ -17,6 +17,7 @@
 </head>
 <body>
 <h1>高師大附中 刷臉簽到登記本</h1>
+<div>{{signin.api_key}} | {{signin.groupid}}</div>
 {% for signin in signins %}
     {#-循环逻辑-#}
 <div>
