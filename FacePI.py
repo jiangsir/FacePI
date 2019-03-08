@@ -323,12 +323,6 @@ class FacePI:
 
     def Train(self, userData=None, personname=None):
         ''' 1. 用 3 連拍訓練一個新人 '''
-        if personname == None:
-            personname = input("請輸入您的姓名: ")
-
-        if userData == None:
-            userData = input("請輸入您的說明文字(比如: 高師大附中國一仁): ")
-
         #personname = input('進行 3 連拍，請輸入要訓練的對象姓名：')
         #traindatasPath = basepath + '/traindatas/'
         #traindatasPath = os.path.join(basepath, 'traindatas')
@@ -336,23 +330,33 @@ class FacePI:
         for i in range(3):
             jpgimagepath = Camera.takePicture(
                 personGroupId, 2000, 'Train', hint=' (第 '+str(i+1)+" 張)", size='large')
+            jpgimagepaths.append(jpgimagepath)
             #time.strftime("%Y-%m-%d_%H:%M:%S", time.localtime()) + ".jpg"
             #filename = jpgimagepath[jpgimagepath.rfind('/'):]
-            filename = os.path.basename(jpgimagepath)
 
+
+
+        if personname == None:
+            personname = input("請輸入您的姓名: ")
+
+        if userData == None:
+            userData = input("請輸入您的說明文字(比如: 高師大附中國一仁): ")
+
+        jpgtrainpaths = []
+        for jpgimagepath in jpgimagepaths:
+            filename = os.path.basename(jpgimagepath)
             #jpgtraindata = '/home/pi/traindatas/' + personname + filename
             home = os.path.expanduser("~")
-            jpgtraindata = os.path.join(home, 'traindatas', userData,
+            jpgtrainpath = os.path.join(home, 'traindatas', userData,
                                         personname, filename)
-
-            if not os.path.exists(os.path.dirname(jpgtraindata)):
-                os.makedirs(os.path.dirname(jpgtraindata))
-            os.rename(jpgimagepath, jpgtraindata)
-            jpgimagepaths.append(jpgtraindata)
+            if not os.path.exists(os.path.dirname(jpgtrainpath)):
+                os.makedirs(os.path.dirname(jpgtrainpath))
+            os.rename(jpgimagepath, jpgtrainpath)
+            jpgtrainpaths.append(jpgtrainpath)
 
         personAPI = FaceAPI.Person(api_key, host)
         personAPI.add_personimages(personGroupId, personname, userData,
-                                   jpgimagepaths)
+                                   jpgtrainpaths)
         personGroupapi = FaceAPI.PersonGroup(api_key, host)
         personGroupapi.train_personGroup(personGroupId)
 
