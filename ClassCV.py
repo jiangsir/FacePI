@@ -77,7 +77,7 @@ def show_opencv(typee, hint='', mirror=False):
         if typee == 'Identify':
             hints = "請按「ENTER」進行簽到" + hint
         elif typee == 'Train':
-            hints = "請按「ENTER」進行三連拍" + hint
+            hints = "請按「ENTER」進行訓練三連拍(畫面只能有一個人)" + hint
         else:
             hints = "請按「ENTER」繼續" + hint
         w, h = draw.textsize(hints, font=hintfont)
