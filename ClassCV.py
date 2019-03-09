@@ -2,7 +2,6 @@ import time
 import ClassUtils
 import ClassTK
 import MyException
-import ClassCSV
 import ClassDB
 from PIL import Image, ImageDraw, ImageFont, ImageTk
 import dlib
