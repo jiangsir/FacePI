@@ -18,13 +18,3 @@ echo alluser
 
 SET PATH=%PATH%;%ANACONDA_PATH%;%ANACONDA_PATH%\Scripts\;
 
-
-call conda remove -n %CONDA_NAME% --all -y
-call conda create -n %CONDA_NAME% python=3.5.2 -y
-call conda activate %CONDA_NAME%
-
-call conda -V
-python %CD%\setup.py
-
-
-pause

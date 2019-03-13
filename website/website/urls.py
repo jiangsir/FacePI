@@ -15,9 +15,11 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from FacePI.views import facepi_view
 from FacePIapp.views import facepiapp_view
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('FacePIapp/', facepiapp_view),
+    path('FacePI/', facepi_view),
+    path('FacePIapp/', facepiapp_view)
 ]

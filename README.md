@@ -200,7 +200,7 @@ traindatas 下的檔案結構如下:
 
 請記得啟動 mysql, 在 windows 中則可安裝 xampp 方便管理
 
-進入網頁: http://127.0.0.1:8000/FacePIapp/
+進入管理網頁: http://127.0.0.1:8000/FacePI/
 
 ### 修改設定讓外部電腦可以連入
 
@@ -212,4 +212,5 @@ traindatas 下的檔案結構如下:
 再重新啟動 server
 
     python FacePI/website/manage.py runserver
+
 
